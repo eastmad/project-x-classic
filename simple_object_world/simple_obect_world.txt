@@ -1,0 +1,47 @@
+Simple Object World
+
+World of simple objects that allow an expression of transition.
+
+A planet has transitions between landing and orbit and orbit and escape
+
+Allow special transitions
+
+Adding a body should include transitions
+
+Express time / fuel for transitions.
+
+Caculate path between two bodies via transitions.
+
+Express transitions
+
+TransitionPoint
+TransitionLink
+Body
+
+Bodies
+
+Star
+Planet
+Moon
+Satellite
+Sea
+Continent
+
+TransitionPoints
+
+Surface
+Atmosphere
+Orbit
+
+
+To go from Eurasia to Mars crises platform
+
+Start from 
+
+Eurasia-surface
+Eurasia-airspace
+Earth-orbit
+Earth-escape
+Mars-escape
+Mars-orbit
+Crises-platform

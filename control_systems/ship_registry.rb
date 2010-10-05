@@ -1,0 +1,107 @@
+class ShipRegistry
+   private_class_method :new
+   @@ships = nil
+   
+   def self.register_ship(ship_name, location = nil)
+      @@ships = Array.new unless @@ships
+      
+      ship = ShipData.new(ship_name, location)
+      @@ships << ship
+      
+      return ship
+   end     
+      
+end
+
+class ShipData
+   attr_reader :name, :locationPoint, :status, :headingPoint   
+   
+   def initialize(ship_name, locationPoint = nil)
+      @name = ship_name
+      @locationPoint = locationPoint
+      @headingPoint = nil
+      @status = :sync
+   end
+
+   def set_heading(planet)
+      raise "Cannot set course to #{planet}" unless (planet.kind_of? Planet) 
+      #planet must be in system
+      if (@locationPoint.body.owned_by? planet.owning_body)
+          @headingPoint = planet.outerPoint
+          info "Heading #{@headingPoint}"
+      else
+          raise "Cannot head for a planet not in this system"
+      end   
+   end
+   
+   def engage      
+       raise "I am not aware of any desired heading" if @headingPoint.nil?
+       raise "Heading is not a planet" unless (@headingPoint.body.kind_of? Planet)
+       if (@status == :sync and @locationPoint.body.kind_of? Moon) 
+           raise "I can't engage main drive while docked"
+       end    
+       #location must be planet in system
+       info "heading body #{@headingPoint.body}"
+       info "location owner body #{@locationPoint.body.root_body}"
+       if (@headingPoint.body.owned_by? @locationPoint.body.root_body)
+           @locationPoint = @headingPoint
+           @headingPoint = nil
+           @state = :rest
+       else
+           raise "Cannot head for a planet not in this system"
+       end         
+   end
+   
+   def orbit(planet)      
+      raise "Cannot orbit #{planet}" unless (planet.kind_of? Planet) 
+      #location must be planet or a moon of it
+      #state must be at rest
+      if ((planet == @locationPoint.body or planet == @locationPoint.body.owning_body) and @status == :rest)
+         @status = :sync
+         @locationPoint = planet.orbitPoint
+      else
+         raise "Cannot orbit #{planet} from #{@locationPoint}"
+      end   
+   end
+   
+   def dock(moon)
+      raise "Cannot dock with #{moon}" unless (moon.kind_of? Moon) 
+      #location must be planet or moon
+      #Either orbiting planet or atmoon
+      if ((moon == @locationPoint.body and @status == :rest) or (moon == @locationPoint.body and @status == :sync))
+         @status = :sync
+         @locationPoint = moon.outerPoint
+      else
+         raise "Cannot dock with #{moon} from #{@locationPoint}"
+      end   
+   end
+   
+   def undock()
+         #location must be moon
+         if (@locationPoint.body.kind_of? Moon and @status == :sync)
+            @status = :rest
+         else
+            raise "Cannot undock from #{@location}"
+         end   
+   end
+   
+   def leave_orbit()
+         #location must be planet
+         if (@locationPoint.body.kind_of? Planet and @status == :sync)
+            @status = :rest
+         else
+            raise "Cannot leave orbit from #{@location}"
+         end   
+   end
+   
+   def describeLocation()
+      "#{@name} is #{@locationPoint}"
+   end
+end
+
+
+
+
+
+
+
