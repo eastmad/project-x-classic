@@ -23,6 +23,8 @@ Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
               }
             elsif (@ed.text.include? "undock")
                @rq.enq SystemsMessage.new("Releasing docking clamps.", SystemSecurity, :response)
+            elsif (@ed.text.include? "fire")
+               @rq.enq SystemsMessage.new("Fire controls locked out when docked.", SystemWeapon, :warn)   
             else
               @feedback.text = "Parser: I don't know #{@ed.text}" 
             end          
@@ -49,7 +51,7 @@ Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
          line = @rq.deq
          @ap[0].line_type.text = line.make_string
          @ap[0].response_type = line.flavour
-         @ap[0].line_type.stroke = (line.flavour == :info) ? rgb(50,50,200) : rgb(200,50,50)   
+         @ap[0].set_stroke line.flavour   
       end
    }
    
@@ -61,9 +63,23 @@ class ActionLine
    
    def copy_line other_line
       @line_type.text = other_line.line_type.text
-      @line_type.stroke = (other_line.response_type == :info) ? rgb(50,50,200) : rgb(200,50,50)
+      set_stroke other_line.response_type
       @response_type = other_line.response_type
    end
+   
+   def set_stroke flav
+   
+      case flav   
+       when :response
+         @line_type.stroke = rgb(50,50,200)
+       when :warn
+         @line_type.stroke = rgb(200,50,50)
+       else
+         @line_type.stroke = rgb(0,0,0)
+      end
+   
+   end
+   
 end
 
 class SystemsMessage
@@ -77,7 +93,7 @@ class SystemsMessage
    
    def make_string
       str = origin.cursor_str unless origin.nil?
-      str << ":#{@text}"
+      str << ": #{@text}"
       str
    end
 end
