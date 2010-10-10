@@ -195,24 +195,7 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    def goodbye      
       exit()
    end
-
-=begin
-
-   def do_stuff(lastCommand, req_op)
-      command_sys = ShipSystem.find_system(req_op[:ship_system]) 
-             
-      resp_hash = command_sys.evaluate(lastCommand)
-      @resp_str = "#{command_sys.cursor_str}: #{resp_hash[:str]}"
-      @info_str = @ship.describeLocation()
-      @resp.replace "#{@resp_str}"     
-      @info.replace "#{@info_str}"     
-      if (resp_hash[:success])
-          MediaManager.show_media(@im_win,resp_hash[:media]) 
-      else 
-          SoundPlay.play_sound(5)
-      end       
-   end
-=end   
+   
    def reset     
      @dr.clear @arr            
      @state = :empty
