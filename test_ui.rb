@@ -1,77 +1,94 @@
+require "control_systems/ship_system"
+require "control_systems/system_power"
+require "control_systems/system_weapon"
+require "control_systems/system_navigation"
+require "control_systems/system_communication"
+require "control_systems/system_security"
+
 Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
 
-   @feedback = strong("?")
    @rq = ResponseQueue.new   
-   @ap = ActionPanel.new([strong(), strong(), strong(), strong(), strong()])
+   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
    
    stack (:width => 450) {
       background lightblue
       flow {
          @ed = edit_line ">"
          button "done" do
-            @ap.clear_lines
-            
-       info "edit-line = #{@ed.text}"
-       if (@ed.text.include? "launch")
-               @rq.enq "Launch command confirmed."
-      every (2) { 
-                  @rq.enq AddPhasedActions.next_action if AddPhasedActions.any?
-      }
-       else
-      @rq.enq "#{@ed.text}?"
-       end  
-            
+            @feedback.text = ""
+            if (@ed.text.include? "launch")
+              @rq.enq SystemsMessage.new("Launch command confirmed.", SystemPower, :response)
+              every (2) { 
+                @rq.enq AddPhasedActions.next_action if AddPhasedActions.any?
+              }
+            elsif (@ed.text.include? "undock")
+               @rq.enq SystemsMessage.new("Releasing docking clamps.", SystemSecurity, :response)
+            else
+              @feedback.text = "Parser: I don't know #{@ed.text}" 
+            end          
             
          end
       }
-      para @feedback
+      @feedback = para
    }
    stack(:width =>550, :height => 200) {            
-      para @ap.lines[0]
-      inscription @ap.lines[1]
-      inscription @ap.lines[2]
-      inscription @ap.lines[3]
-      inscription @ap.lines[4]
+      @ap[0].line_type = inscription ""
+      @ap[1].line_type = inscription ""
+      @ap[2].line_type = inscription ""
+      @ap[3].line_type = inscription ""
+      @ap[4].line_type = inscription ""
    }
    
    every (1) {
-      unless @rq.peek.nil?
-      
-         @ap.lines[4].text = @ap.lines[3].text
-         @ap.lines[3].text = @ap.lines[2].text
-         @ap.lines[2].text = @ap.lines[1].text
-         @ap.lines[1].text = @ap.lines[0].text
-         @ap.lines[0].text = ""
-         @ap.lines[0].text = @rq.deq unless @rq.peek.nil?
+      unless @rq.peek.nil?     
+         @ap[4].copy_line @ap[3]
+         @ap[3].copy_line @ap[2]
+         @ap[2].copy_line @ap[1]
+         @ap[1].copy_line @ap[0]
+         #@ap[0].line_type.text = ""
+         line = @rq.deq
+         @ap[0].line_type.text = line.make_string
+         @ap[0].response_type = line.flavour
+         @ap[0].line_type.stroke = (line.flavour == :info) ? rgb(50,50,200) : rgb(200,50,50)   
       end
-   }      
+   }
+   
 }
 
-class ActionPanel
+class ActionLine
 
-   attr_reader :lines
+   attr_accessor :line_type, :response_type
    
-   def initialize panelElements
-      @lines = panelElements 
+   def copy_line other_line
+      @line_type.text = other_line.line_type.text
+      @line_type.stroke = (other_line.response_type == :info) ? rgb(50,50,200) : rgb(200,50,50)
+      @response_type = other_line.response_type
    end
-   
-   def clear_lines
-      @lines.each { |line| 
-         info "clear line #{line.text}"
-         #line.text = ""
-      }
-   end
-
 end
 
+class SystemsMessage
+   attr_reader :text, :origin, :flavour 
+
+   def initialize txt, orig = nil, flav = :info
+      @text = txt
+      @origin = orig
+      @flavour = flav
+   end
+   
+   def make_string
+      str = origin.cursor_str unless origin.nil?
+      str << ":#{@text}"
+      str
+   end
+end
 
 class AddPhasedActions
 
      @@a = [        
-        "Main thrusters ignited.",
-   "Course set for Mars.",
-   "Leaving satellite gravitational influence.",
-   "Currenly awaiting launch clearance."
+        SystemsMessage.new("Main thrusters ignited.", SystemPower),
+   SystemsMessage.new("Course set for Mars.", SystemNavigation),
+   SystemsMessage.new("Leaving satellite gravitational influence.", SystemNavigation),
+   SystemsMessage.new("Currenly awaiting launch clearance.", SystemCommunication)
       ]
 
    def self.next_action()
@@ -83,6 +100,9 @@ class AddPhasedActions
      false
    end
 end
+
+
+
 
 class ResponseQueue
    def initialize
