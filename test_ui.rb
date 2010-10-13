@@ -5,6 +5,10 @@ require "control_systems/system_navigation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
 
+require "interface/action_line"
+require "interface/system_message"
+require "interface/response_queue"
+
 Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
 
    @rq = ResponseQueue.new   
@@ -57,47 +61,6 @@ Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
    
 }
 
-class ActionLine
-
-   attr_accessor :line_type, :response_type
-   
-   def copy_line other_line
-      @line_type.text = other_line.line_type.text
-      set_stroke other_line.response_type
-      @response_type = other_line.response_type
-   end
-   
-   def set_stroke flav
-   
-      case flav   
-       when :response
-         @line_type.stroke = rgb(50,50,200)
-       when :warn
-         @line_type.stroke = rgb(200,50,50)
-       else
-         @line_type.stroke = rgb(0,0,0)
-      end
-   
-   end
-   
-end
-
-class SystemsMessage
-   attr_reader :text, :origin, :flavour 
-
-   def initialize txt, orig = nil, flav = :info
-      @text = txt
-      @origin = orig
-      @flavour = flav
-   end
-   
-   def make_string
-      str = origin.cursor_str unless origin.nil?
-      str << ": #{@text}"
-      str
-   end
-end
-
 class AddPhasedActions
 
      @@a = [        
@@ -120,20 +83,4 @@ end
 
 
 
-class ResponseQueue
-   def initialize
-      @queue = []
-   end
-
-   def enq obj
-      @queue << obj
-   end
-
-   def deq
-      @queue.shift
-   end
-
-   def peek
-      @queue.last
-   end
-end   
+  
