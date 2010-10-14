@@ -15,6 +15,12 @@ require "control_systems/system_power"
 require "control_systems/system_weapon"
 require "control_systems/system_navigation"
 require "control_systems/operation"
+require "control_systems/system_communication"
+require "control_systems/system_security"
+
+require "interface/action_line"
+require "interface/system_message"
+require "interface/response_queue"
 
 Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    background black
@@ -28,7 +34,6 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    Dictionary.add_discovered_proper_noun(mars.name, mars)
    station = Moon.new("Sputnik", earth.outerPoint)
    Dictionary.add_discovered_proper_noun(station.name, station)
-                 
 
    @ship = ShipRegistry.register_ship("ProjectX",station.outerPoint)
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
@@ -44,6 +49,8 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    
    stack(:width =>210) {
                   
+      @rq = ResponseQueue.new
+      
       @im_win = ImageWindow.new(:station)     
            
       @imstack = stack {
@@ -105,7 +112,13 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
       
       @resp = para "#{@resp_str}", :stroke => aqua
       @info = para "#{@info_str}", :stroke => white
-                             
+      
+      every (1) {
+        unless @rq.peek.nil?     
+          line = @rq.deq
+          @resp.text = line.make_string   
+        end
+      }
       
       sounds = Array.new
       num = 1
@@ -161,7 +174,7 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
           
          if (@state == :done)                 
             begin
-               resp_hash = ShipSystem.command_parser(@dr.fullCommand, @resp)
+               resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
                @info_str = @ship.describeLocation()
                
                if (resp_hash[:success])
@@ -190,7 +203,6 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
           
    }
             
-
    
    def goodbye      
       exit()
@@ -201,5 +213,6 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
      @state = :empty
      @gr.reset_grammar()
    end   
+  
 }
 

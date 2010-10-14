@@ -1,6 +1,6 @@
 class ShipSystem
  
- def self.command_parser command_str, resp_window
+ def self.command_parser command_str, rq
  
    command_verb = command_str.split.first
    info "command_verb = #{command_verb}"
@@ -9,9 +9,9 @@ class ShipSystem
    
    command_sys = find_system(req_op[:ship_system]) 
    resp_hash = command_sys.evaluate(command_str)
-   #@resp_str = "#{command_sys.cursor_str}: #{resp_hash[:str]}"
-   #@info_str = @ship.describeLocation()
-   resp_window.replace "#{command_sys.cursor_str}: #{resp_hash[:str]}"             
+
+   #resp_window.replace "#{command_sys.cursor_str}: #{resp_hash[:str]}"   
+   rq.enq SystemsMessage.new(resp_hash[:str], command_sys, :response)
          
    resp_hash
  end
@@ -30,11 +30,11 @@ class ShipSystem
     
     self.new.instance_eval(processed_script)     
     
-  end   
+ end   
 
  
  def self.christen(data)
-  @@ship = data
+   @@ship = data
  end
  
  def self.find_system(sys_symbol)
@@ -75,7 +75,7 @@ class ShipSystem
  end
  
  def self.cursor_str
-       "Sys"
+   "Sys"
  end
  
    def method_missing (methId, *args)      
