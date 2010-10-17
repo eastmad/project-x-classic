@@ -47,10 +47,10 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    Operation.register_op :plot, :navigation, 1
    Operation.register_op :engage, :power, 1
    
+   @rq = ResponseQueue.new
+   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
    stack(:width =>210) {
-                  
-      @rq = ResponseQueue.new
-      
+                           
       @im_win = ImageWindow.new(:station)     
            
       @imstack = stack {
@@ -84,10 +84,7 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    stack(:width => 300)  {      
       @dr = DisplayResponse.new 
       @gr = GrammarTree.new
-      #@req_str = ""
-      #@complete_str = ""
-      @resp_str = "Waiting for command.."
-      @info_str = "No request"
+
       @state = :empty
       @arr = Array.new(7)
       flow {
@@ -107,16 +104,24 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
               @arr[5] = @req6
               @arr[6] = @req7
       }
-
-      #puts @arr
       
-      @resp = para "#{@resp_str}", :stroke => aqua
-      @info = para "#{@info_str}", :stroke => white
+      @ap[0].line_type = para ""
+      @ap[1].line_type = para ""
+      @ap[2].line_type = para ""
+      @ap[3].line_type = para ""
+      @ap[4].line_type = para ""
       
       every (1) {
         unless @rq.peek.nil?     
           line = @rq.deq
-          @resp.text = line.make_string   
+          
+          @ap[4].copy_line @ap[3]
+          @ap[3].copy_line @ap[2]
+          @ap[2].copy_line @ap[1]
+          @ap[1].copy_line @ap[0]
+          @ap[0].line_type.text = line.make_string
+          @ap[0].response_type = line.flavour
+          @ap[0].set_stroke line.flavour 
         end
       }
       
@@ -136,10 +141,7 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
          
          key_resp = KeystrokeReader.key_in(k,@dr.req_str)
          @dr.req_str = key_resp[:str]
-         @state = key_resp[:state]
-         
-         @info_str = "[#{@state}]"         
-                   
+         @state = key_resp[:state]                   
          @dr.replace_req @arr
       
          if (@state == :exit)
@@ -156,26 +158,20 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
          if (@state == :complete_me)
             res = Dictionary.complete_me(@dr.req_str, @gr.next_filter)
             if (res == nil)
-              @info_str += " #{@dr.req_str} is not in dictionary"            
+              @rq.enq SystemsMessage.new("#{@dr.req_str} is not in dictionary", SystemCommunication, :warn)
             else
                SoundPlay.play_sound(0)
                @dr.req_str = res[:word]
                @dr.req_grammar = res[:grammar]
-               @gr.set_grammar(res[:grammar])
-               @info_str += " #{res[:word]} found (#{res[:grammar]})"
-               if (!res[:systems].nil? and  res[:systems].include? :weapon) 
-                  @info_str += " bang"
-               end   
+               @gr.set_grammar(res[:grammar])  
             end                           
             @dr.add_req               
-            #@resp.replace @resp_str
             @dr.replace_req @arr            
          end
           
          if (@state == :done)                 
             begin
                resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
-               @info_str = @ship.describeLocation()
                
                if (resp_hash[:success])
                   MediaManager.show_media(@im_win,resp_hash[:media]) 
@@ -191,13 +187,12 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
                #@heading_inscription.hide
                end   
                @action_inscription.replace @ship.status, :stroke => white            
-            rescue
-                 @info_str += " #{@dr.req_str} is not in dictionary"            
+            rescue => ex
+               @rq.enq SystemsMessage.new("#{ex}", SystemCommunication, :warn)            
             end
             
             reset
          end
-         @info.replace "#{@info_str}"
       }
       
           

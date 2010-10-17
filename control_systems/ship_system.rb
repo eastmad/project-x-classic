@@ -5,7 +5,7 @@ class ShipSystem
    command_verb = command_str.split.first
    info "command_verb = #{command_verb}"
    req_op = Operation.find_op(command_verb.to_sym)
-   raise "No operation correcponds to command" if req_op.nil? 
+   raise "No operation corresponds to command '#{command_verb}'" if req_op.nil? 
    
    command_sys = find_system(req_op[:ship_system]) 
    resp_hash = command_sys.evaluate(command_str)
