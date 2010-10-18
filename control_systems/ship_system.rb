@@ -1,5 +1,11 @@
 class ShipSystem
  
+ @@rq = nil
+ 
+ def self.set_rq rq
+   @@rq = rq
+ end
+ 
  def self.command_parser command_str, rq
  
    command_verb = command_str.split.first
@@ -7,11 +13,12 @@ class ShipSystem
    req_op = Operation.find_op(command_verb.to_sym)
    raise "No operation corresponds to command '#{command_verb}'" if req_op.nil? 
    
-   command_sys = find_system(req_op[:ship_system]) 
+   command_sys = find_system(req_op[:ship_system])
+   command_sys.set_rq rq
    resp_hash = command_sys.evaluate(command_str)
 
    #resp_window.replace "#{command_sys.cursor_str}: #{resp_hash[:str]}"   
-   rq.enq SystemsMessage.new(resp_hash[:str], command_sys, :response)
+   #rq.enq SystemsMessage.new(resp_hash[:str], command_sys, :response)
          
    resp_hash
  end

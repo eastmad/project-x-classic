@@ -7,6 +7,9 @@ require "simple_object_world/simple_body"
 require "simple_object_world/simple_game_object"
 require "simple_object_world/location_point"
 require "simple_object_world/location_link"
+require "interface/action_line"
+require "interface/system_message"
+require "interface/response_queue"
 require "control_systems/dictionary"
 require "control_systems/grammar_tree"
 require "control_systems/ship_registry"
@@ -18,9 +21,7 @@ require "control_systems/operation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
 
-require "interface/action_line"
-require "interface/system_message"
-require "interface/response_queue"
+
 
 Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    background black
@@ -39,10 +40,10 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
    ShipSystem.christen(@ship)
    Operation.register_op :launch, :power, 1
-   Operation.register_op :undock, :power, 1
+   Operation.register_op :undock, :security, 1
    Operation.register_op :fire, :weapon, 1
    Operation.register_op :compute, :navigation, 1
-   Operation.register_op :dock, :power, 1
+   Operation.register_op :dock, :navigation, 1
    Operation.register_op :orbit, :power, 1
    Operation.register_op :plot, :navigation, 1
    Operation.register_op :engage, :power, 1

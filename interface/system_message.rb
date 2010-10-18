@@ -1,4 +1,4 @@
-class SystemsMessage
+class SystemsMessage < RuntimeError
    attr_reader :text, :origin, :flavour 
 
    def initialize txt, orig = nil, flav = :info

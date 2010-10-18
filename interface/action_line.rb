@@ -12,11 +12,13 @@ class ActionLine
    
       case flav   
        when :response
-         @line_type.stroke = rgb(50,50,200)
+         @line_type.stroke = rgb(150,150,255)
+       when :response_bad
+         @line_type.stroke = rgb(255,175,175)
        when :warn
-         @line_type.stroke = rgb(200,50,50)
+         @line_type.stroke = rgb(255,150,150)
        else
-         @line_type.stroke = rgb(0,0,0)
+         @line_type.stroke = rgb(255,255,255)
       end
    
    end

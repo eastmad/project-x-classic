@@ -9,8 +9,11 @@ class SystemPower < ShipSystem
         ret = "#{@subj} launched towards #{@adj} #{@obj}"   
       end       
       resp_hash = {:str => ret, :success => true, :media => :travel}
+      @@rq.enq SystemsMessage.new(ret, SystemPower, :response) 
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("launch cancelled", SystemPower, :response_bad)
     end      
               
     return resp_hash 
@@ -40,44 +43,14 @@ class SystemPower < ShipSystem
       ret = "Main drive engaged. Heading: #{@@ship.headingPoint}"
       @@ship.engage          
       resp_hash = {:str => ret, :success => true, :media => :plot_course}
+      @@rq.enq SystemsMessage.new(ret, SystemPower, :response)
     rescue RuntimeError => ex          
-      resp_hash = {:str => ex, :success => false}
+      resp_hash = {:success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Main drive not engaged", SystemPower, :response_bad)
     end      
          
     return resp_hash
-  end
-  
-  def _undock(args = nil)     
-    #info "Call undock"
-    begin
-      @@ship.undock
-      ret = "#{@@ship.name} undocked"
-      if (!@obj.nil?)
-         ret += " from #{@obj}"
-      end
-      resp_hash = {:str => ret, :success => true, :media => :travel}
-    rescue RuntimeError => ex 
-      resp_hash = {:str => ex, :success => false}
-    end      
-       
-    return resp_hash  
-  end
-  
-  def _dock(args = nil)     
-   #info "Call dock"
-   begin
-     sgo = find_sgo_from_name(@obj)     
-     @@ship.dock sgo
-     ret = "#{@@ship.name} docked"      
-     if (!sgo.nil?)
-           ret += " to #{@obj}"
-     end
-     resp_hash = {:str => ret, :success => true, :media => :docking}
-   rescue RuntimeError => ex      
-     resp_hash = {:str => ex, :success => false}
-   end      
-     
-   return resp_hash
   end
   
   def _orbit(args = nil)     
@@ -89,8 +62,11 @@ class SystemPower < ShipSystem
          ret = "#{@@ship.name} in orbit around #{@obj}"       
        end
        resp_hash = {:str => ret, :success => true, :media => :plot_course}
+       @@rq.enq SystemsMessage.new(ret, SystemPower, :response)
      rescue RuntimeError => ex 
        resp_hash = {:str => ex, :success => false}
+       @@rq.enq ex
+       @@rq.enq SystemsMessage.new("Cannot enter orbit", SystemPower, :response_bad)
      end      
        
      return resp_hash  
@@ -100,11 +76,11 @@ class SystemPower < ShipSystem
   end
    
   def to_s
-      "I am the power system"
+    "I am the power system"
   end
   
   def self.cursor_str
-         "Power"
+     "Power"
   end
 end
 
