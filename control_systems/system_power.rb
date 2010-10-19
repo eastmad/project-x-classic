@@ -1,5 +1,5 @@
 class SystemPower < ShipSystem
-      
+  Operation.register_sys(:power)    
   def _launch(args=nil)
     
     begin

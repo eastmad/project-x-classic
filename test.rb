@@ -14,16 +14,16 @@ require "control_systems/dictionary"
 require "control_systems/grammar_tree"
 require "control_systems/ship_registry"
 require "control_systems/ship_system"
+require "control_systems/operation"
 require "control_systems/system_power"
 require "control_systems/system_weapon"
 require "control_systems/system_navigation"
-require "control_systems/operation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
+require "control_systems/system_myself"
 
 
-
-Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
+Shoes.app(:width => 550, :height => 250, :title => "ProjectX") {
    background black
    stroke white
    
@@ -47,6 +47,7 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
    Operation.register_op :orbit, :power, 1
    Operation.register_op :plot, :navigation, 1
    Operation.register_op :engage, :power, 1
+   Operation.register_op :summarize, :myself, 1
    
    @rq = ResponseQueue.new
    @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
@@ -88,6 +89,9 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
 
       @state = :empty
       @arr = Array.new(7)
+ 
+      stack {
+     	border rgb(25,25,50) , :strokewidth => 1
       flow {
               para "> ", :stroke => white
               @req = para "_", :stroke => white     
@@ -105,6 +109,8 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
               @arr[5] = @req6
               @arr[6] = @req7
       }
+      @last_command = inscription "Waiting for command", :stroke => gray
+      } 	
       
       @ap[0].line_type = para ""
       @ap[1].line_type = para ""
@@ -129,15 +135,17 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
       sounds = Array.new
       num = 1
         
-      while File.exists?(SoundPlay.load_sound(num)) do    
-         s = SoundPlay.load_sound(num)
-         sound = video s          
-         info "sound=#{sound.inspect}"
-         SoundPlay.register_sound(sound)     
-         num += 1
-      end  
-      SoundPlay.hide_sounds()      
-      
+      if SoundPlay.sound?
+      	while File.exists?(SoundPlay.load_sound(num)) do    
+       	  s = SoundPlay.load_sound(num)
+          sound = video s          
+          info "sound=#{sound.inspect}"
+          SoundPlay.register_sound(sound)     
+          num += 1
+        end  
+        SoundPlay.hide_sounds()      
+      end	      
+
       keypress { |k|
          
          key_resp = KeystrokeReader.key_in(k,@dr.req_str)
@@ -159,7 +167,7 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
          if (@state == :complete_me)
             res = Dictionary.complete_me(@dr.req_str, @gr.next_filter)
             if (res == nil)
-              @rq.enq SystemsMessage.new("#{@dr.req_str} is not in dictionary", SystemCommunication, :warn)
+              @rq.enq SystemsMessage.new("#{@dr.req_str} is not in dictionary", SystemMyself, :warn)
             else
                SoundPlay.play_sound(0)
                @dr.req_str = res[:word]
@@ -189,9 +197,10 @@ Shoes.app (:width => 550, :height => 250, :title => "ProjectX") {
                end   
                @action_inscription.replace @ship.status, :stroke => white            
             rescue => ex
-               @rq.enq SystemsMessage.new("#{ex}", SystemCommunication, :warn)            
+               @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
             end
             
+	    @last_command.text = @dr.fullCommand  
             reset
          end
       }

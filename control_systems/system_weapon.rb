@@ -1,5 +1,5 @@
 class SystemWeapon < ShipSystem
-    
+  Operation.register_sys(:weapon)  
   def _fire(arg = nil)     
    #info "Call fire"
       
@@ -38,7 +38,6 @@ class SystemWeapon < ShipSystem
   end 
       
   def initialize
-  @a = 0
   end
    
   def to_s

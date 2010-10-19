@@ -2,8 +2,12 @@ class SoundPlay
    
    private_class_method :new
    @@sounds = Array.new
-   PLAYSOUNDS = true
+   PLAYSOUNDS = false
    
+   def self.sound?
+   	PLAYSOUNDS
+   end
+ 
    def self.load_sound(sound_id)
       "wav/sf#{sound_id}.wav"
    end      

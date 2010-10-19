@@ -1,5 +1,5 @@
 class SystemSecurity < ShipSystem 
-
+  Operation.register_sys(:security)
   def _undock(args = nil)     
     #info "Call undock"
     begin
