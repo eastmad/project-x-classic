@@ -9,12 +9,12 @@ class SystemMyself < ShipSystem
     begin
       if @subj.nil?
         all_systems = Operation.find_all_systems.join(", ")
-	ret = "#{@@ship.name} has the systems #{all_systems}"
+	     ret = "#{@@ship.name} has the systems #{all_systems}"
       else
       	all_commands = Operation.find_sys_commands(@subj).join(", ") 
-      	ret = "#{@subj} recognises the following commands: #{all_commands}"
+      	ret = "#{@subj} recognises the following commands: #{all_commands}."
       end
-      resp_hash = {:str => ret, :success => true}
+      resp_hash = {:success => true}
       @@rq.enq SystemsMessage.new(ret, SystemMyself, :response)
     rescue RuntimeError => ex          
       resp_hash = {:success => false}
@@ -23,10 +23,21 @@ class SystemMyself < ShipSystem
          
     return resp_hash
   end
-
-    
-  def initialize
-  end
+   
+ def _help
+ 
+   @@rq.enq SystemsMessage.new("Please drive responsibly", SystemMyself, :info)
+ 
+   @@rq.enq SystemsMessage.new("Use 'summarize <system>' to learn about commands a system understands.", SystemMyself, :info)
+  
+   @@rq.enq SystemsMessage.new("Use 'summarize' to list all systems", SystemMyself, :info) 
+   
+   @@rq.enq SystemsMessage.new("My system helps you control the other onboard systems", SystemMyself, :info) 
+   
+   @@rq.enq SystemsMessage.new("This is the #{@@ship.name}", SystemMyself, :response)
+   
+   {:success => true}
+ end
    
   def to_s
       "I'm online"

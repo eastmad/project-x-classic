@@ -1,5 +1,7 @@
 class SystemNavigation < ShipSystem
     
+  Operation.register_sys(:navigation)
+    
   def _probe(args = nil)
    @subj = "probe"
   end

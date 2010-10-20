@@ -11,6 +11,7 @@ class Dictionary
             {:word => :send, :grammar => :verb, :systems => [:comms]},
             {:word => :describe, :grammar => :verb, :systems => [:library]},
             {:word => :summarize, :grammar => :verb, :systems => [:myself]},
+            {:word => :help, :grammar => :verb, :systems => [:myself]},
                         
             {:word => :gate, :grammar => :noun, :systems => [:navigation]},
             {:word => :probe, :grammar => :noun, :systems => [:navigation, :power]},
