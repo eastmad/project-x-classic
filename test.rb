@@ -23,7 +23,7 @@ require "control_systems/system_security"
 require "control_systems/system_myself"
 
 
-Shoes.app(:width => 550, :height => 250, :title => "ProjectX") {
+Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    background black
    stroke white
    
@@ -92,7 +92,7 @@ Shoes.app(:width => 550, :height => 250, :title => "ProjectX") {
       @arr = Array.new(7)
  
       stack {
-     	border rgb(25,25,50) , :strokewidth => 1
+      border rgb(25,25,50) , :strokewidth => 1
       flow {
               para "> ", :stroke => white
               @req = para "_", :stroke => white     
@@ -111,7 +111,7 @@ Shoes.app(:width => 550, :height => 250, :title => "ProjectX") {
               @arr[6] = @req7
       }
       @last_command = inscription "Waiting for command", :stroke => gray
-      } 	
+      }  
       
       @ap[0].line_type = para ""
       @ap[1].line_type = para ""
@@ -137,15 +137,15 @@ Shoes.app(:width => 550, :height => 250, :title => "ProjectX") {
       num = 1
         
       if SoundPlay.sound?
-      	while File.exists?(SoundPlay.load_sound(num)) do    
-       	  s = SoundPlay.load_sound(num)
+         while File.exists?(SoundPlay.load_sound(num)) do    
+           s = SoundPlay.load_sound(num)
           sound = video s          
           info "sound=#{sound.inspect}"
           SoundPlay.register_sound(sound)     
           num += 1
         end  
         SoundPlay.hide_sounds()      
-      end	      
+      end         
 
       keypress { |k|
          
@@ -201,7 +201,7 @@ Shoes.app(:width => 550, :height => 250, :title => "ProjectX") {
                @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
             end
             
-	    @last_command.text = @dr.fullCommand  
+       @last_command.text = @dr.fullCommand  
             reset
          end
       }

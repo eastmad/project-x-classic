@@ -57,7 +57,7 @@ class ShipSystem
  end
  
  def self.is_proper_noun?(word)   
-   dic_entry = Dictionary.matching_word(word.capitalize!)
+   dic_entry = Dictionary.matching_word(word.capitalize)
    if !dic_entry.nil? and dic_entry[:grammar] == :proper_noun
       return true
    end
@@ -85,18 +85,19 @@ class ShipSystem
    "Sys"
  end
  
-   def method_missing (methId, *args)      
-       word = methId.id2name
-       info "(methId, *args) Call method missing:#{word} and #{args.length} "
-       
-       word.slice!(0)
-       if ShipSystem.is_proper_noun?(word)
-          if (@obj.nil?)
-             @obj = word.capitalize
-          elsif (@subj.nil?)   
-             @subj = word.capitalize
-          end   
-       end
-  end
+ def method_missing (methId, *args)      
+   word = methId.id2name
+   info "(methId, *args) Call method missing:#{word} and #{args.length} "
 
+   word.slice!(0)
+   if ShipSystem.is_proper_noun?(word)
+     if (@obj.nil?)
+       @obj = word.capitalize
+     elsif (@subj.nil?)
+       @subj = word.capitalize
+     end
+   else
+     @subj = word.to_sym
+   end
+ end
 end

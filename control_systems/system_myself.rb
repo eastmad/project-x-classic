@@ -6,16 +6,24 @@ class SystemMyself < ShipSystem
   end
 
   def _summarize(args = nil)
+    
     begin
       if @subj.nil?
         all_systems = Operation.find_all_systems.join(", ")
-	     ret = "#{@@ship.name} has the systems #{all_systems}"
+        ret = "#{@@ship.name} has the systems #{all_systems}"
+        para1 = <<-END.gsub(/^ {10}/, '')
+          #{ret}.
+                        
+          Type 'summarize' to find all commands known to one system.
+        END
       else
-      	all_commands = Operation.find_sys_commands(@subj).join(", ") 
-      	ret = "#{@subj} recognises the following commands: #{all_commands}."
+         all_commands = Operation.find_sys_commands(@subj).join(", ") 
+         para1 = "#{@subj} recognises the following commands: #{all_commands}."
       end
+      
+
       resp_hash = {:success => true}
-      @@rq.enq SystemsMessage.new(ret, SystemMyself, :response)
+      @@rq.enq SystemsMessage.new(para1, SystemMyself, :response)
     rescue RuntimeError => ex          
       resp_hash = {:success => false}
       @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
@@ -24,37 +32,21 @@ class SystemMyself < ShipSystem
     return resp_hash
   end
    
- def _help
+  def _help
  
-   @@rq.enq SystemsMessage.new("Please drive responsibly", SystemMyself, :info)
- 
-   @@rq.enq SystemsMessage.new("Use 'summarize <system>' to learn about commands a system understands.", SystemMyself, :info)
-  
-   @@rq.enq SystemsMessage.new("Use 'summarize' to list all systems", SystemMyself, :info) 
+    para1 = <<-END.gsub(/^ {6}/, '')
+      You are commanding the small spacecraft #{@@ship.name}. I will help you talk to the other onboard systems.
+      
+      Type 'summarize' to list all online systems.
+      Type 'describe' to find information about stars, palnets and satellites.
+    END
+
+    @@rq.enq SystemsMessage.new(para1, SystemMyself, :response)
    
-   @@rq.enq SystemsMessage.new("My system helps you control the other onboard systems", SystemMyself, :info) 
-   
-   @@rq.enq SystemsMessage.new("This is the #{@@ship.name}", SystemMyself, :response)
-   
-   {:success => true}
- end
+    {:success => true}
+  end
    
   def to_s
-      "I'm online"
-  end
-
-  def method_missing (methId, *args)      
-     word = methId.id2name
-     info "(methId, *args) Call method missing:#{word} and #{args.length} "
-       
-     if ShipSystem.is_proper_noun?(word)
-        if (@obj.nil?)
-           @obj = word.capitalize
-        elsif (@subj.nil?)   
-           @subj = word.capitalize
-        end 
-     else
-	 @subj = word.to_sym
-     end
+    "I'm online"
   end
 end
