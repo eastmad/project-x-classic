@@ -44,11 +44,13 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    Operation.register_op :fire, :weapon, 1
    Operation.register_op :compute, :navigation, 1
    Operation.register_op :dock, :navigation, 1
+   Operation.register_op :describe, :navigation, 1
    Operation.register_op :orbit, :power, 1
    Operation.register_op :plot, :navigation, 1
    Operation.register_op :engage, :power, 1
    Operation.register_op :summarize, :myself, 1
    Operation.register_op :help, :myself, 1
+
    
    @rq = ResponseQueue.new
    @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]

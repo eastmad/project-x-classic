@@ -42,7 +42,7 @@ class Star < CelestialObject
    end
    
    def owns
-      @outerPoint.findLinkedLocPoint(:planet).body
+      @outerPoint.findLinkedLocPoint(:planet)
    end
       
 end
@@ -73,7 +73,7 @@ class Planet < CelestialObject
    end
    
    def owns
-      @outerPoint.findLinkedLocPoint(:satellite).body
+      @outerPoint.findLinkedLocPoint(:satellite)
    end
 
 end

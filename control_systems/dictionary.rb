@@ -12,7 +12,7 @@ class Dictionary
             {:word => :describe, :grammar => :verb, :systems => [:library]},
             {:word => :summarize, :grammar => :verb, :systems => [:myself]},
             {:word => :help, :grammar => :verb, :systems => [:myself]},
-                        
+            {:word => :describe, :grammar => :verb, :systems => [:myself]},                        
             {:word => :gate, :grammar => :noun, :systems => [:navigation]},
             {:word => :probe, :grammar => :noun, :systems => [:navigation, :power]},
             {:word => :course, :grammar => :noun, :systems => [:navigation]},

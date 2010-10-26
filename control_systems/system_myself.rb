@@ -13,8 +13,8 @@ class SystemMyself < ShipSystem
         ret = "#{@@ship.name} has the systems #{all_systems}"
         para1 = <<-END.gsub(/^ {10}/, '')
           #{ret}.
-                        
-          Type 'summarize' to find all commands known to one system.
+          
+          Type 'summarize navigation' to find all commands known to that system.
         END
       else
          all_commands = Operation.find_sys_commands(@subj).join(", ") 

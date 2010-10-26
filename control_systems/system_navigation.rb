@@ -15,7 +15,20 @@ class SystemNavigation < ShipSystem
   end
    
   def _course(arg = nil)        
-  end     
+  end    
+  
+  def _describe(arg = nil)
+    rbody = @@ship.locationPoint.body.root_body
+    planets = rbody.owns.collect{|locPoint| locPoint.body}
+    para1 = <<-END.gsub(/^ {6}/, '')
+      We are in the #{rbody} system.
+      The orbiting planets are #{planets.join(", ")}.
+      
+      Type 'describe Mars' to find information about one celestial body
+    END
+    @@rq.enq SystemsMessage.new(para1, SystemNavigation, :response)
+    {:success => true, :media => :docking}
+  end
   
   def _compute(arg = nil)
     {:str => "Poo\nPoo\nPoo\nPoo\nPoo", :success => true, :media => :travel}
