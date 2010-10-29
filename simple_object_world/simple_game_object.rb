@@ -36,6 +36,17 @@ class Star < CelestialObject
       
    end
    
+   def status_word(status)
+      if status == :rest
+         sw = "within"
+      elsif status == :sync
+         sw = "orbiting"
+      elsif status == :dependent
+         sw = "ash on"
+      end
+      
+      sw
+   end
    
    def describe
      "#{@name} is a star within the galaxy"
@@ -71,6 +82,19 @@ class Planet < CelestialObject
    def describe
       "#{@name} is a planet orbiting #{@owning_body.name}"
    end
+
+   def status_word(status)
+      if status == :rest
+         sw = "in vicinity of"
+      elsif status == :sync
+         sw = "orbiting"
+      elsif status == :dependent
+         sw = "parked on"
+      end
+      
+      sw
+   end
+
    
    def owns
       @outerPoint.findLinkedLocPoint(:satellite)
@@ -91,6 +115,19 @@ class Moon < CelestialObject
       ownerPoint.add_link(:satellite, @outerPoint)      
    end
    
+   def status_word(status)
+      if status == :rest
+         sw = "in vicinity of"
+      elsif status == :sync
+         sw = "orbiting"
+      elsif status == :dependent
+         sw = "docked with"
+      end
+      
+      sw
+   end
+
+
    def describe
       "#{@name} is a satellite of #{@owning_body.name}"
    end

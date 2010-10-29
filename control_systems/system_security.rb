@@ -4,14 +4,14 @@ class SystemSecurity < ShipSystem
     #info "Call undock"
     begin
       @@ship.undock
-      ret = "#{@@ship.name} undocked"
+      ret = "#{@@ship.name} docking clamps released"
       if (!@obj.nil?)
          ret += " from #{@obj}"
       end
-      resp_hash = {:str => ret, :success => true, :media => :travel}
+      resp_hash = {:success => true}
       @@rq.enq SystemsMessage.new(ret, SystemPower, :response)
     rescue RuntimeError => ex 
-      resp_hash = {:str => ex, :success => false}
+      resp_hash = {:success => false}
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("Cannot release clamps", SystemSecurity, :response)
     end      

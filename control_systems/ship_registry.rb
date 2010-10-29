@@ -20,7 +20,7 @@ class ShipData
       @name = ship_name
       @locationPoint = locationPoint
       @headingPoint = nil
-      @status = :sync
+      @status = :dependent
    end
 
    def set_heading(planet)
@@ -37,7 +37,7 @@ class ShipData
    def engage      
        raise SystemsMessage.new("I am not aware of any desired heading", SystemNavigation, :info) if @headingPoint.nil?
        raise SystemsMessage.new("Heading is not a planet", SystemNavigation, :info) unless (@headingPoint.body.kind_of? Planet)
-       if (@status == :sync and @locationPoint.body.kind_of? Moon) 
+       if (@status == :dependent) 
            raise SystemsMessage.new("I can't engage main drive while docked", SystemSecurity, :info)
        end    
        #location must be planet in system
@@ -56,7 +56,7 @@ class ShipData
       raise SystemsMessage.new("Cannot orbit #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
       #location must be planet or a moon of it
       #state must be at rest
-      if ((planet == @locationPoint.body or planet == @locationPoint.body.owning_body) and @status == :rest)
+      if ((planet == @locationPoint.body or planet == @locationPoint.body.owning_body) and @status != :sync)
          @status = :sync
          @locationPoint = planet.orbitPoint
       else
@@ -65,11 +65,12 @@ class ShipData
    end
    
    def dock(moon)
+      raise SystemsMessage.new("#{@name} is already docked", SystemNavigation, :info) if (@status == :dependent)
       raise SystemsMessage.new("Cannot dock with #{moon}", SystemNavigation, :info) unless (moon.kind_of? Moon) 
       #location must be planet or moon
       #Either orbiting planet or atmoon
       if ((moon == @locationPoint.body and @status == :rest) or (moon == @locationPoint.body and @status == :sync))
-         @status = :sync
+         @status = :dependent
          @locationPoint = moon.outerPoint
       else
          raise SystemsMessage.new("Cannot dock with #{moon} from #{@locationPoint}", SystemNavigation, :info)
@@ -78,7 +79,7 @@ class ShipData
    
    def undock()
       #location must be moon
-      if (@locationPoint.body.kind_of? Moon and @status == :sync)
+      if (@locationPoint.body.kind_of? Moon and @status == :dependent)
          @status = :rest
       else
          raise SystemsMessage.new("Cannot undock from #{@location}", SystemSecurity, :info)
@@ -87,7 +88,7 @@ class ShipData
    
    def leave_orbit()
       #location must be planet
-      if (@locationPoint.body.kind_of? Planet and @status == :sync)
+      if (@locationPoint.body.kind_of? Planet and @status == :dependent)
            @status = :rest
       else
           raise SystemsMessage.new("Cannot leave orbit from #{@location}", SystemNavigation, :info)
@@ -95,7 +96,8 @@ class ShipData
    end
    
    def describeLocation()
-      "#{@name} is #{@locationPoint}"
+      statusword = @locationPoint.body.status_word(@status)
+      "#{statusword} #{@locationPoint.body}"
    end
 end
 

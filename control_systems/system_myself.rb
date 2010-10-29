@@ -4,6 +4,12 @@ class SystemMyself < ShipSystem
   def self.cursor_str
       "Myself"
   end
+  
+  def _status(args = nil)
+    SystemNavigation.status
+    
+    {:success => true}
+  end
 
   def _summarize(args = nil)
     

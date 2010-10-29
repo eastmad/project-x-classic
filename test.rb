@@ -50,6 +50,7 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    Operation.register_op :engage, :power, 1
    Operation.register_op :summarize, :myself, 1
    Operation.register_op :help, :myself, 1
+   Operation.register_op :status, :myself, 1
 
    
    @rq = ResponseQueue.new
@@ -79,7 +80,7 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
          
          @action_icon = flow {
             image "gifs/loc_icon.gif"
-            @action_inscription = inscription @ship.locationPoint, :stroke => white
+            @action_inscription = inscription @ship.describeLocation, :stroke => white
          }
       }
       
@@ -192,18 +193,18 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
                end 
                
                if (!@ship.headingPoint.nil?)
-                  @heading_inscription.replace @ship.headingPoint.body, :stroke => white
+                  @heading_inscription.replace @ship.headingPoint, :stroke => white
                   @heading_icon.show
                else
                   @heading_icon.hide
                #@heading_inscription.hide
                end   
-               @action_inscription.replace @ship.status, :stroke => white            
+               @action_inscription.replace @ship.describeLocation, :stroke => white            
             rescue => ex
                @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
             end
             
-       @last_command.text = @dr.fullCommand  
+            @last_command.text = @dr.fullCommand  
             reset
          end
       }

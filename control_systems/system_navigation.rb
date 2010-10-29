@@ -3,15 +3,15 @@ class SystemNavigation < ShipSystem
   Operation.register_sys(:navigation)
     
   def _probe(args = nil)
-   @subj = "probe"
+    @subj = "probe"
   end
     
   def _planet(args = nil)
-   @obj = "planet"
+    @obj = "planet"
   end
   
   def _nearest(args = nil)
-   @adj = "nearest"
+    @adj = "nearest"
   end
    
   def _course(arg = nil)        
@@ -35,50 +35,51 @@ class SystemNavigation < ShipSystem
   end
   
   def _plot(args = nil)     
-     info "Call plot"
-     begin        
-        sgo = ShipSystem.find_sgo_from_name(@obj)          
-        if (!sgo.nil?)
-            ret = "Course plotted to #{@obj}"
-            @@ship.set_heading sgo
-        end
-        resp_hash = {:str => ret, :success => true, :media => :travel}
-        @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
-     rescue RuntimeError => ex 
-       resp_hash = {:str => ex, :success => false}
-       @@rq.enq ex
-       @@rq.enq SystemsMessage.new("Cannot plot course", SystemNavigation, :response_bad)
-     end      
-       
-     return resp_hash  
+    info "Call plot"
+    begin        
+      sgo = ShipSystem.find_sgo_from_name(@obj)          
+      if (!sgo.nil?)
+        ret = "Course plotted to #{@obj}"
+        @@ship.set_heading sgo
+      end
+      resp_hash = {:str => ret, :success => true, :media => :travel}
+      @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
+    rescue RuntimeError => ex 
+      resp_hash = {:str => ex, :success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Cannot plot course", SystemNavigation, :response_bad)
+    end      
+      
+    return resp_hash  
   end
   
   
   def _dock(args = nil)     
-     #info "Call dock"
-     begin
-       sgo = find_sgo_from_name(@obj)     
-       @@ship.dock sgo
-       ret = "#{@@ship.name} docked"      
-       if (!sgo.nil?)
-             ret += " to #{@obj}"
-       end
-       resp_hash = {:str => ret, :success => true, :media => :docking}
-       @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
-     rescue RuntimeError => ex      
-       resp_hash = {:str => ex, :success => false}
-       @@rq.enq ex
-       @@rq.enq SystemsMessage.new("Cannot dock", SystemNavigation, :response)
-     end      
-       
-     return resp_hash
+    #info "Call dock"
+    begin
+      sgo = find_sgo_from_name(@obj) unless @obj.nil?     
+      @@ship.dock sgo
+      ret = "#{@@ship.name} docked"      
+      if (!sgo.nil?)
+         ret += " to #{@obj}"
+      end
+      resp_hash = {:str => ret, :success => true, :media => :docking}
+      @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
+    rescue RuntimeError => ex      
+      resp_hash = {:str => ex, :success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Docking manoeuvre not attempted", SystemNavigation, :response_bad)
+    end      
+      
+    return resp_hash
   end
-  
-  def initialize
-  end
-   
+
   def to_s
       "I am the navigation system"
+  end
+  
+  def self.status
+    @@rq.enq SystemsMessage.new("#{@@ship.name} is #{@@ship.describeLocation}", SystemNavigation, :response)
   end
   
   def self.cursor_str
