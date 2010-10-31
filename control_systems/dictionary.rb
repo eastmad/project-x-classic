@@ -4,9 +4,9 @@ class Dictionary
             {:word => :compute, :grammar => :verb, :systems => [:navigation]},
             {:word => :launch, :grammar => :verb, :systems => [:weapon, :power]},
             {:word => :engage, :grammar => :verb, :systems => [:power]},
-            {:word => :dock, :grammar => :verb, :systems => [:navigation, :power]},
             {:word => :orbit, :grammar => :verb, :systems => [:navigation, :power]},
-            {:word => :undock, :grammar => :verb, :systems => [:navigation, :power]},
+            {:word => :dock, :grammar => :verb, :systems => [:power]},
+            {:word => :undock, :grammar => :verb, :systems => [:power]},
             {:word => :plot, :grammar => :verb, :systems => [:navigation]},
             {:word => :send, :grammar => :verb, :systems => [:comms]},
             {:word => :describe, :grammar => :verb, :systems => [:library]},
@@ -14,6 +14,7 @@ class Dictionary
             {:word => :help, :grammar => :verb, :systems => [:myself]},
             {:word => :describe, :grammar => :verb, :systems => [:myself]},
             {:word => :status, :grammar => :verb, :systems => [:myself]}, 
+            {:word => :release, :grammar => :noun, :systems => [:security]},
             {:word => :gate, :grammar => :noun, :systems => [:navigation]},
             {:word => :probe, :grammar => :noun, :systems => [:navigation, :power]},
             {:word => :course, :grammar => :noun, :systems => [:navigation]},
@@ -61,4 +62,9 @@ class Dictionary
    def self.add_discovered_proper_noun(str, sgo)
       @@Words << {:word => str.to_sym, :grammar => :proper_noun, :systems =>[:navigation], :sgo => sgo}
    end
+   
+   def self.add_system_nouns(sys)
+       @@Words << {:word => sys, :grammar => :noun, :systems =>[:myself]}
+   end
+   
 end

@@ -85,6 +85,18 @@ class ShipSystem
    "Sys"
  end
  
+ def self.status
+    @@rq.enq SystemsMessage.new("System cannot report it's status yet", SystemMyself, :info)
+ end
+ 
+ def get_system_from_symbol sym
+   sys_string = "System#{sym.to_s.capitalize}"
+   info "Sys string #{sys_string}"
+   sys = Kernel.const_get(sys_string)
+   info "System found #{sys}"
+   sys
+ end
+ 
  def method_missing (methId, *args)      
    word = methId.id2name
    info "(methId, *args) Call method missing:#{word} and #{args.length} "

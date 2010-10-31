@@ -14,6 +14,7 @@ class Operation
   def self.register_sys(sys) 
       @@systems = Array.new unless @@systems
       @@systems << sys
+      Dictionary.add_system_nouns(sys)
    end
    
    def self.find_op(command_verb, noun = nil)

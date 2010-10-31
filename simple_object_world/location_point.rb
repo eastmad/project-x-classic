@@ -37,6 +37,10 @@ class LocationPoint
   def out
     links.each do |link|
        return link.locPoint if (link.link_type == :up) 
-    end      
+    end
+    
+    llp = findLinkedLocPoint @body.out if @body.out
+    
+    llp.first
   end
 end

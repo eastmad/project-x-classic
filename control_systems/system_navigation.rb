@@ -42,7 +42,7 @@ class SystemNavigation < ShipSystem
         ret = "Course plotted to #{@obj}"
         @@ship.set_heading sgo
       end
-      resp_hash = {:str => ret, :success => true, :media => :travel}
+      resp_hash = {:str => ret, :success => true, :media => :plot_course}
       @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
@@ -52,34 +52,13 @@ class SystemNavigation < ShipSystem
       
     return resp_hash  
   end
-  
-  
-  def _dock(args = nil)     
-    #info "Call dock"
-    begin
-      sgo = find_sgo_from_name(@obj) unless @obj.nil?     
-      @@ship.dock sgo
-      ret = "#{@@ship.name} docked"      
-      if (!sgo.nil?)
-         ret += " to #{@obj}"
-      end
-      resp_hash = {:str => ret, :success => true, :media => :docking}
-      @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
-    rescue RuntimeError => ex      
-      resp_hash = {:str => ex, :success => false}
-      @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Docking manoeuvre not attempted", SystemNavigation, :response_bad)
-    end      
-      
-    return resp_hash
-  end
 
   def to_s
       "I am the navigation system"
   end
   
   def self.status
-    @@rq.enq SystemsMessage.new("#{@@ship.name} is #{@@ship.describeLocation}", SystemNavigation, :response)
+    @@rq.enq SystemsMessage.new("#{@@ship.name} is #{@@ship.describeLocation}", SystemNavigation, :info)
   end
   
   def self.cursor_str

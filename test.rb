@@ -40,10 +40,11 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
    ShipSystem.christen(@ship)
    Operation.register_op :launch, :power, 1
-   Operation.register_op :undock, :security, 1
+   Operation.register_op :undock, :power, 1
    Operation.register_op :fire, :weapon, 1
+   Operation.register_op :release, :security, 1
    Operation.register_op :compute, :navigation, 1
-   Operation.register_op :dock, :navigation, 1
+   Operation.register_op :dock, :power, 1
    Operation.register_op :describe, :navigation, 1
    Operation.register_op :orbit, :power, 1
    Operation.register_op :plot, :navigation, 1

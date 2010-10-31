@@ -47,7 +47,7 @@ class Star < CelestialObject
       
       sw
    end
-   
+      
    def describe
      "#{@name} is a star within the galaxy"
    end
@@ -95,6 +95,10 @@ class Planet < CelestialObject
       sw
    end
 
+   def out
+      :star
+   end
+
    
    def owns
       @outerPoint.findLinkedLocPoint(:satellite)
@@ -127,6 +131,9 @@ class Moon < CelestialObject
       sw
    end
 
+   def out
+      :planet
+   end
 
    def describe
       "#{@name} is a satellite of #{@owning_body.name}"

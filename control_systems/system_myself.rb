@@ -2,13 +2,24 @@ class SystemMyself < ShipSystem
   Operation.register_sys(:myself)  
 
   def self.cursor_str
-      "Myself"
+    "Myself"
   end
   
   def _status(args = nil)
-    SystemNavigation.status
+    begin
     
-    {:success => true}
+      info "status for #{@subj}"
+      sys = get_system_from_symbol(@subj) unless @subj.nil?
+      @@rq.enq SystemsMessage.new("Type 'status navigation' to get status report for that system", SystemMyself, :response) if @subj.nil?
+      sys = SystemNavigation if sys.nil?
+    
+      sys.status
+    
+      {:success => true}
+    rescue
+      @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
+      {:success => false}
+    end
   end
 
   def _summarize(args = nil)
