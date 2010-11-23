@@ -2,7 +2,7 @@ class SoundPlay
    
    private_class_method :new
    @@sounds = Array.new
-   PLAYSOUNDS = true
+   PLAYSOUNDS = false
    
    def self.sound?
       PLAYSOUNDS

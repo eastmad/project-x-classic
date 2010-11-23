@@ -30,9 +30,9 @@ class Star < CelestialObject
       lp3 = LocationPoint.new(self, :inner_orbit)
       @outerPoint = LocationPoint.new(self, :outer_orbit)      
       
-      @centrePoint.add_link(:up,lp2)
-      lp2.add_link(:up,lp3)
-      lp3.add_link(:up, @outerPoint)
+      @centrePoint.add_link([:up],lp2)
+      lp2.add_link([:up],lp3)
+      lp3.add_link([:up], @outerPoint)
       
    end
    
@@ -71,12 +71,12 @@ class Planet < CelestialObject
       lp3 = LocationPoint.new(self, :atmosphere)
       @outerPoint = LocationPoint.new(self, :geo_orbit)      
             
-      @centrePoint.add_link(:up, lp2)
-      lp2.add_link(:up, lp3)
-      lp3.add_link(:up,@outerPoint)       
+      @centrePoint.add_link([:up], lp2)
+      lp2.add_link([:up], lp3)
+      lp3.add_link([:up],@outerPoint)       
       
-      @outerPoint.add_link(:star, ownerPoint)      
-      ownerPoint.add_link(:planet, @outerPoint)      
+      @outerPoint.add_link([:star], ownerPoint)      
+      ownerPoint.add_link([:planet], @outerPoint)      
    end
    
    def describe
@@ -113,10 +113,10 @@ class Moon < CelestialObject
       @centrePoint = LocationPoint.new(self, :centre)                
       @outerPoint = LocationPoint.new(self, :surface)
                   
-      @centrePoint.add_link(:up, @outerPoint)
+      @centrePoint.add_link([:up], @outerPoint)
       
-      @outerPoint.add_link(:planet, ownerPoint) 
-      ownerPoint.add_link(:satellite, @outerPoint)      
+      @outerPoint.add_link([:planet], ownerPoint) 
+      ownerPoint.add_link([:satellite], @outerPoint)      
    end
    
    def status_word(status)

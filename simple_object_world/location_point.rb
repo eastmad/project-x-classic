@@ -12,13 +12,13 @@ class LocationPoint
     "#{body} #{band}"    
   end
   
-  def add_link (link_type, locPoint)
-     @links << LocationLink.new(link_type, locPoint)
+  def add_link (link_types, locPoint)
+     @links << LocationLink.new(link_types, locPoint)
   end
   
   def isLinked? (locPoint, link_type = nil) 
     links.each do |link|
-      if (link_type == nil or link_type == link.link_type)
+      if (link_type == nil or link.link_types.include? link_type)
          return true if (locPoint == link.locPoint) 
       end
     end
@@ -28,7 +28,7 @@ class LocationPoint
     
     locpoints = []
     links.each do |link|
-       locpoints << link.locPoint if (link_type == link.link_type) 
+       locpoints << link.locPoint if link.link_types.include? link_type 
     end
     
     locpoints
@@ -36,7 +36,7 @@ class LocationPoint
   
   def out
     links.each do |link|
-       return link.locPoint if (link.link_type == :up) 
+       return link.locPoint if (link.link_types.include? :up) 
     end
     
     llp = findLinkedLocPoint @body.out if @body.out
