@@ -1,7 +1,6 @@
 
 class CelestialObject < SimpleBody      
-   attr_reader :centrePoint
-   attr_reader :outerPoint
+   attr_reader :centrePoint, :outerPoint, :surfacePoint
    attr_accessor :links
    
    def initialize(name, owning = nil)      
@@ -53,7 +52,7 @@ class Star < CelestialObject
    end
    
    def owns
-      @outerPoint.findLinkedLocPoint(:planet)
+      @outerPoint.find_linked_location(:planet)
    end
       
 end
@@ -67,12 +66,12 @@ class Planet < CelestialObject
       super(name, ownerPoint.body)
       
       @centrePoint = LocationPoint.new(self, :centre)      
-      lp2 = LocationPoint.new(self, :surface)
+      @surfacePoint = LocationPoint.new(self, :surface)
       lp3 = LocationPoint.new(self, :atmosphere)
       @outerPoint = LocationPoint.new(self, :geo_orbit)      
             
-      @centrePoint.add_link([:up], lp2)
-      lp2.add_link([:up], lp3)
+      @centrePoint.add_link([:up], @surfacePoint)
+      @surfacePoint.add_link([:up], lp3)
       lp3.add_link([:up],@outerPoint)       
       
       @outerPoint.add_link([:star], ownerPoint)      
@@ -101,7 +100,7 @@ class Planet < CelestialObject
 
    
    def owns
-      @outerPoint.findLinkedLocPoint(:satellite)
+      @outerPoint.find_linked_location(:satellite)
    end
 
 end
@@ -110,12 +109,15 @@ class Moon < CelestialObject
    def initialize(name, ownerPoint)      
       super(name, ownerPoint.body)
 
-      @centrePoint = LocationPoint.new(self, :centre)                
-      @outerPoint = LocationPoint.new(self, :surface)
+      @centrePoint = LocationPoint.new(self, :centre)   
+      @surfacePoint = LocationPoint.new(self, :surface)
+      @outerPoint = LocationPoint.new(self, :outer)
                   
-      @centrePoint.add_link([:up], @outerPoint)
+      @centrePoint.add_link([:up], @surfacePoint)
+      @surfacePoint.add_link([:up], @outerPoint)
+      @outerPoint.add_link([:dock], @surfacePoint)
       
-      @outerPoint.add_link([:planet], ownerPoint) 
+      @outerPoint.add_link([:planet, :orbit], ownerPoint) 
       ownerPoint.add_link([:satellite], @outerPoint)      
    end
    

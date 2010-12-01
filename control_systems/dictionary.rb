@@ -1,6 +1,6 @@
 class Dictionary
    @@Words = [ 
-            {:word => :fire, :grammar => :verb, :systems => [:weapon]},
+            {:word => :approach, :grammar => :verb, :systems => [:power]},
             {:word => :compute, :grammar => :verb, :systems => [:navigation]},
             {:word => :launch, :grammar => :verb, :systems => [:weapon, :power]},
             {:word => :engage, :grammar => :verb, :systems => [:power]},
@@ -14,7 +14,7 @@ class Dictionary
             {:word => :help, :grammar => :verb, :systems => [:myself]},
             {:word => :describe, :grammar => :verb, :systems => [:myself]},
             {:word => :status, :grammar => :verb, :systems => [:myself]}, 
-            {:word => :release, :grammar => :noun, :systems => [:security]},
+            {:word => :release, :grammar => :verb, :systems => [:security]},
             {:word => :gate, :grammar => :noun, :systems => [:navigation]},
             {:word => :probe, :grammar => :noun, :systems => [:navigation, :power]},
             {:word => :course, :grammar => :noun, :systems => [:navigation]},

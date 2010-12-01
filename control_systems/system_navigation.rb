@@ -35,14 +35,12 @@ class SystemNavigation < ShipSystem
   end
   
   def _plot(args = nil)     
-    info "Call plot"
     begin        
       sgo = ShipSystem.find_sgo_from_name(@obj)          
       if (!sgo.nil?)
-        ret = "Course plotted to #{@obj}"
         @@ship.set_heading sgo
       end
-      resp_hash = {:str => ret, :success => true, :media => :plot_course}
+      resp_hash = {:success => true, :media => :plot_course}
       @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}

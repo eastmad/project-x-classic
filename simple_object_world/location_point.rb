@@ -16,7 +16,7 @@ class LocationPoint
      @links << LocationLink.new(link_types, locPoint)
   end
   
-  def isLinked? (locPoint, link_type = nil) 
+  def is_linked? (locPoint, link_type = nil) 
     links.each do |link|
       if (link_type == nil or link.link_types.include? link_type)
          return true if (locPoint == link.locPoint) 
@@ -24,7 +24,15 @@ class LocationPoint
     end
   end  
   
-  def findLinkedLocPoint link_type
+  def has_link_type? link_type
+    links.each do |link|
+      return true if (link.link_types.include? link_type)
+    end
+    
+    false
+  end
+  
+  def find_linked_location link_type
     
     locpoints = []
     links.each do |link|
@@ -34,13 +42,4 @@ class LocationPoint
     locpoints
   end
   
-  def out
-    links.each do |link|
-       return link.locPoint if (link.link_types.include? :up) 
-    end
-    
-    llp = findLinkedLocPoint @body.out if @body.out
-    
-    llp.first
-  end
 end

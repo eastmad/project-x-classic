@@ -14,6 +14,7 @@ require "control_systems/dictionary"
 require "control_systems/grammar_tree"
 require "control_systems/ship_registry"
 require "control_systems/ship_system"
+require "control_systems/ship_data"
 require "control_systems/operation"
 require "control_systems/system_power"
 require "control_systems/system_weapon"
@@ -36,12 +37,12 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    station = Moon.new("Sputnik", earth.outerPoint)
    Dictionary.add_discovered_proper_noun(station.name, station)
 
-   @ship = ShipRegistry.register_ship("ProjectX",station.outerPoint)
+   @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
    ShipSystem.christen(@ship)
    Operation.register_op :launch, :power, 1
    Operation.register_op :undock, :power, 1
-   Operation.register_op :fire, :weapon, 1
+   Operation.register_op :approach, :power, 1
    Operation.register_op :release, :security, 1
    Operation.register_op :compute, :navigation, 1
    Operation.register_op :dock, :power, 1
