@@ -3,7 +3,8 @@ class MediaManager
       :drive => {:entry_anim => :hyper, :exit_anim => :terre, :sound => 3},
       :plot_course => {:entry_anim => :plot, :sound => 3},
       :travel => {:entry_anim => :stars, :exit_anim => :terre, :sound => 3},
-      :docking => {:entry_anim => :stars, :exit_anim => :station, :sound => 3}
+      :docking => {:entry_anim => :stars, :exit_anim => :station, :sound => 3},
+      :describe => {:entry_anim => :solar_system, :exit_anim => :solar_system, :sound => 3},
    }
    
    def self.show_media(im_win, pack_id)

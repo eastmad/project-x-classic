@@ -3,8 +3,8 @@ class CelestialObject < SimpleBody
    attr_reader :centrePoint, :outerPoint, :surfacePoint
    attr_accessor :links
    
-   def initialize(name, owning = nil)      
-      super(name, owning)
+   def initialize(name, desc = "Nondescript", owning = nil)      
+      super(name, desc, owning)
       @links = []
    end      
 
@@ -21,8 +21,8 @@ class CelestialObject < SimpleBody
 end
 
 class Star < CelestialObject      
-   def initialize(name, owner = nil)      
-      super(name, owner)
+   def initialize(name, desc, owner = nil)      
+      super(name, desc, owner)
       
       @centrePoint = LocationPoint.new(self, :centre)
       lp2 = LocationPoint.new(self, :photosphere)
@@ -35,7 +35,7 @@ class Star < CelestialObject
       
    end
    
-   def status_word(status)
+   def status_word(status, band)
       if status == :rest
          sw = "within"
       elsif status == :sync
@@ -54,6 +54,11 @@ class Star < CelestialObject
    def owns
       @outerPoint.find_linked_location(:planet)
    end
+   
+   def describe_owns 
+      planets = owns.collect{|locPoint| locPoint.body}
+      "The orbiting planets are #{planets.join(', ')}"
+   end
       
 end
 
@@ -62,8 +67,8 @@ class Planet < CelestialObject
 
    attr_reader :orbitPoint
    
-   def initialize(name, ownerPoint)      
-      super(name, ownerPoint.body)
+   def initialize(name, desc, ownerPoint)      
+      super(name, desc, ownerPoint.body)
       
       @centrePoint = LocationPoint.new(self, :centre)      
       @surfacePoint = LocationPoint.new(self, :surface)
@@ -74,17 +79,33 @@ class Planet < CelestialObject
       @surfacePoint.add_link([:up], lp3)
       lp3.add_link([:up],@outerPoint)       
       
-      @outerPoint.add_link([:star], ownerPoint)      
+      @outerPoint.add_link([:star], ownerPoint)  
+      @outerPoint.add_link([:approach], lp3)
       ownerPoint.add_link([:planet], @outerPoint)      
    end
    
    def describe
       "#{@name} is a planet orbiting #{@owning_body.name}"
    end
+   
+   def owns
+       @outerPoint.find_linked_location(:satellite)
+   end
+   
+   def describe_owns 
+       ret = "No orbiting bodies"
+       satellites = owns.collect{|locPoint| locPoint.body}
+       ret = "The orbiting satellites are #{satellites.join(', ')}" unless satellites.empty? 
+       ret
+   end
 
-   def status_word(status)
+   def status_word(status, band)
       if status == :rest
-         sw = "in vicinity of"
+         if band == :atmosphere
+            sw = "in atmosphere of"
+         else
+            sw = "above"
+         end
       elsif status == :sync
          sw = "orbiting"
       elsif status == :dependent
@@ -99,15 +120,13 @@ class Planet < CelestialObject
    end
 
    
-   def owns
-      @outerPoint.find_linked_location(:satellite)
-   end
+
 
 end
 
 class Moon < CelestialObject
-   def initialize(name, ownerPoint)      
-      super(name, ownerPoint.body)
+   def initialize(name, desc, ownerPoint)      
+      super(name, desc, ownerPoint.body)
 
       @centrePoint = LocationPoint.new(self, :centre)   
       @surfacePoint = LocationPoint.new(self, :surface)
@@ -121,9 +140,9 @@ class Moon < CelestialObject
       ownerPoint.add_link([:satellite], @outerPoint)      
    end
    
-   def status_word(status)
+   def status_word(status, band)
       if status == :rest
-         sw = "in vicinity of"
+         sw = "above"
       elsif status == :sync
          sw = "orbiting"
       elsif status == :dependent
@@ -140,5 +159,10 @@ class Moon < CelestialObject
    def describe
       "#{@name} is a satellite of #{@owning_body.name}"
    end
+
+   def describe_owns 
+      "No registered companies."
+   end
+
 
 end

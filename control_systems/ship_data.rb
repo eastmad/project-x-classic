@@ -45,13 +45,19 @@ class ShipData
    end
    
    def approach(local_body)  
-     lps = @locationPoint.find_linked_location :satellite
-     lps = @locationPoint.find_linked_location :planet if lps.nil?
-     lp = lps.find {| lp | lp.body == local_body}
-  
+     inside = @locationPoint.body == local_body
+     
      if (@status == :dependent) 
        raise SystemsMessage.new("I can't fire thrusters without launch protocol", SystemSecurity, :info)
      end    
+
+     lps = (@locationPoint.find_linked_location :satellite) + (@locationPoint.find_linked_location :approach)
+     raise SystemsMessage.new("#{local_body} not in range of thrusters", SystemNavigation, :info) if (lps.empty? and !inside)
+     raise SystemsMessage.new("Cannot approach #{local_body} safely with thrusters", SystemNavigation, :info) if (lps.empty? and inside)
+     
+     
+     lp = lps.find {| lp | lp.body == local_body}
+  
       
      unless lp.nil? 
       @locationPoint = lp
@@ -139,7 +145,7 @@ class ShipData
    end
    
    def describeLocation()
-      statusword = @locationPoint.body.status_word(@status)
+      statusword = @locationPoint.body.status_word(@status, @locationPoint.band)
       "#{statusword} #{@locationPoint.body}"
    end
 end

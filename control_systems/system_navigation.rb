@@ -18,16 +18,22 @@ class SystemNavigation < ShipSystem
   end    
   
   def _describe(arg = nil)
-    rbody = @@ship.locationPoint.body.root_body
-    planets = rbody.owns.collect{|locPoint| locPoint.body}
-    para1 = <<-END.gsub(/^ {6}/, '')
-      We are in the #{rbody} system.
-      The orbiting planets are #{planets.join(", ")}.
+    begin
+      sgo = ShipSystem.find_sgo_from_name(@obj)
+       
+      sgo = @@ship.locationPoint.body.root_body if (@obj.nil?)
       
-      Type 'describe Mars' to find information about one celestial body
-    END
-    @@rq.enq SystemsMessage.new(para1, SystemNavigation, :response)
-    {:success => true, :media => :docking}
+      para1 = sgo.describe
+      para1 << "\n- " << sgo.desc
+      para1 << "\n- " << sgo.describe_owns
+      para1 << "\nType 'describe Mars' to find information about one celestial body" if obj.nil?
+
+      @@rq.enq SystemsMessage.new(para1, SystemNavigation, :response)
+      {:success => true, :media => :describe}
+    rescue
+      resp_hash = {:success => false}
+      @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
+    end
   end
   
   def _compute(arg = nil)

@@ -1,10 +1,11 @@
 class SimpleBody
  
 
- attr_reader :name, :owning_body, :boundary_point
+ attr_reader :name, :desc, :owning_body, :boundary_point
  
- def initialize name, owner = nil
+ def initialize name, desc = "Unknown origin", owner = nil
    @name = name
+   @desc = desc
    @owning_body = owner
  end
  

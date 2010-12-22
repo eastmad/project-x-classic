@@ -35,7 +35,7 @@ class LocationPoint
   def find_linked_location link_type
     
     locpoints = []
-    links.each do |link|
+    links.each do |link|    
        locpoints << link.locPoint if link.link_types.include? link_type 
     end
     

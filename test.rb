@@ -28,13 +28,13 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    background black
    stroke white
    
-   sol = Star.new("Sol")
+   sol = Star.new("Sol", "Your home planet's sun")
    Dictionary.add_discovered_proper_noun(sol.name, sol)
-   earth = Planet.new("Earth", sol.outerPoint)
+   earth = Planet.new("Earth","Your home planet", sol.outerPoint)
    Dictionary.add_discovered_proper_noun(earth.name, earth)
-   mars = Planet.new("Mars", sol.outerPoint)
+   mars = Planet.new("Mars", "Known as the red planet", sol.outerPoint)
    Dictionary.add_discovered_proper_noun(mars.name, mars)
-   station = Moon.new("Sputnik", earth.outerPoint)
+   station = Moon.new("Sputnik", "One of the oldest space stations", earth.outerPoint)
    Dictionary.add_discovered_proper_noun(station.name, station)
 
    @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)

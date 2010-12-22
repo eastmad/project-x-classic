@@ -5,7 +5,8 @@ class ImageWindow
    :terre => ["gifs/terre/terre0.gif", "gifs/terre/terre1.gif", "gifs/terre/terre2.gif", "gifs/terre/terre3.gif", "gifs/terre/terre4.gif", "gifs/terre/terre5.gif", "gifs/terre/terre6.gif", "gifs/terre/terre7.gif", "gifs/terre/terre8.gif"],
    :hyper =>["gifs/hyper/hyper-1.gif", "gifs/hyper/hyper-2.gif", "gifs/hyper/hyper-3.gif", "gifs/hyper/hyper-4.gif", "gifs/hyper/hyper-5.gif", "gifs/hyper/hyper-6.gif", "gifs/hyper/hyper-7.gif", "gifs/hyper/hyper-8.gif", "gifs/hyper/hyper-9.gif", "gifs/hyper/hyper-10.gif"],
    :stars =>["gifs/stars/1.gif","gifs/stars/2.gif","gifs/stars/3.gif","gifs/stars/4.gif","gifs/stars/5.gif","gifs/stars/6.gif","gifs/stars/7.gif","gifs/stars/8.gif","gifs/stars/9.gif","gifs/stars/10.gif","gifs/stars/11.gif","gifs/stars/12.gif","gifs/stars/13.gif","gifs/stars/14.gif","gifs/stars/15.gif","gifs/stars/16.gif","gifs/stars/17.gif","gifs/stars/18.gif","gifs/stars/19.gif","gifs/stars/20.gif"],
-   :station =>["gifs/station/Frame_0.gif", "gifs/station/Frame_1.gif","gifs/station/Frame_2.gif","gifs/station/Frame_3.gif","gifs/station/Frame_4.gif","gifs/station/Frame_5.gif"]
+   :station =>["gifs/station/Frame_0.gif", "gifs/station/Frame_1.gif","gifs/station/Frame_2.gif","gifs/station/Frame_3.gif","gifs/station/Frame_4.gif","gifs/station/Frame_5.gif"],
+   :solar_system => ["gifs/solar-system.jpg"],
    }
 
    def initialize(anim_id)
