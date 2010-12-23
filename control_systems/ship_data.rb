@@ -47,8 +47,8 @@ class ShipData
    def approach(local_body)  
      inside = @locationPoint.body == local_body
      
-     if (@status == :dependent) 
-       raise SystemsMessage.new("I can't fire thrusters without launch protocol", SystemSecurity, :info)
+     if (@status != :sync) 
+       raise SystemsMessage.new("I can't fire directional thrusters unless we are in a stable orbit.", SystemPower, :info)
      end    
 
      lps = (@locationPoint.find_linked_location :satellite) + (@locationPoint.find_linked_location :approach)

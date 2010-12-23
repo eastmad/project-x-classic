@@ -107,21 +107,7 @@ class SystemPower < ShipSystem
            
     return resp_hash
   end
-  
-  def _orbit(args = nil)     
-     #info "Call orbit"
-     begin      
-       sgo = ShipSystem.find_sgo_from_name(@obj)     
-       @@rq.enq @@ship.orbit sgo
-       resp_hash = {:success => true, :media => :plot_course}
-     rescue RuntimeError => ex 
-       resp_hash = {:str => ex, :success => false}
-       @@rq.enq ex
-       @@rq.enq SystemsMessage.new("Cannot enter orbit", SystemPower, :response_bad)
-     end      
-       
-     return resp_hash  
-  end
+
       
   def initialize
   end

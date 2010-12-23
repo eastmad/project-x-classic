@@ -4,10 +4,10 @@ class Dictionary
             {:word => :compute, :grammar => :verb, :systems => [:navigation]},
             {:word => :launch, :grammar => :verb, :systems => [:weapon, :power]},
             {:word => :engage, :grammar => :verb, :systems => [:power]},
-            {:word => :orbit, :grammar => :verb, :systems => [:navigation, :power]},
+            {:word => :orbit, :grammar => :verb, :systems => [:navigation]},
             {:word => :dock, :grammar => :verb, :systems => [:power]},
             {:word => :undock, :grammar => :verb, :systems => [:power]},
-            {:word => :plot, :grammar => :verb, :systems => [:navigation]},
+            {:word => :plot, :grammar => :verb, :systems => [:navigation], :following => :course},
             {:word => :send, :grammar => :verb, :systems => [:comms]},
             {:word => :describe, :grammar => :verb, :systems => [:library]},
             {:word => :summarize, :grammar => :verb, :systems => [:myself]},
@@ -49,14 +49,16 @@ class Dictionary
    
    def self.complete_me(str, filter)
       res = nil
+      following = nil
             
       @@Words.each do |k|
         if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar])) 
            res = k
+           following = matching_word(k[:following].to_s) if k[:following]
         end          
       end
             
-      return res   
+      return res, following   
    end
    
    def self.add_discovered_proper_noun(str, sgo)

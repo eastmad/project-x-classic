@@ -47,7 +47,7 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    Operation.register_op :compute, :navigation, 1
    Operation.register_op :dock, :power, 1
    Operation.register_op :describe, :navigation, 1
-   Operation.register_op :orbit, :power, 1
+   Operation.register_op :orbit, :navigation, 1
    Operation.register_op :plot, :navigation, 1
    Operation.register_op :engage, :power, 1
    Operation.register_op :summarize, :myself, 1
@@ -171,17 +171,27 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
          end
          
          if (@state == :complete_me)
-            res = Dictionary.complete_me(@dr.req_str, @gr.next_filter)
+            res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter)
             if (res == nil)
               @rq.enq SystemsMessage.new("#{@dr.req_str} is not in dictionary", SystemMyself, :warn)
             else
                SoundPlay.play_sound(0)
                @dr.req_str = res[:word]
                @dr.req_grammar = res[:grammar]
-               @gr.set_grammar(res[:grammar])  
+               @gr.set_grammar(res[:grammar])
+               
+               unless following.nil?
+                 @dr.add_req               
+                 @dr.replace_req @arr
+                 @dr.req_str = following[:word]
+                 @dr.req_grammar = following[:grammar]
+                 @gr.set_grammar(following[:grammar])
+               end
             end                           
             @dr.add_req               
-            @dr.replace_req @arr            
+            @dr.replace_req @arr    
+            
+            
          end
           
          if (@state == :done)                 
