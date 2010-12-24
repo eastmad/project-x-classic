@@ -1,3 +1,37 @@
+class City < SimpleBody      
+   attr_reader :centrePoint
+   attr_accessor :links
+   
+   def initialize(name, desc, ownerPoint)      
+      super(name, desc, ownerPoint.body)
+      @links = []
+      
+      @centrePoint = LocationPoint.new(self, :centre)               
+      @centrePoint.add_link([:up, :launch], ownerPoint) 
+      ownerPoint.add_link([:city, :land], @centrePoint)   
+   end      
+
+   def owned_by? body
+      return false if @owning_body.nil?
+      return true if @owning_body == body 
+      
+      return @owning_body.owned_by? body 
+   end
+   
+   def status_word(status, band)
+      "parked in"
+
+   end
+   
+   def describe
+      "#{@name} is a space port of #{@owning_body.name}"
+   end
+   
+   def to_s
+     @name
+   end
+end
+
 
 class CelestialObject < SimpleBody      
    attr_reader :centrePoint, :outerPoint, :surfacePoint
@@ -65,22 +99,22 @@ end
 
 class Planet < CelestialObject
 
-   attr_reader :orbitPoint
+   attr_reader :orbitPoint, :atmospherePoint
    
    def initialize(name, desc, ownerPoint)      
       super(name, desc, ownerPoint.body)
       
       @centrePoint = LocationPoint.new(self, :centre)      
       @surfacePoint = LocationPoint.new(self, :surface)
-      lp3 = LocationPoint.new(self, :atmosphere)
+      @atmospherePoint = LocationPoint.new(self, :atmosphere)
       @outerPoint = LocationPoint.new(self, :geo_orbit)      
             
       @centrePoint.add_link([:up], @surfacePoint)
-      @surfacePoint.add_link([:up], lp3)
-      lp3.add_link([:up],@outerPoint)       
+      @surfacePoint.add_link([:up], @atmospherePoint)
+      @atmospherePoint.add_link([:up],@outerPoint)       
       
       @outerPoint.add_link([:star], ownerPoint)  
-      @outerPoint.add_link([:approach], lp3)
+      @outerPoint.add_link([:approach], @atmospherePoint)
       ownerPoint.add_link([:planet], @outerPoint)      
    end
    

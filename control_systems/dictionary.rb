@@ -2,6 +2,7 @@ class Dictionary
    @@Words = [ 
             {:word => :approach, :grammar => :verb, :systems => [:power]},
             {:word => :compute, :grammar => :verb, :systems => [:navigation]},
+            {:word => :land, :grammar => :verb, :systems => [:power]},
             {:word => :launch, :grammar => :verb, :systems => [:weapon, :power]},
             {:word => :engage, :grammar => :verb, :systems => [:power]},
             {:word => :orbit, :grammar => :verb, :systems => [:navigation]},

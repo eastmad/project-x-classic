@@ -36,11 +36,14 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    Dictionary.add_discovered_proper_noun(mars.name, mars)
    station = Moon.new("Sputnik", "One of the oldest space stations", earth.outerPoint)
    Dictionary.add_discovered_proper_noun(station.name, station)
+   houston = City.new("Houston", "Main space port for Earth, based in old continentel America", earth.atmospherePoint)
+   Dictionary.add_discovered_proper_noun(houston.name, houston)
 
    @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
    ShipSystem.christen(@ship)
    Operation.register_op :launch, :power, 1
+   Operation.register_op :land, :power, 1
    Operation.register_op :undock, :power, 1
    Operation.register_op :approach, :power, 1
    Operation.register_op :release, :security, 1

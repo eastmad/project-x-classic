@@ -19,21 +19,43 @@ class SystemPower < ShipSystem
               
     return resp_hash     
   end   
+  
+  def _land(args=nil)   
+    begin
+      raise SystemsMessage.new("#{@@ship.name} is not within a planet's atmosphere", SystemMyself, :info) unless @@ship.status == :rest
+      
+      unless @obj.nil?
+         sgo = ShipSystem.find_sgo_from_name(@obj) 
+         @@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)       
+      end
+                    
+      @@rq.enq @@ship.land sgo      
+             
+      SystemNavigation.status
+      resp_hash = {:success => true, :media => :land}
+    rescue RuntimeError => ex 
+      resp_hash = {:str => ex, :success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Landing cancelled", SystemPower, :response_bad)
+    end      
+                
+    return resp_hash     
+  end   
 
   def _probe(args = nil)
-   @subj = "probe"
+    @subj = "probe"
   end
     
   def _planet(args = nil)
-   @obj = "planet"
+    @obj = "planet"
   end
   
   def _nearest(args = nil)
-   @adj = "nearest"
+    @adj = "nearest"
   end
    
   def _vessel(arg = nil)        
-   @obj = "vessel"
+    @obj = "vessel"
   end     
   
   def _dock(args = nil)     

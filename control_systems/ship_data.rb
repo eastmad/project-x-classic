@@ -68,17 +68,6 @@ class ShipData
      end 
    end
    
-   def locate 
-
-      
-      unless lp.nil?
-        @headingPoint = lp
-        return SystemsMessage.new("Heading set to #{local_body}", SystemNavigation, :info)        
-      end
-      
-      
-   end
-   
    def orbit(planet)      
      raise SystemsMessage.new("Cannot orbit #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
      raise SystemsMessage.new("#{@name} is in orbit around #{planet}", SystemNavigation, :info) if (@status == :sync and @locationPoint == planet.outerPoint)
@@ -98,17 +87,36 @@ class ShipData
    end
    
    def dock(moon)
-      raise SystemsMessage.new("#{@name} is already docked", SystemNavigation, :info) if (@status == :dependent)
-      raise SystemsMessage.new("Cannot dock with #{moon}", SystemNavigation, :info) unless (moon.kind_of? Moon) 
-      #location must be planet or moon
-      #Either orbiting planet or atmoon
-      if ((moon == @locationPoint.body and @status == :rest) or (moon == @locationPoint.body and @status == :sync))
-         @status = :dependent
-         @locationPoint = moon.surfacePoint
-         return SystemsMessage.new("Docked with #{moon}", SystemPower, :info)
-      else
-         raise SystemsMessage.new("Cannot dock with #{moon} from #{@locationPoint}", SystemNavigation, :info)
-      end   
+     raise SystemsMessage.new("#{@name} is already docked", SystemNavigation, :info) if (@status == :dependent)
+     raise SystemsMessage.new("Cannot dock with #{moon}", SystemNavigation, :info) unless (moon.kind_of? Moon) 
+     #location must be planet or moon
+     #Either orbiting planet or atmoon
+     if (moon == @locationPoint.body and (@status == :rest or @status == :sync))
+       @status = :dependent
+       @locationPoint = moon.surfacePoint
+       return SystemsMessage.new("Docked with #{moon}", SystemPower, :info)
+     else
+       raise SystemsMessage.new("Cannot dock with #{moon} from #{@locationPoint}", SystemNavigation, :info)
+     end   
+   end
+   
+   def land(city)
+     
+     #location must be city     
+     city_points = @locationPoint.find_linked_location :city
+     raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
+
+     #if a city specified check it is available to land at
+     #take first for now
+     target_point = city_points.first
+     
+     if (@status == :rest)
+       @status = :dependent
+       @locationPoint = target_point
+       return SystemsMessage.new("Landed at #{target_point.body.name}", SystemPower, :info)
+     else
+       raise SystemsMessage.new("Cannot land on #{target_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
+     end   
    end
    
    
