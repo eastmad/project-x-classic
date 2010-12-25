@@ -7,7 +7,27 @@ class ImageWindow
    :stars =>["gifs/stars/1.gif","gifs/stars/2.gif","gifs/stars/3.gif","gifs/stars/4.gif","gifs/stars/5.gif","gifs/stars/6.gif","gifs/stars/7.gif","gifs/stars/8.gif","gifs/stars/9.gif","gifs/stars/10.gif","gifs/stars/11.gif","gifs/stars/12.gif","gifs/stars/13.gif","gifs/stars/14.gif","gifs/stars/15.gif","gifs/stars/16.gif","gifs/stars/17.gif","gifs/stars/18.gif","gifs/stars/19.gif","gifs/stars/20.gif"],
    :station =>["gifs/station/Frame_0.gif", "gifs/station/Frame_1.gif","gifs/station/Frame_2.gif","gifs/station/Frame_3.gif","gifs/station/Frame_4.gif","gifs/station/Frame_5.gif"],
    :solar_system => ["gifs/solar-system.jpg"],
+   :mars => ["gifs/mars-planet-water-nasa.jpg"],
    }
+   
+   @@sgo = {
+      :Planet => {:default => :terre, :Mars => :mars},
+      :Star => {:default => :solar_system},
+      :Moon => {:default => :station},
+      :City => {:default => :houston}
+   }
+
+   def self.find_id body
+      klassname = body.class.name.to_sym
+      instance_name = body.name.to_sym
+      
+      sgo_hash = @@sgo[klassname]
+      image_id = sgo_hash[instance_name]
+      ret = sgo_hash[:default]
+      ret = image_id unless image_id.nil?
+      
+      ret
+    end
 
    def initialize(anim_id)
       @ims = @@anims[anim_id]

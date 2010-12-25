@@ -202,7 +202,7 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
                resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
                
                if (resp_hash[:success])
-                  MediaManager.show_media(@im_win,resp_hash[:media]) unless resp_hash[:media].nil?
+                  MediaManager.show_media(@im_win,resp_hash[:media],@ship.locationPoint) unless resp_hash[:media].nil?
                else 
                    SoundPlay.play_sound(5)
                end 
