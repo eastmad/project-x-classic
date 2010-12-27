@@ -47,7 +47,7 @@ class SystemNavigation < ShipSystem
         @@ship.set_heading sgo
       end
       resp_hash = {:success => true, :media => :plot_course}
-      @@rq.enq SystemsMessage.new(ret, SystemNavigation, :response)
+      @@rq.enq SystemsMessage.new("Course set", SystemNavigation, :response)
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex

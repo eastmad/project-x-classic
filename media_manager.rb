@@ -5,6 +5,7 @@ class MediaManager
       :travel => {:entry_anim => :stars, :sound => 3},
       :orbit => {:entry_anim => :stars, :sound => 3},
       :docking => {:entry_anim => :stars, :sound => 3},
+      :land => {:entry_anim => :stars, :sound => 3},
       :describe => {:entry_anim => :solar_system, :exit_anim => :solar_system, :sound => 3},
    }
    

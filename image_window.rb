@@ -8,24 +8,25 @@ class ImageWindow
    :station =>["gifs/station/Frame_0.gif", "gifs/station/Frame_1.gif","gifs/station/Frame_2.gif","gifs/station/Frame_3.gif","gifs/station/Frame_4.gif","gifs/station/Frame_5.gif"],
    :solar_system => ["gifs/solar-system.jpg"],
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
+   :city => ["gifs/cityport.jpg"]
    }
    
    @@sgo = {
       :Planet => {:default => :terre, :Mars => :mars},
       :Star => {:default => :solar_system},
       :Moon => {:default => :station},
-      :City => {:default => :houston}
+      :City => {:default => :city, :Houston => :city}
    }
 
    def self.find_id body
       klassname = body.class.name.to_sym
       instance_name = body.name.to_sym
-      
+info "klassname: #{klassname}, instance_name = #{instance_name}"      
       sgo_hash = @@sgo[klassname]
       image_id = sgo_hash[instance_name]
       ret = sgo_hash[:default]
       ret = image_id unless image_id.nil?
-      
+info "ret =  #{ret}"            
       ret
     end
 
