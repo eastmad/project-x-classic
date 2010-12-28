@@ -38,6 +38,8 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
    Dictionary.add_discovered_proper_noun(station.name, station)
    houston = City.new("Houston", "Main space port for Earth, based in old continentel America", earth.atmospherePoint)
    Dictionary.add_discovered_proper_noun(houston.name, houston)
+   marsport = City.new("Dundarach", "Only space port for Mars, sometimes refered to as Marsport", mars.atmospherePoint)
+   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
 
    @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
@@ -67,7 +69,7 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
       @imstack = stack {
          image @im_win.first_image()      
       } 
-      animate (2) do | frame |                     
+      animate (4) do | frame |                     
         @imstack.clear { image @im_win.animate_image(frame)}                     
       end
       
@@ -153,7 +155,10 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
           num += 1
         end  
         SoundPlay.hide_sounds()      
-      end         
+      end   
+      @rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
+      @rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
+      @rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
 
       keypress { |k|
          

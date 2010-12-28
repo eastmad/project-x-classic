@@ -27,6 +27,10 @@ class City < SimpleBody
       "#{@name} is a space port of #{@owning_body.name}"
    end
    
+   def describe_owns
+       "No contacts known."
+   end
+   
    def to_s
      @name
    end
@@ -129,7 +133,9 @@ class Planet < CelestialObject
    def describe_owns 
        ret = "No orbiting bodies"
        satellites = owns.collect{|locPoint| locPoint.body}
+       cities = @atmospherePoint.find_linked_location(:city).collect{|cityPoint| cityPoint.body}
        ret = "The orbiting satellites are #{satellites.join(', ')}" unless satellites.empty? 
+       ret << "\n- City ports are #{cities.join(', ')}" unless cities.empty? 
        ret
    end
 

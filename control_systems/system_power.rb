@@ -22,7 +22,7 @@ class SystemPower < ShipSystem
   
   def _land(args=nil)   
     begin
-      raise SystemsMessage.new("#{@@ship.name} is not within a planet's atmosphere", SystemMyself, :info) unless @@ship.status == :rest
+      raise SystemsMessage.new("#{@@ship.name} is not within a planet's atmosphere", SystemMyself, :info) unless @@ship.locationPoint.band == :atmosphere
       
       unless @obj.nil?
          sgo = ShipSystem.find_sgo_from_name(@obj) 
@@ -120,7 +120,7 @@ class SystemPower < ShipSystem
         
       SystemNavigation.status
         
-      resp_hash = {:success => true}
+      resp_hash = {:success => true, :media => :travel}
     rescue RuntimeError => ex          
         resp_hash = {:success => false}
         @@rq.enq ex

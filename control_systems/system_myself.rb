@@ -39,7 +39,7 @@ class SystemMyself < ShipSystem
       end
       
 
-      resp_hash = {:success => true}
+      resp_hash = {:success => true, :media => :summarize}
       @@rq.enq SystemsMessage.new(para1, SystemMyself, :response)
     rescue RuntimeError => ex          
       resp_hash = {:success => false}

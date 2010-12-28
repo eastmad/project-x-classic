@@ -26,7 +26,7 @@ class SystemNavigation < ShipSystem
       para1 = sgo.describe
       para1 << "\n- " << sgo.desc
       para1 << "\n- " << sgo.describe_owns
-      para1 << "\nType 'describe Mars' to find information about one celestial body" if obj.nil?
+      para1 << "\nType 'describe Mars' to find information about one celestial body" if @obj.nil?
 
       @@rq.enq SystemsMessage.new(para1, SystemNavigation, :response)
       {:success => true, :media => :describe}
@@ -44,10 +44,9 @@ class SystemNavigation < ShipSystem
     begin        
       sgo = ShipSystem.find_sgo_from_name(@obj)          
       if (!sgo.nil?)
-        @@ship.set_heading sgo
+         @@rq.enq @@ship.set_heading sgo
       end
       resp_hash = {:success => true, :media => :plot_course}
-      @@rq.enq SystemsMessage.new("Course set", SystemNavigation, :response)
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex
