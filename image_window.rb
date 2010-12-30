@@ -9,23 +9,25 @@ class ImageWindow
    :solar_system => ["gifs/solar-system.jpg"],
    :summarize => ["gifs/summarize.jpg"],
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
-   :city => ["gifs/cityport.jpg"]
+   :city => ["gifs/cityport.jpg"],
+   :atmosphere => ["gifs/atmosphere.jpg"],
    }
    
    @@sgo = {
-      :Planet => {:default => :terre, :Mars => :mars},
-      :Star => {:default => :solar_system},
-      :Moon => {:default => :station},
-      :City => {:default => :city, :Houston => :city}
+      :Planet => {:surface => :terre, :outer => :terre, :orbit => :terre, :atmosphere => :atmosphere, :Mars => :mars},
+      :Star => {:outer => :solar_system},
+      :Moon => {:surface => :station, :outer => :station},
+      :City => {:centre => :city, :Houston => :city}
    }
 
-   def self.find_id body
+   def self.find_id locPoint
+      body = locPoint.body
       klassname = body.class.name.to_sym
       instance_name = body.name.to_sym
 info "klassname: #{klassname}, instance_name = #{instance_name}"      
       sgo_hash = @@sgo[klassname]
       image_id = sgo_hash[instance_name]
-      ret = sgo_hash[:default]
+      ret = sgo_hash[locPoint.band]
       ret = image_id unless image_id.nil?
 info "ret =  #{ret}"            
       ret

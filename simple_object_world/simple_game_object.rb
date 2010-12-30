@@ -38,7 +38,7 @@ end
 
 
 class CelestialObject < SimpleBody      
-   attr_reader :centrePoint, :outerPoint, :surfacePoint
+   attr_reader :centrePoint, :orbitPoint, :outerPoint, :surfacePoint
    attr_accessor :links
    
    def initialize(name, desc = "Nondescript", owning = nil)      
@@ -64,12 +64,12 @@ class Star < CelestialObject
       
       @centrePoint = LocationPoint.new(self, :centre)
       lp2 = LocationPoint.new(self, :photosphere)
-      lp3 = LocationPoint.new(self, :inner_orbit)
-      @outerPoint = LocationPoint.new(self, :outer_orbit)      
+      @orbitPoint = LocationPoint.new(self, :orbit)
+      @outerPoint = LocationPoint.new(self, :outer)      
       
       @centrePoint.add_link([:up],lp2)
-      lp2.add_link([:up],lp3)
-      lp3.add_link([:up], @outerPoint)
+      lp2.add_link([:up],@orbitPoint)
+      @orbitPoint.add_link([:up], @outerPoint)
       
    end
    
@@ -111,15 +111,15 @@ class Planet < CelestialObject
       @centrePoint = LocationPoint.new(self, :centre)      
       @surfacePoint = LocationPoint.new(self, :surface)
       @atmospherePoint = LocationPoint.new(self, :atmosphere)
-      @outerPoint = LocationPoint.new(self, :geo_orbit)      
+      @orbitPoint = LocationPoint.new(self, :orbit)      
             
       @centrePoint.add_link([:up], @surfacePoint)
       @surfacePoint.add_link([:up], @atmospherePoint)
-      @atmospherePoint.add_link([:up],@outerPoint)       
+      @atmospherePoint.add_link([:up],@orbitPoint)       
       
-      @outerPoint.add_link([:star], ownerPoint)  
-      @outerPoint.add_link([:approach], @atmospherePoint)
-      ownerPoint.add_link([:planet], @outerPoint)      
+      @orbitPoint.add_link([:star], ownerPoint)  
+      @orbitPoint.add_link([:approach], @atmospherePoint)
+      ownerPoint.add_link([:planet], @orbitPoint)      
    end
    
    def describe

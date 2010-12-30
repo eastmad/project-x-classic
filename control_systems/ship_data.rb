@@ -21,7 +21,7 @@ class ShipData
       #planet must be in system
       raise SystemsMessage.new("Cannot head for a planet not in this system", SystemNavigation, :info) unless (@locationPoint.body.owned_by? planet.owning_body)
           
-      @headingPoint = planet.outerPoint
+      @headingPoint = planet.orbitPoint
       info "Heading #{@headingPoint}"
       SystemsMessage.new("New heading is #{@headingPoint}", SystemNavigation, :info)
    end
@@ -70,7 +70,7 @@ class ShipData
    
    def orbit(planet)      
      raise SystemsMessage.new("Cannot orbit #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
-     raise SystemsMessage.new("#{@name} is in orbit around #{planet}", SystemNavigation, :info) if (@status == :sync and @locationPoint == planet.outerPoint)
+     raise SystemsMessage.new("#{@name} is in orbit around #{planet}", SystemNavigation, :info) if (@status == :sync and @locationPoint == planet.orbitPoint)
      raise SystemsMessage.new("#{@name} is stationary", SystemNavigation, :info) if (@status ==:dependent)
      #location must be planet or there must be a link to orbit
      #state must be at rest
@@ -81,7 +81,7 @@ class ShipData
      raise SystemsMessage.new("Cannot orbit #{planet} from #{@locationPoint}", SystemNavigation, :info) unless ((planet == @locationPoint.body or found_orbit_point) and @status != :sync)
          
      @status = :sync
-     @locationPoint = planet.outerPoint
+     @locationPoint = planet.orbitPoint
          
      SystemsMessage.new("#{@name} in orbit around #{planet}", SystemNavigation, :info)   
    end

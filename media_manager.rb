@@ -8,6 +8,7 @@ class MediaManager
       :land => {:entry_anim => :stars, :sound => 3},
       :describe => {:entry_anim => :solar_system, :exit_anim => :solar_system, :sound => 2},
       :summarize => {:entry_anim => :summarize, :exit_anim => :summarize, :sound => 2},
+      :atmosphere => {:entry_anim => :stars, :sound => 3},
    }
    
    def self.show_media(im_win, pack_id, locationPoint)
@@ -16,7 +17,7 @@ class MediaManager
       
       
       exit = package_hash[:exit_anim]
-      exit = ImageWindow.find_id locationPoint.body if exit.nil?
+      exit = ImageWindow.find_id locationPoint if exit.nil?
 
       im_win.set_animation(package_hash[:entry_anim],exit)
    end

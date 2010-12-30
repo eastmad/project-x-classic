@@ -120,7 +120,7 @@ class SystemPower < ShipSystem
         
       SystemNavigation.status
         
-      resp_hash = {:success => true, :media => :travel}
+      resp_hash = {:success => true, :media => :atmosphere}
     rescue RuntimeError => ex          
         resp_hash = {:success => false}
         @@rq.enq ex

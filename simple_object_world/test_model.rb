@@ -11,7 +11,7 @@ Shoes.app do
   otherStar = Star.new("Betelgeuse")
   myPlanet = Planet.new("Earth", myStar.outerPoint)
   myPlanetMars = Planet.new("Mars", myStar.outerPoint)
-  myMoon = Moon.new("Sputnik", myPlanet.outerPoint) 
+  myMoon = Moon.new("Sputnik", myPlanet.orbitPoint) 
   
   info "#{myPlanet.describe}"
   info "#{myStar.describe}"
