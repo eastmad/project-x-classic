@@ -24,7 +24,7 @@ require "control_systems/system_security"
 require "control_systems/system_myself"
 
 
-Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
+Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    background black
    stroke white
    
@@ -78,6 +78,11 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
             image "gifs/star_icon.gif", :width => 15, :height => 16
             inscription "Sol", :stroke => white
          }
+         
+         @planet_icon = flow {
+	    image "gifs/planet_icon.gif"
+	    @planet_inscription = inscription "Earth", :stroke => white
+         }
       
          @heading_icon = flow {
             image "gifs/head_icon.gif"
@@ -91,7 +96,7 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
          }
       }
       
-      @iconstack.move(0,parent.height - 90)
+      @iconstack.move(0,parent.height - 130)
    }
 
    stack(:width => 300)  {      
@@ -217,9 +222,12 @@ Shoes.app(:width => 550, :height => 280, :title => "ProjectX") {
                   @heading_icon.show
                else
                   @heading_icon.hide
-               #@heading_inscription.hide
                end   
-               @action_inscription.replace @ship.describeLocation, :stroke => white            
+               @action_inscription.replace @ship.describeLocation, :stroke => white
+               #either the current body is a planet, or the owning body.
+               local_body = @ship.locationPoint.body
+               local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
+               @planet_inscription.replace local_planet, :stroke => white
             rescue => ex
                @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
             end
