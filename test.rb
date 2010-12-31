@@ -5,6 +5,8 @@ require "media_manager"
 require "sound_play"
 require "simple_object_world/simple_body"
 require "simple_object_world/simple_game_object"
+require "simple_object_world/contract"
+require "simple_object_world/trader"
 require "simple_object_world/location_point"
 require "simple_object_world/location_link"
 require "interface/action_line"
@@ -40,6 +42,12 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    Dictionary.add_discovered_proper_noun(houston.name, houston)
    marsport = City.new("Dundarach", "Only space port for Mars, sometimes refered to as Marsport", mars.atmospherePoint)
    Dictionary.add_discovered_proper_noun(marsport.name, marsport)
+   
+   trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint) 
+   item = Item.new("blackberries")
+   contract = Contract.new(:supply, item, trader)
+   Dictionary.add_discovered_proper_noun(trader.index_name, trader)
+   
 
    @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
    Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
@@ -80,8 +88,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
          }
          
          @planet_icon = flow {
-	    image "gifs/planet_icon.gif"
-	    @planet_inscription = inscription "Earth", :stroke => white
+      image "gifs/planet_icon.gif"
+      @planet_inscription = inscription "Earth", :stroke => white
          }
       
          @heading_icon = flow {

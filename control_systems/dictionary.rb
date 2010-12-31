@@ -43,8 +43,9 @@ class Dictionary
      res = nil
       
      @@Words.each do |k|
+     info "#{k[:word]}, #{k[:word].to_s}, #{str}"
        if (k[:word].to_s == str) 
-         res = k            
+         res = k           
        end          
      end
       

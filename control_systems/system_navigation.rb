@@ -30,8 +30,9 @@ class SystemNavigation < ShipSystem
 
       @@rq.enq SystemsMessage.new(para1, SystemNavigation, :response)
       {:success => true, :media => :describe}
-    rescue
+    rescue RuntimeError => ex
       resp_hash = {:success => false}
+      @@rq.enq ex
       @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
     end
   end

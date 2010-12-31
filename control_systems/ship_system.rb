@@ -26,12 +26,13 @@ class ShipSystem
  
  def self.evaluate(script)       
     debug "Call evaluate for command '#{script}'"
-     
-     
-    script.downcase!    
+             
     words = script.split
     processed_script = ""
-    words.each {|word| processed_script += "_#{word} "}
+    words.each do |word| 
+      word = word[0, 1].downcase + word[1..-1] 
+      processed_script += "_#{word} "
+    end 
     
     #info "processed '#{processed_script}'"
     
@@ -56,8 +57,14 @@ class ShipSystem
    
  end
  
+ def self.make_noun word
+   word = word[0, 1].capitalize + word[1..-1]
+ end
+ 
  def self.is_proper_noun?(word)   
-   dic_entry = Dictionary.matching_word(word.capitalize)
+   word = ShipSystem.make_noun(word)
+   
+   dic_entry = Dictionary.matching_word(word)
    if !dic_entry.nil? and dic_entry[:grammar] == :proper_noun
       return true
    end
@@ -102,11 +109,12 @@ class ShipSystem
    info "(methId, *args) Call method missing:#{word} and #{args.length} "
 
    word.slice!(0)
+   info "is #{word} proper noun?"
    if ShipSystem.is_proper_noun?(word)
      if (@obj.nil?)
-       @obj = word.capitalize
+       @obj = ShipSystem.make_noun(word)
      elsif (@subj.nil?)
-       @subj = word.capitalize
+       @subj = ShipSystem.make_noun(word)
      end
    else
      @subj = word.to_sym
