@@ -72,7 +72,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
    stack(:width =>210) {
                            
-      @im_win = ImageWindow.new(:station)     
+      @im_win = ImageWindow.new(:stationdocked)     
            
       @imstack = stack {
          image @im_win.first_image()      

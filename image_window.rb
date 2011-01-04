@@ -11,12 +11,13 @@ class ImageWindow
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
    :city => ["gifs/cityport.jpg"],
    :atmosphere => ["gifs/atmosphere.jpg"],
+   :stationdocked=>["gifs/station-closeup.jpg"],
    }
    
    @@sgo = {
       :Planet => {:surface => :terre, :outer => :terre, :orbit => :terre, :atmosphere => :atmosphere, :Mars => :mars},
       :Star => {:outer => :solar_system},
-      :Moon => {:surface => :station, :outer => :station},
+      :Moon => {:surface => :stationdocked, :outer => :station},
       :City => {:centre => :city, :Houston => :city}
    }
 
