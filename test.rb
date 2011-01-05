@@ -137,11 +137,11 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       @last_command = inscription "Waiting for command", :stroke => gray
       }  
       
-      @ap[0].line_type = para ""
-      @ap[1].line_type = para ""
-      @ap[2].line_type = para ""
-      @ap[3].line_type = para ""
-      @ap[4].line_type = para ""
+      @ap[0].line_type = para strong(""),""
+      @ap[1].line_type = para strong(""),""
+      @ap[2].line_type = para strong(""),""
+      @ap[3].line_type = para strong(""),""
+      @ap[4].line_type = para strong(""),""
       
       every (1) {
         unless @rq.peek.nil?     
@@ -151,9 +151,11 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
           @ap[3].copy_line @ap[2]
           @ap[2].copy_line @ap[1]
           @ap[1].copy_line @ap[0]
-          @ap[0].line_type.text = line.make_string
           @ap[0].response_type = line.flavour
           @ap[0].set_stroke line.flavour 
+          @ap[0].origin = line.origin
+          @ap[0].line_type.contents[1].replace(line.make_string)
+          @ap[0].line_type.contents[0].replace(line.origin.cursor_str)
         end
       }
       

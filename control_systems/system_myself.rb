@@ -2,7 +2,7 @@ class SystemMyself < ShipSystem
   Operation.register_sys(:myself)  
 
   def self.cursor_str
-    "Myself"
+    "myself:"
   end
   
   def _status(args = nil)

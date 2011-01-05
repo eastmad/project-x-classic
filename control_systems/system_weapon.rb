@@ -45,6 +45,6 @@ class SystemWeapon < ShipSystem
   end
   
   def self.cursor_str
-    "Weapons"
+    "weapons:"
   end
 end

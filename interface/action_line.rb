@@ -1,11 +1,13 @@
 class ActionLine
 
-   attr_accessor :line_type, :response_type
+   attr_accessor :line_type, :response_type, :origin
    
    def copy_line other_line
-      @line_type.text = other_line.line_type.text
       set_stroke other_line.response_type
+      @origin = other_line.origin
       @response_type = other_line.response_type
+      @line_type.contents[1].replace(other_line.line_type.contents[1])
+      @line_type.contents[0].replace((@origin.nil?)? "": @origin.cursor_str)
    end
    
    def set_stroke flav

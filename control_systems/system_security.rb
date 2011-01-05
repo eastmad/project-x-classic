@@ -7,6 +7,6 @@ class SystemSecurity < ShipSystem
   end
   
   def self.cursor_str
-      "Security"
+      "security:"
   end
 end

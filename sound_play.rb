@@ -21,7 +21,7 @@ class SoundPlay
    end
    
    def self.play_sound(sound)            
-      @@sounds[sound].play if PLAYSOUNDS     
+      @@sounds[sound].play if sound?     
    end
    
    def self.num_sounds()

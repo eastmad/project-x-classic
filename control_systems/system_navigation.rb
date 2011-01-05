@@ -81,6 +81,6 @@ class SystemNavigation < ShipSystem
   end
   
   def self.cursor_str
-      "Nav"
+      "nav:"
   end
 end

@@ -2,6 +2,7 @@ class KeystrokeReader
    def self.key_in(k, str)      
       
       state = :empty
+      
       if (k == :backspace)
          info "keystroke str='#{str}', length = #{str.length}"
          if (str.length == 0)
@@ -12,7 +13,7 @@ class KeystrokeReader
          end           
       elsif (k == ' ')
          state = :complete_me         
-      elsif (k == "\n")
+      elsif (k == "\n" or k == :enter)
          state = :done   
       elsif (k == :f10)
           state = :exit

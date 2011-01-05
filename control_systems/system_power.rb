@@ -149,7 +149,7 @@ class SystemPower < ShipSystem
   end
   
   def self.cursor_str
-     "Power"
+     "power:"
   end
 end
 

@@ -8,8 +8,8 @@ class SystemsMessage < RuntimeError
    end
    
    def make_string
-      str = origin.cursor_str unless origin.nil?
-      str << ": #{@text}"
+      #str = origin.cursor_str unless origin.nil?
+      str = " #{@text}"
       str
    end
 end
