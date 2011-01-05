@@ -19,13 +19,13 @@ require "control_systems/ship_registry"
 require "control_systems/ship_system"
 require "control_systems/ship_data"
 require "control_systems/operation"
+require "control_systems/system_ghost"
 require "control_systems/system_power"
 require "control_systems/system_weapon"
 require "control_systems/system_navigation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
 require "control_systems/system_myself"
-
 
 Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    background black
@@ -171,10 +171,12 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
           num += 1
         end  
         SoundPlay.hide_sounds()      
-      end   
-      @rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
-      @rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
-      @rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
+      end
+      
+      @rq.enq SystemGhost.welcome   
+      #@rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
+      #@rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
+      #@rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
 
       keypress { |k|
          
