@@ -5,7 +5,7 @@ class SoundPlay
    PLAYSOUNDS = true
    
    def self.sound?
-      PLAYSOUNDS
+      LocalConfig::PLAYSOUNDS
    end
  
    def self.load_sound(sound_id)

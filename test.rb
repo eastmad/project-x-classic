@@ -1,3 +1,4 @@
+require "local_config"
 require "keystroke_reader"
 require "display_response"
 require "image_window"
