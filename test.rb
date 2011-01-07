@@ -28,6 +28,8 @@ require "control_systems/system_security"
 require "control_systems/system_myself"
 
 Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
+   
+
    background black
    stroke white
    

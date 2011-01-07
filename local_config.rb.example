@@ -1,3 +1,7 @@
 module LocalConfig
-	PLAYSOUNDS = true
+  # For windows
+  # PLAYSOUNDS = true
+  
+  # For linux
+  # PLAYSOUNDS = false 
 end
