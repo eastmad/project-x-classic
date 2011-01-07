@@ -67,6 +67,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    Operation.register_op :summarize, :myself, 1
    Operation.register_op :help, :myself, 1
    Operation.register_op :status, :myself, 1
+   Operation.register_op :read, :communication, 1
 
    
    @rq = ResponseQueue.new
@@ -155,7 +156,11 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
           @ap[0].set_stroke line.flavour 
           @ap[0].origin = line.origin
           @ap[0].line_type.contents[1].replace(line.make_string)
-          @ap[0].line_type.contents[0].replace(line.origin.cursor_str)
+          if (line.flavour == :mail)
+        		@ap[0].line_type.contents[0].replace("_____mail from #{line.origin.cursor_str}\n")
+      		else
+          	@ap[0].line_type.contents[0].replace(line.origin.cursor_str)
+          end	
         end
       }
       
@@ -177,6 +182,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       @rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
       @rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
       @rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
+      @rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
 
       keypress { |k|
          

@@ -8,16 +8,15 @@ class SystemGhost < ShipSystem
   def self.welcome
     para1 = <<-END.gsub(/^ {8}/, '')
         Brother,
+        
         You do not know me. And I cannot 
         tell you yet why you are here. 
-        You are in control of this small ship #{@@ship.name}
-        You must leave this solar system before 
-        i can tell you any more.
-          
-        Type 'mission' to remind you of what must be done.
+        You are in control of this small ship.
+        You must leave this solar system before i 
+        can contact you any again.
     END
     
-    SystemsMessage.new(para1, SystemGhost, :ghost)
+    SystemsMessage.new(para1, SystemGhost, :mail)
   end  
   
   def _mission(args = nil)
@@ -31,10 +30,8 @@ class SystemGhost < ShipSystem
         
         You are in control of this small ship #{@@ship.name}
         
-        You must leave this solar system before i can tell 
-        you any more.
-          
-        Type 'mission' to remind you of what must be done.
+        You must leave this solar system before i can contact 
+        you any again.
       END
     else
        para1 = "Incomplete."
