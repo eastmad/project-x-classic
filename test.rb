@@ -176,6 +176,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       end
       
       @rq.enq SystemGhost.welcome   
+      @ap[1].hide
+      @ap[2].hide
+      @ap[3].hide
+      @ap[4].hide
       #@rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
       #@rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
       #@rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
