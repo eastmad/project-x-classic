@@ -1,18 +1,21 @@
 class ActionLine
 
-   attr_accessor :line_type, :response_type, :origin
+   attr_accessor :line_type, :flavour, :origin
    
-   def copy_line other_line
-      set_stroke other_line.response_type
-      @origin = other_line.origin
-      @response_type = other_line.response_type
-      
-      @line_type.contents[1].replace(other_line.line_type.contents[1])
-      if (other_line.response_type == :mail)
-        @line_type.contents[0].replace((@origin.nil?)? "": "_____mail from #{@origin.cursor_str}\n")
-      else
-      	@line_type.contents[0].replace((@origin.nil?)? "": @origin.cursor_str)
-      end
+   def set_line message
+     @flavour = message.flavour
+     set_stroke message.flavour 
+     @origin = message.origin
+     @line_type.contents[1].replace(message.make_string)
+     if (message.flavour == :mail)
+       @line_type.contents[0].replace((@origin.nil?)? "": "_____mail from #{@origin.cursor_str}\n")
+     else
+       @line_type.contents[0].replace((@origin.nil?)? "": @origin.cursor_str)
+     end  
+   end  
+   
+   def make_string
+     line_type.contents[1]
    end
    
    def set_stroke flav
