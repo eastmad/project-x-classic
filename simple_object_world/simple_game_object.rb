@@ -90,7 +90,7 @@ class Star < CelestialObject
    end
    
    def owns
-      @outerPoint.find_linked_location(:planet)
+      @orbitPoint.find_linked_location(:planet)
    end
    
    def describe_owns 

@@ -8,9 +8,11 @@ class ActionLine
      @origin = message.origin
      @line_type.contents[1].replace(message.make_string)
      if (message.flavour == :mail)
-       @line_type.contents[0].replace((@origin.nil?)? "": "_____mail from #{@origin.cursor_str}\n")
+       @line_type.contents[0].underline = "single"
+       @line_type.contents[0].replace((@origin.nil?)? "": "                   mail from #{@origin.cursor_str}\n")  
      else
-       @line_type.contents[0].replace((@origin.nil?)? "": @origin.cursor_str)
+       @line_type.contents[0].underline = "none"
+       @line_type.contents[0].replace((@origin.nil?)? "": @origin.cursor_str)  
      end  
    end  
    
@@ -28,7 +30,7 @@ class ActionLine
        when :warn
          @line_type.stroke = rgb(255,150,150)
        when :mail
-         @line_type.stroke = rgb(200,200,250)
+         @line_type.stroke = rgb(180,180,250)
          @line_type.leading = 2
        else
          @line_type.stroke = rgb(255,255,255)
