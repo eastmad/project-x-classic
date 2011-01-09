@@ -40,7 +40,7 @@ class SystemMyself < ShipSystem
       
 
       resp_hash = {:success => true, :media => :summarize}
-      @@rq.enq SystemsMessage.new(para1, SystemMyself, :response)
+      @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)
     rescue RuntimeError => ex          
       resp_hash = {:success => false}
       @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
@@ -58,12 +58,12 @@ class SystemMyself < ShipSystem
       Type 'describe' to find information about stars, palnets and satellites.
     END
 
-    @@rq.enq SystemsMessage.new(para1, SystemMyself, :response)
+    @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)
    
     {:success => true}
   end
    
-  def to_s
-    "I'm online"
+  def self.to_s
+    "self aware system"
   end
 end

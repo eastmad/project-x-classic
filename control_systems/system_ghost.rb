@@ -1,5 +1,5 @@
 class SystemGhost < ShipSystem 
-  Operation.register_sys(:ghost)  
+  #Operation.register_sys(:ghost)  
 
   def self.cursor_str
     "ghost:"

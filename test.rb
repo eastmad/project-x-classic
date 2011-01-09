@@ -134,10 +134,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       unless @rq.peek.nil?     
         message = @rq.deq
 
-        if (message.flavour == :mail)
+        if (message.flavour == :mail || message.flavour == :report)
           (4.downto 1).each {|n| @ap[n].line_type.hide}
         else
-          @ap[0].set_line @old_top_message if @ap[0].flavour == :mail 
+          @ap[0].set_line @old_top_message if (@ap[0].flavour == :mail || @ap[0].flavour == :report)
           (4.downto 1).each do |n|
              @ap[n].line_type.show
              @ap[n].set_line @ap[n - 1]

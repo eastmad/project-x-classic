@@ -23,12 +23,13 @@ class SystemNavigation < ShipSystem
        
       sgo = @@ship.locationPoint.body.root_body if (@obj.nil?)
       
-      para1 = sgo.describe
+      para1 = "#{sgo}\n\n"
+      para1 << sgo.describe
       para1 << "\n- " << sgo.desc
       para1 << "\n- " << sgo.describe_owns
-      para1 << "\nType 'describe Mars' to find information about one celestial body" if @obj.nil?
+      para1 << "\n\n(Type 'describe Mars' to find information about any catalogued object)" if @obj.nil?
 
-      @@rq.enq SystemsMessage.new(para1, SystemNavigation, :response)
+      @@rq.enq SystemsMessage.new(para1, SystemNavigation, :report)
       {:success => true, :media => :describe}
     rescue RuntimeError => ex
       resp_hash = {:success => false}
@@ -72,8 +73,8 @@ class SystemNavigation < ShipSystem
     return resp_hash  
   end
 
-  def to_s
-      "I am the navigation system"
+  def self.to_s
+      "navigation system"
   end
   
   def self.status
@@ -83,4 +84,5 @@ class SystemNavigation < ShipSystem
   def self.cursor_str
       "nav:"
   end
+ 
 end
