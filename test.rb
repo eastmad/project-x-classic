@@ -45,8 +45,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
 
   trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint) 
-  item = Item.new("blackberries")
-  contract = Contract.new(:supply, item, trader)
+  item = Item.new("blackberries", "A juicy forest fruit", :commodity)
+  trader.contracts << Contract.new(:supply, item)
   Dictionary.add_discovered_proper_noun(trader.index_name, trader)
 
   @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
