@@ -37,7 +37,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Dictionary.add_discovered_proper_noun(earth.name, earth)
   mars = Planet.new("Mars", "Known as the red planet", sol.orbitPoint)
   Dictionary.add_discovered_proper_noun(mars.name, mars)
-  station = Moon.new("Sputnik", "One of the oldest space stations", earth.orbitPoint)
+  station = SpaceStation.new("Sputnik", "One of the oldest space stations", earth.orbitPoint)
   Dictionary.add_discovered_proper_noun(station.name, station)
   houston = City.new("Houston", "Main space port for Earth, based in old continentel America", earth.atmospherePoint)
   Dictionary.add_discovered_proper_noun(houston.name, houston)

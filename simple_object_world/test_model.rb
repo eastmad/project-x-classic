@@ -11,19 +11,19 @@ Shoes.app do
   otherStar = Star.new("Betelgeuse")
   myPlanet = Planet.new("Earth", myStar.outerPoint)
   myPlanetMars = Planet.new("Mars", myStar.outerPoint)
-  myMoon = Moon.new("Sputnik", myPlanet.orbitPoint) 
+  mySpaceStation = SpaceStation.new("Sputnik", myPlanet.orbitPoint) 
   
   info "#{myPlanet.describe}"
   info "#{myStar.describe}"
-  info "#{myMoon.describe}"
+  info "#{mySpaceStation.describe}"
   info "#{myPlanetMars.describe}"
 
   info "#{myStar} contains = #{myStar.owns}"
   info "#{myPlanet} contains = #{myPlanet.owns}"
-  #info "Is #{myMoon} in #{myStar}? #{myMoon.isLinked? myStar.outerPoint}"
- # info "Is #{myMoon} in #{otherStar}? #{myMoon.isLinked? otherStar.outerPoint}"
+  #info "Is #{mySpaceStation} in #{myStar}? #{mySpaceStation.isLinked? myStar.outerPoint}"
+ # info "Is #{mySpaceStation} in #{otherStar}? #{mySpaceStation.isLinked? otherStar.outerPoint}"
   
-  sp = myMoon.centrePoint
+  sp = mySpaceStation.centrePoint
   info "Starting from #{sp}"
   sp = sp.out
   info "Outwards is #{sp}"

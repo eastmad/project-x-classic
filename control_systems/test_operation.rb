@@ -13,8 +13,8 @@ require "../simple_object_world/simple_game_object.rb"
 Shoes.app do
    info "Debug Operation"
    
-   myMoon = Moon.new("Sputnik","Old soviet",LocationPoint.new("void","void"))
-   @ship = ShipRegistry.register_ship("The Marco Polo", myMoon.outerPoint)
+   mySpaceStation = SpaceStation.new("Sputnik","Old soviet",LocationPoint.new("void","void"))
+   @ship = ShipRegistry.register_ship("The Marco Polo", mySpaceStation.outerPoint)
    info @ship.describeLocation
    ShipSystem.christen(@ship)
    

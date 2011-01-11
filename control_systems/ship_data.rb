@@ -86,17 +86,17 @@ class ShipData
      SystemsMessage.new("#{@name} in orbit around #{planet}", SystemNavigation, :info)   
    end
    
-   def dock(moon)
+   def dock(spaceStation)
      raise SystemsMessage.new("#{@name} is already docked", SystemNavigation, :info) if (@status == :dependent)
-     raise SystemsMessage.new("Cannot dock with #{moon}", SystemNavigation, :info) unless (moon.kind_of? Moon) 
-     #location must be planet or moon
-     #Either orbiting planet or atmoon
-     if (moon == @locationPoint.body and (@status == :rest or @status == :sync))
+     raise SystemsMessage.new("Cannot dock with #{spaceStation}", SystemNavigation, :info) unless (spaceStation.kind_of? SpaceStation) 
+     #location must be planet or spaceStation
+     #Either orbiting planet or atspaceStation
+     if (spaceStation == @locationPoint.body and (@status == :rest or @status == :sync))
        @status = :dependent
-       @locationPoint = moon.surfacePoint
-       return SystemsMessage.new("Docked with #{moon}", SystemPower, :info)
+       @locationPoint = spaceStation.surfacePoint
+       return SystemsMessage.new("Docked with #{spaceStation}", SystemPower, :info)
      else
-       raise SystemsMessage.new("Cannot dock with #{moon} from #{@locationPoint}", SystemNavigation, :info)
+       raise SystemsMessage.new("Cannot dock with #{spaceStation} from #{@locationPoint}", SystemNavigation, :info)
      end   
    end
    

@@ -24,11 +24,15 @@ class City < SimpleBody
    end
    
    def describe
-      "#{@name} is a space port of #{@owning_body.name}"
+      "#{@name} is a city port of #{@owning_body.name}"
    end
    
    def describe_owns
        "No contacts known."
+   end
+   
+   def welcome
+     "The city port of #{@name} welcomes your visit."
    end
    
    def to_s
@@ -164,7 +168,7 @@ class Planet < CelestialObject
 
 end
 
-class Moon < CelestialObject
+class SpaceStation < CelestialObject
   def initialize(name, desc, ownerPoint)      
     super(name, desc, ownerPoint.body)
 
@@ -205,5 +209,9 @@ class Moon < CelestialObject
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     ret = "The trading companies are #{traders.join(', ')}" unless traders.empty? 
     ret
+  end
+  
+  def welcome
+    "The trade station #{@name} welcomes your visit."
   end
 end
