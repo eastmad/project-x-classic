@@ -20,6 +20,7 @@ require "control_systems/ship_system"
 require "control_systems/ship_data"
 require "control_systems/operation"
 require "control_systems/system_ghost"
+require "control_systems/system_trade"
 require "control_systems/system_power"
 require "control_systems/system_weapon"
 require "control_systems/system_navigation"
@@ -43,11 +44,15 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = City.new("Dundarach", "Only space port for Mars, sometimes refered to as Marsport", mars.atmospherePoint)
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
+  listeningPost = SpaceStation.new("Eagle23", "Earth military control listening post", mars.orbitPoint)
+  Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
   trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint) 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
-  trader.contracts << Contract.new(:supply, item)
+  trader.contracts << Contract.new(:sink, item)
   Dictionary.add_discovered_proper_noun(trader.index_name, trader)
+  
+  SystemTrade.prepare_trade_page station
 
   @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
   Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo

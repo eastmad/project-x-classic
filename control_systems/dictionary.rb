@@ -11,6 +11,8 @@ class Dictionary
             {:word => :plot, :grammar => :verb, :systems => [:navigation], :following => :course},
             {:word => :send, :grammar => :verb, :systems => [:comms]},
             {:word => :read, :grammar => :verb, :systems => [:comms]},
+            {:word => :mail, :grammar => :noun, :systems => [:comms]},
+            {:word => :page, :grammar => :noun, :systems => [:comms]},
             {:word => :describe, :grammar => :verb, :systems => [:library]},
             {:word => :summarize, :grammar => :verb, :systems => [:myself]},
             {:word => :help, :grammar => :verb, :systems => [:myself]},

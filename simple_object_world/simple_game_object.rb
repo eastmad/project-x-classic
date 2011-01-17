@@ -62,6 +62,8 @@ class CelestialObject < SimpleBody
    end
 end
 
+
+
 class Star < CelestialObject      
    def initialize(name, desc, owner = nil)      
       super(name, desc, owner)
@@ -211,7 +213,49 @@ class SpaceStation < CelestialObject
     ret
   end
   
+  def trade_page 
+    ret = "#{@name} trade list:\n"
+    traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
+    traders.each do | trader | 
+      ret << "#{trader.to_s}\n"
+      trader.contracts.each { |contract| ret << "-#{contract.to_s}\n"}
+    end 
+    
+    ret
+  end
+  
   def welcome
     "The trade station #{@name} welcomes your visit."
+  end
+end
+
+class SmallStructure < CelestialObject
+  attr_reader :damage_rating
+  
+  def initialize(name, desc, ownerPoint)      
+    super(name, desc, ownerPoint.body)
+
+    @centrePoint = LocationPoint.new(self, :centre)   
+    ownerPoint.add_link([:satellite], @centrePoint)      
+  end
+
+  def status_word(status, band)
+    if status == :rest
+       sw = "above"
+    elsif status == :sync
+       sw = "orbiting"
+    elsif status == :dependent
+       sw = "docked with"
+    end
+
+    sw
+  end
+
+  def describe
+    "#{@name} is a satellite of #{@owning_body.name}"
+  end
+  
+  def describe_owns 
+    "Low armour, and no active shielding"  
   end
 end

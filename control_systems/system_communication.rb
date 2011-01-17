@@ -6,12 +6,25 @@ class SystemCommunication < ShipSystem
   
   def _read(args = nil)
     begin
- 	    @@rq.enq SystemGhost.welcome
+      
+      mes = args
+      mes = SystemGhost.welcome if args.nil?
+      
+      
+      @@rq.enq mes
     
       {:success => true}
     rescue
       @@rq.enq SystemsMessage.new("No mail.", SystemCommunication, :response_bad)
       {:success => false}
     end
+  end
+  
+  def _mail(args = nil)
+    return SystemGhost.welcome
+  end
+  
+  def _page(args = nil)
+    return SystemTrade.welcome
   end
 end

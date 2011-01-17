@@ -65,6 +65,7 @@ class SystemPower < ShipSystem
       @@rq.enq @@ship.dock sgo
       @@rq.enq @@ship.lock_docking_clamp()
       @@rq.enq SystemsMessage.new("Message received:'#{sgo.welcome}'", SystemCommunication, :info)
+      SystemTrade.prepare_trade_page sgo
 
       resp_hash = {:success => true, :media => :docking}
     rescue RuntimeError => ex      

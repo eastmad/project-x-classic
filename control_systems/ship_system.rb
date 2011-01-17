@@ -34,7 +34,7 @@ class ShipSystem
       processed_script += "_#{word} "
     end 
     
-    #info "processed '#{processed_script}'"
+    info "processed '#{processed_script}'"
     
     self.new.instance_eval(processed_script)     
     
