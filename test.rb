@@ -50,6 +50,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint) 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
   trader.contracts << Contract.new(:sink, item)
+  item = Item.new("choclate chips", "Confectionary additions", :commodity)
+  trader.contracts << Contract.new(:sink, item)
+  item = Item.new("wafer cones", "Confectionary containers", :commodity)
+  trader.contracts << Contract.new(:source, item, earth)
   Dictionary.add_discovered_proper_noun(trader.index_name, trader)
   
   SystemTrade.prepare_trade_page station
