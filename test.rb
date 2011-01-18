@@ -122,6 +122,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
 
     stack {
       border rgb(25,25,50) , :strokewidth => 1
+      background darkslategray
       flow {
         para "> ", :stroke => white
         @arr[0] = para "_", :stroke => white
