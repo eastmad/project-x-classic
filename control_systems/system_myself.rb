@@ -8,9 +8,9 @@ class SystemMyself < ShipSystem
   def _status(args = nil)
     begin
     
-      info "status for #{@subj}"
-      sys = get_system_from_symbol(@subj) unless @subj.nil?
-      @@rq.enq SystemsMessage.new("Type 'status navigation' to get status report for that system", SystemMyself, :response) if @subj.nil?
+      info "status for #{args}"
+      sys = get_system_from_symbol(args) unless args.nil?
+      @@rq.enq SystemsMessage.new("Type 'status navigation' to get status report for that system", SystemMyself, :response) if args.nil?
       sys = SystemNavigation if sys.nil?
     
       sys.status
@@ -25,7 +25,7 @@ class SystemMyself < ShipSystem
   def _summarize(args = nil)
     
     begin
-      if @subj.nil?
+      if args.nil?
         all_systems = Operation.find_all_systems.join(", ")
         ret = "#{@@ship.name} has the systems #{all_systems}"
         para1 = <<-END.gsub(/^ {10}/, '')
@@ -34,8 +34,8 @@ class SystemMyself < ShipSystem
           Type 'summarize navigation' to find all commands known to that system.
         END
       else
-         all_commands = Operation.find_sys_commands(@subj).join(", ") 
-         para1 = "#{@subj} recognises the following commands: #{all_commands}."
+         all_commands = Operation.find_sys_commands(args).join(", ") 
+         para1 = "#{args} recognises the following commands: #{all_commands}."
       end
       
 

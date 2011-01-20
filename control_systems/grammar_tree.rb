@@ -5,7 +5,7 @@ class GrammarTree
       {:name => :adjective1,  :grammar => :adjective, :branches => [:noun, :proper_noun]}, 
       {:name => :proper_noun1,:grammar => :proper_noun,:branches=> [:preposition, :end_grammar]},
       {:name => :noun1,       :grammar => :noun,      :branches=> [:preposition, :end_grammar]},      
-      {:name => :preposition1,:grammar => :preposition,:branches=> [:noun, :proper_noun, :adjective]},
+      {:name => :preposition1,:grammar => :preposition,:branches=> [:noun, :proper_noun, :adjective, :subject]},
       {:name => :adjective2,  :grammar => :adjective, :branches  => [:noun, :proper_noun]}, 
       {:name => :proper_noun2, :grammar => :proper_noun, :branches =>[:end_grammar]},
       {:name => :noun2,        :grammar => :noun, :branches =>[:end_grammar]},

@@ -57,15 +57,24 @@ class ShipSystem
    
  end
  
- def self.make_noun word
+ def self.make_proper_noun word
    word = word[0, 1].capitalize + word[1..-1]
  end
  
  def self.is_proper_noun?(word)   
-   word = ShipSystem.make_noun(word)
+   word = ShipSystem.make_proper_noun(word)
    
    dic_entry = Dictionary.matching_word(word)
-   if !dic_entry.nil? and dic_entry[:grammar] == :proper_noun
+   if !dic_entry.nil? and (dic_entry[:grammar] == :proper_noun) 
+      return true
+   end
+   
+   false
+ end
+ 
+ def self.is_subject?(word)   
+   dic_entry = Dictionary.matching_word(word)
+   if !dic_entry.nil? and (dic_entry[:grammar] == :subject) 
       return true
    end
    
@@ -112,12 +121,18 @@ class ShipSystem
    info "is #{word} proper noun?"
    if ShipSystem.is_proper_noun?(word)
      if (@obj.nil?)
-       @obj = ShipSystem.make_noun(word)
+       @obj = ShipSystem.make_proper_noun(word)
      elsif (@subj.nil?)
-       @subj = ShipSystem.make_noun(word)
+       @subj = ShipSystem.make_proper_noun(word)
+     end
+   elsif ShipSystem.is_subject?(word)
+     if (@obj.nil?)
+       @obj = word
+     elsif (@subj.nil?)
+       @subj = word
      end
    else
-     @subj = word.to_sym
+     word
    end
  end
 end

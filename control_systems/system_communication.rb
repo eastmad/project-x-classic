@@ -8,8 +8,7 @@ class SystemCommunication < ShipSystem
     begin
       
       mes = args
-      mes = SystemGhost.welcome if args.nil?
-      
+      mes = SystemGhost.welcome if args.nil?      
       
       @@rq.enq mes
     

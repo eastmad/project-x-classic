@@ -49,10 +49,13 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
 
   trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint) 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
+  Dictionary.add_discovered_subject(item.name, item)  
   trader.contracts << Contract.new(:sink, item)
   item = Item.new("choclate chips", "Confectionary additions", :commodity)
+  Dictionary.add_discovered_subject(item.name, item)  
   trader.contracts << Contract.new(:sink, item)
   item = Item.new("wafer cones", "Confectionary containers", :commodity)
+  Dictionary.add_discovered_subject(item.name, item)  
   trader.contracts << Contract.new(:source, item, earth)
   Dictionary.add_discovered_proper_noun(trader.index_name, trader)
   
@@ -76,7 +79,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :help, :myself, 1
   Operation.register_op :status, :myself, 1
   Operation.register_op :read, :communication, 1
-
+  Operation.register_op :accept, :trade, 1
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]

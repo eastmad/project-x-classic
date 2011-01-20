@@ -6,12 +6,14 @@ class Dictionary
             {:word => :launch, :grammar => :verb, :systems => [:weapon, :power]},
             {:word => :engage, :grammar => :verb, :systems => [:power], :following => :drive},
             {:word => :orbit, :grammar => :verb, :systems => [:navigation]},
+            {:word => :accept, :grammar => :verb, :systems => [:trade]},
             {:word => :dock, :grammar => :verb, :systems => [:power], :following => :self},
             {:word => :undock, :grammar => :verb, :systems => [:power], :following => :self},
             {:word => :plot, :grammar => :verb, :systems => [:navigation], :following => :course},
             {:word => :send, :grammar => :verb, :systems => [:comms]},
             {:word => :read, :grammar => :verb, :systems => [:comms]},
             {:word => :mail, :grammar => :noun, :systems => [:comms]},
+            {:word => :contract, :grammar => :noun, :systems => [:trade]},
             {:word => :page, :grammar => :noun, :systems => [:comms]},
             {:word => :describe, :grammar => :verb, :systems => [:library]},
             {:word => :summarize, :grammar => :verb, :systems => [:myself]},
@@ -73,6 +75,10 @@ class Dictionary
    def self.add_discovered_proper_noun(str, sgo)
      @@shipname = str if sgo.nil?
      @@Words << {:word => str.to_sym, :grammar => :proper_noun, :systems =>[:navigation], :sgo => sgo}
+   end
+
+   def self.add_discovered_subject(str, item)
+     @@Words << {:word => str.to_sym, :grammar => :subject, :systems =>[:trade], :sgo => item}
    end
    
    def self.add_system_nouns(sys)
