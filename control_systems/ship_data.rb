@@ -1,4 +1,5 @@
 require "#{File.dirname(__FILE__)}/impl_security"
+require "#{File.dirname(__FILE__)}/impl_trade"
 
 class ShipData
    attr_reader :name, :locationPoint, :status, :headingPoint   
@@ -14,6 +15,7 @@ class ShipData
       @headingPoint = nil
       @status = :dependent
       @security = ImplSecurity.new
+      @trade = ImplTrade.new
    end
 
    def set_heading(planet)
@@ -98,6 +100,14 @@ class ShipData
      else
        raise SystemsMessage.new("Cannot dock with #{spaceStation} from #{@locationPoint}", SystemNavigation, :info)
      end   
+   end
+   
+   def accept(item)
+     raise SystemsMessage.new("You can only accept a trade at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
+     raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
+     raise SystemsMessage.new("No source of #{item} on offer", SystemTrade, :info) unless (@trade.source_offered?(@locationPoint.body, item)) 
+     
+     SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
    end
    
    def land(city)

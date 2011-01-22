@@ -29,7 +29,8 @@ require "control_systems/system_security"
 require "control_systems/system_myself"
 
 Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
-  background black
+  
+  background rgb(20, 42, 42)
   stroke white
 
   sol = Star.new("Sol", "Your home planet's sun")
@@ -84,7 +85,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
   stack(:width =>210) {
-
+    background black
     @im_win = ImageWindow.new(:stationdocked)     
 
     @imstack = stack {
@@ -120,7 +121,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     @iconstack.move(0,parent.height - 130)
   }
 
-  stack(:width => 300)  {      
+  stack(:width => 330)  {  
     @dr = DisplayResponse.new 
     @gr = GrammarTree.new
 
@@ -129,7 +130,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
 
     stack {
       border rgb(25,25,50) , :strokewidth => 1
-      background darkslategray
+      background rgb(20, 42, 42)
       flow {
         para "> ", :stroke => white
         @arr[0] = para "_", :stroke => white
@@ -138,7 +139,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       @last_command = inscription "Waiting for command", :stroke => gray
     }  
 
-    stack(:width => 300, :height => 231){
+    stack(:width => 330, :height => 231){
+      background rgb(20,20,40)
       border rgb(25,25,50) , :strokewidth => 1
       (0..4).each{|n| @ap[n].line_type = para strong(""),""}
     }
