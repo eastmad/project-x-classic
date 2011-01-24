@@ -105,7 +105,13 @@ class ShipData
    def accept(item)
      raise SystemsMessage.new("You can only accept a trade at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
      raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
-     raise SystemsMessage.new("No source of #{item} on offer", SystemTrade, :info) unless (@trade.source_offered?(@locationPoint.body, item)) 
+     contract = @trade.source_offered(@locationPoint.body, item)
+     raise SystemsMessage.new("No source of #{item} on offer", SystemTrade, :info) if contract.nil?
+     
+     contract.status = :accepted
+     
+     @trade.cargo << contract.accept()
+     @trade.contracts << contract
      
      SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
    end

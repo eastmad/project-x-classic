@@ -11,7 +11,8 @@ class ImageWindow
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
    :city => ["gifs/cityport.jpg"],
    :atmosphere => ["gifs/atmosphere.jpg"],
-   :stationdocked=>["gifs/station-closeup.jpg"],
+   :stationdocked =>["gifs/station-closeup.jpg"],
+   :crates =>["gifs/crates.jpg"],
    }
    
    @@sgo = {

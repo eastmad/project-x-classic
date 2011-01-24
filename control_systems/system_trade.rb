@@ -25,7 +25,7 @@ class SystemTrade < ShipSystem
      
       @@rq.enq @@ship.accept(item)
       @@rq.enq SystemsMessage.new("Accepted contract to find a buyer for #{@obj}", SystemTrade, :response)
-      {:success => true}
+      {:success => true, :media => :trade}
     rescue => ex
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("Cannot accept.", SystemTrade, :response_bad)

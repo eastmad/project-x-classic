@@ -1,10 +1,13 @@
 class Contract
-  attr_reader :contract_type, :item, :status, :origin_body   
+  attr_reader :contract_type, :item, :origin_body
+  attr_accessor :status
   
   @@contract_types = {:sink => "Find a source of", :source => "Find a buyer for"}
   
   def initialize(contract_type, item, origin_body = nil)
     @status = :available
+    @status = :unfulfilled if (contract_type == :sink)
+    
     @item = item
     @contract_type = contract_type
     @origin_body = origin_body
