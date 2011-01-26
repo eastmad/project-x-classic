@@ -81,6 +81,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :status, :myself, 1
   Operation.register_op :read, :communication, 1
   Operation.register_op :accept, :trade, 1
+  Operation.register_op :fulfill, :trade, 1
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]

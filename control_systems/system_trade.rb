@@ -33,6 +33,20 @@ class SystemTrade < ShipSystem
     end
   end
   
+  def _fulfill(args = nil)
+    begin    
+     item = ShipSystem.find_sgo_from_name(@obj)
+
+     @@rq.enq @@ship.fulfill(item)
+     @@rq.enq SystemsMessage.new("Fulfilled contract to find a source of #{@obj}", SystemTrade, :response)
+     {:success => true, :media => :trade}
+    rescue => ex
+     @@rq.enq ex
+     @@rq.enq SystemsMessage.new("Cannot fulfill.", SystemTrade, :response_bad)
+     {:success => false}
+    end
+  end
+  
   def to_s
     "Trade"
   end

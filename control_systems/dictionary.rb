@@ -7,6 +7,7 @@ class Dictionary
             {:word => :engage, :grammar => :verb, :systems => [:power], :following => :drive},
             {:word => :orbit, :grammar => :verb, :systems => [:navigation]},
             {:word => :accept, :grammar => :verb, :systems => [:trade]},
+            {:word => :fulfill, :grammar => :verb, :systems => [:trade]},
             {:word => :dock, :grammar => :verb, :systems => [:power], :following => :self},
             {:word => :undock, :grammar => :verb, :systems => [:power], :following => :self},
             {:word => :plot, :grammar => :verb, :systems => [:navigation], :following => :course},
