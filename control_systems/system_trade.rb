@@ -1,24 +1,48 @@
 class SystemTrade < ShipSystem 
   Operation.register_sys(:trade)  
-  attr_accessor :trade_page
-
+  
   def self.cursor_str
     "trade:"
   end
   
-  def self.welcome
-  
-    para1 = <<-END.gsub(/^ {8}/, '')
-      #{@trade_page}
-    END
-    
-    SystemsMessage.new(para1, SystemTrade, :mail)
-  end  
-  
-  def self.prepare_trade_page(station)
-    @trade_page = station.trade_page  
+  def _browse(arg = nil)
+    begin    
+      station = @@ship.locationPoint.body
+      raise SystemsMessage.new("No trade channel found", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      
+      @subj ||= :contract      
+      
+      if (@subj == :contract)
+      	para1 = station.contracts_page
+      elsif	(@subj == :trader)
+        para1 = station.traders_page
+      end  
+ 
+      @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
+      {:success => true, :media => :trade}
+    rescue RuntimeError => ex
+      resp_hash = {:success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
+    end
+  end
+
+  def _contract(args = nil)
+    @subj = :contract
   end
   
+  def _contracts(args = nil)
+    @subj = :contract
+  end   
+  
+  def _trader(args = nil)
+    @subj = :trader
+  end
+  
+  def _traders(args = nil)
+    @subj = :trader
+  end   
+   
   def _accept(args = nil)
     begin    
       item = ShipSystem.find_sgo_from_name(@obj)
@@ -51,6 +75,9 @@ class SystemTrade < ShipSystem
     "Trade"
   end
   
+  def self.to_s
+     "trade system"
+  end
   
   def method_missing (methId, *args)      
     word = methId.id2name

@@ -22,8 +22,4 @@ class SystemCommunication < ShipSystem
   def _mail(args = nil)
     return SystemGhost.welcome
   end
-  
-  def _page(args = nil)
-    return SystemTrade.welcome
-  end
-end
+ end

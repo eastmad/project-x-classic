@@ -45,10 +45,11 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = City.new("Dundarach", "Only space port for Mars, sometimes refered to as Marsport", mars.atmospherePoint)
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
-  listeningPost = SpaceStation.new("Eagle23", "Earth military control listening post", mars.orbitPoint)
+  listeningPost = SpaceStation.new("Hawk23", "Earth military control listening post", mars.orbitPoint)
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
-  trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint) 
+  trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint)
+  trader2 = Trader.new("Amstrad International", "AmstradInt", "Trading in faulty computing equipment", station.centrePoint) 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
   Dictionary.add_discovered_subject(item.name, item)  
   trader.contracts << Contract.new(:sink, item)
@@ -57,10 +58,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   trader.contracts << Contract.new(:sink, item)
   item = Item.new("wafer cones", "Confectionary containers", :commodity)
   Dictionary.add_discovered_subject(item.name, item)  
-  trader.contracts << Contract.new(:source, item, earth)
+  trader2.contracts << Contract.new(:source, item, earth)
+  trader.contracts << Contract.new(:sink, item)
+    
   Dictionary.add_discovered_proper_noun(trader.index_name, trader)
-  
-  SystemTrade.prepare_trade_page station
 
   @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
   Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
@@ -82,6 +83,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :read, :communication, 1
   Operation.register_op :accept, :trade, 1
   Operation.register_op :fulfill, :trade, 1
+  Operation.register_op :browse, :trade, 1
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]

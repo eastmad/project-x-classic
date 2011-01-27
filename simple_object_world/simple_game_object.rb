@@ -213,19 +213,35 @@ class SpaceStation < CelestialObject
     ret
   end
   
-  def trade_page 
-    ret = "#{@name} trade list:\n"
+  def contracts_page 
+    ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
+    ret << "Contract to find a buyer for\n"    
     traders.each do | trader | 
-      ret << "#{trader.to_s}\n"
-      trader.contracts.each { |contract| ret << "-#{contract.to_s}\n"}
+      #ret << "#{trader.to_s}\n"
+      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.index_name})\n" if contract.contract_type == :source}
+    end
+    ret << "\nContract to find a source of\n"
+    traders.each do | trader | 
+      #ret << "#{trader.to_s}\n"
+      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.index_name})\n" if contract.contract_type == :sink}
     end 
     
     ret
   end
   
+  def traders_page 
+    ret = ""
+    traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
+    traders.each do | trader | 
+      ret << "\n-#{trader.name} (#{trader.index_name})\n#{trader.desc}\n" 
+    end
+    
+    ret
+  end
+  
   def welcome
-    "The trade station #{@name} welcomes your visit."
+    "The trade station #{@name} welcomes your visit. Browse channel open."
   end
 end
 

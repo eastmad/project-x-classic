@@ -64,8 +64,7 @@ class SystemPower < ShipSystem
       sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?     
       @@rq.enq @@ship.dock sgo
       @@rq.enq @@ship.lock_docking_clamp()
-      @@rq.enq SystemsMessage.new("Message received:'#{sgo.welcome}'", SystemCommunication, :info)
-      SystemTrade.prepare_trade_page sgo
+      @@rq.enq SystemsMessage.new("'#{sgo.welcome}'", SystemCommunication, :info)
 
       resp_hash = {:success => true, :media => :docking}
     rescue RuntimeError => ex      

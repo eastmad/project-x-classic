@@ -13,9 +13,9 @@ class Dictionary
             {:word => :plot, :grammar => :verb, :systems => [:navigation], :following => :course},
             {:word => :send, :grammar => :verb, :systems => [:comms]},
             {:word => :read, :grammar => :verb, :systems => [:comms]},
+            {:word => :browse, :grammar => :verb, :systems => [:trade]},           
             {:word => :mail, :grammar => :noun, :systems => [:comms]},
             {:word => :contract, :grammar => :noun, :systems => [:trade]},
-            {:word => :page, :grammar => :noun, :systems => [:comms]},
             {:word => :describe, :grammar => :verb, :systems => [:library]},
             {:word => :summarize, :grammar => :verb, :systems => [:myself]},
             {:word => :help, :grammar => :verb, :systems => [:myself]},
@@ -31,6 +31,7 @@ class Dictionary
             {:word => :message, :grammar => :noun, :systems => [:comms]},
             {:word => :vessel, :grammar => :noun, :systems => [:weapon]},
             {:word => :drive, :grammar => :noun, :systems => [:power]},
+            {:word => :traders, :grammar => :noun, :systems => [:comms]},            
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},

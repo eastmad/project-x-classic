@@ -21,7 +21,7 @@ class Contract
     Consignment.new(@item, @origin_body)
   end
   
-  def fulfil (consignment, contract)
+  def fulfill (consignment, contract)
     raise "Only a sink contract can be fulfilled" unless @contract_type == :sink
     raise "Contract already fulfilled" if @status == :fulfilled
     raise "Only a source contract can fulfil a sink" unless contract.contract_type == :source

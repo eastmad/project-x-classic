@@ -37,10 +37,13 @@ info "sink_offered nil"
   end
   
   def find_contract(type, item)
+    info "contracts"
     @contracts.each do | contract |
-      info "contract #{contract.item} == #{item} #{contract.contract_type } == #{type}"
+      info "contract #{contract.item} == #{item} #{contract.contract_type} == #{type}"
       return contract if contract.item == item and contract.contract_type == type
     end
+    
+    info "no contract"
   end
 
 end

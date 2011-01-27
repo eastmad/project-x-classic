@@ -131,14 +131,15 @@ class ShipData
     end
     raise SystemsMessage.new("No request for #{item} is asked for", SystemTrade, :info) if contract.nil?
  
- begin
+    consignment = @trade.find_consignment(item)
+    source_contract = @trade.find_contract(:source,item)
 
-    contract.fulfill(@trade.find_consignment(item), @trade.find_contract(:source,item))
-   rescue
-      raise SystemsMessage.new("Cannot fulfill for #{item}", SystemTrade, :info)
-    end
+    raise SystemsMessage.new("You have no source contract for #{item}", SystemTrade, :info) if source_contract.nil? 
+    raise SystemsMessage.new("You have no source consignment of #{item}", SystemTrade, :info) if consignment.nil?   
+    
+    contract.fulfill(consignment, source_contract)
  
-    SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
+    SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
   end
    
    def land(city)
