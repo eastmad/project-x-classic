@@ -11,10 +11,12 @@ class SystemTrade < ShipSystem
       raise SystemsMessage.new("No trade channel found", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
       @subj ||= :contract      
-      
-      if (@subj == :contract)
-      	para1 = station.contracts_page
-      elsif	(@subj == :trader)
+
+      if (sgo = ShipSystem.find_sgo_from_name(@obj))
+        para1 = sgo.describe      
+      elsif (@subj == :contract)
+         para1 = station.contracts_page
+      elsif (@subj == :trader)
         para1 = station.traders_page
       end  
  
@@ -42,6 +44,14 @@ class SystemTrade < ShipSystem
   def _traders(args = nil)
     @subj = :trader
   end   
+   
+  def _industries(args = nil)
+    :industries
+  end  
+  
+  def _intergalactic(args = nil)
+      :intergalactic
+  end
    
   def _accept(args = nil)
     begin    
@@ -81,7 +91,7 @@ class SystemTrade < ShipSystem
   
   def method_missing (methId, *args)      
     word = methId.id2name
-    info "(methId, *args) Call method missing:#{word} and #{args.length} "
+    info "(methId, *args, #{args[0]}) Call method missing:#{word} and #{args.length} "
 
     word.slice!(0)
     info "is #{word} proper noun?"

@@ -21,9 +21,12 @@ class GrammarTree
    #cool pod 5
    #launch probe
    
+   attr_accessor :context
+   
    def initialize
       @name_stack = Array.new(6)            #max words
       @name_stack << :start_grammar
+      @context = nil
    end
 
 
@@ -65,11 +68,13 @@ class GrammarTree
    
    def undo_grammar
       @name_stack.pop
+      @context = nil
    end     
    
    def reset_grammar
       @name_stack.clear
       @name_stack << :start_grammar
+      @context = nil
    end
                  
 end

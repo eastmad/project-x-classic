@@ -10,7 +10,7 @@ class Trader < SimpleBody
   end      
 
   def describe
-  "#{@name} (#{@index_name}) is a trader in space port #{@owning_body.name}"
+  "#{@name} #{@index_name} is a trader in space port #{@owning_body.name}"
   end
 
   def describe_owns
@@ -20,6 +20,6 @@ class Trader < SimpleBody
   end
 
   def to_s
-   "#{@name} (#{@index_name})"
+   "#{@name} #{@index_name}"
   end
 end

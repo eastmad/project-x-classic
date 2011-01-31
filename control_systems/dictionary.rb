@@ -1,37 +1,37 @@
 class Dictionary
    @@Words = [ 
-            {:word => :approach, :grammar => :verb, :systems => [:power]},
-            {:word => :compute, :grammar => :verb, :systems => [:navigation]},
-            {:word => :land, :grammar => :verb, :systems => [:power], :following => :self},
-            {:word => :launch, :grammar => :verb, :systems => [:weapon, :power]},
-            {:word => :engage, :grammar => :verb, :systems => [:power], :following => :drive},
-            {:word => :orbit, :grammar => :verb, :systems => [:navigation]},
-            {:word => :accept, :grammar => :verb, :systems => [:trade]},
-            {:word => :fulfill, :grammar => :verb, :systems => [:trade]},
-            {:word => :dock, :grammar => :verb, :systems => [:power], :following => :self},
-            {:word => :undock, :grammar => :verb, :systems => [:power], :following => :self},
-            {:word => :plot, :grammar => :verb, :systems => [:navigation], :following => :course},
-            {:word => :send, :grammar => :verb, :systems => [:comms]},
-            {:word => :read, :grammar => :verb, :systems => [:comms]},
-            {:word => :browse, :grammar => :verb, :systems => [:trade]},           
-            {:word => :mail, :grammar => :noun, :systems => [:comms]},
-            {:word => :contract, :grammar => :noun, :systems => [:trade]},
-            {:word => :describe, :grammar => :verb, :systems => [:library]},
-            {:word => :summarize, :grammar => :verb, :systems => [:myself]},
-            {:word => :help, :grammar => :verb, :systems => [:myself]},
-            {:word => :describe, :grammar => :verb, :systems => [:myself]},
-            {:word => :status, :grammar => :verb, :systems => [:myself]}, 
-            {:word => :release, :grammar => :verb, :systems => [:security]},
-            {:word => :gate, :grammar => :noun, :systems => [:navigation]},
-            {:word => :probe, :grammar => :noun, :systems => [:navigation, :power]},
-            {:word => :course, :grammar => :noun, :systems => [:navigation]},
-            {:word => :cannon, :grammar => :noun, :systems => [:weapon]},
-            {:word => :planet, :grammar => :noun, :systems => [:navigation]},
-            {:word => :torpedo, :grammar => :noun, :systems => [:weapon]},
-            {:word => :message, :grammar => :noun, :systems => [:comms]},
-            {:word => :vessel, :grammar => :noun, :systems => [:weapon]},
-            {:word => :drive, :grammar => :noun, :systems => [:power]},
-            {:word => :traders, :grammar => :noun, :systems => [:comms]},            
+            {:word => :approach, :grammar => :verb, :sys => :power},
+            {:word => :compute, :grammar => :verb, :sys => :navigation},
+            {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
+            {:word => :launch, :grammar => :verb, :sys => :power},
+            {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
+            {:word => :orbit, :grammar => :verb, :sys => :navigation},
+            {:word => :accept, :grammar => :verb, :sys => :trade},
+            {:word => :fulfill, :grammar => :verb, :sys => :trade},
+            {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
+            {:word => :undock, :grammar => :verb, :sys => :power, :following => :self},
+            {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
+            {:word => :send, :grammar => :verb, :sys => :comms},
+            {:word => :read, :grammar => :verb, :sys => :comms},
+            {:word => :browse, :grammar => :verb, :sys => :trade},           
+            {:word => :mail, :grammar => :noun, :sys => :comms},
+            {:word => :contract, :grammar => :noun, :sys => :trade},
+            {:word => :describe, :grammar => :verb, :sys => :library},
+            {:word => :summarize, :grammar => :verb, :sys => :myself},
+            {:word => :help, :grammar => :verb, :sys => :myself},
+            {:word => :describe, :grammar => :verb, :sys => :navigation},
+            {:word => :status, :grammar => :verb, :sys => :myself}, 
+            {:word => :release, :grammar => :verb, :sys => :security},
+            {:word => :gate, :grammar => :noun, :sys => :navigation},
+            {:word => :probe, :grammar => :noun, :sys => :navigation},
+            {:word => :course, :grammar => :noun, :sys => :navigation},
+            {:word => :cannon, :grammar => :noun, :sys => :weapon},
+            {:word => :planet, :grammar => :noun, :sys => :navigation},
+            {:word => :torpedo, :grammar => :noun, :sys => :weapon},
+            {:word => :message, :grammar => :noun, :sys => :comms},
+            {:word => :vessel, :grammar => :noun, :sys => :weapon},
+            {:word => :drive, :grammar => :noun, :sys => :power},
+            {:word => :traders, :grammar => :noun, :sys => :comms},            
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},
@@ -41,7 +41,10 @@ class Dictionary
             
             {:word => :nearest, :grammar => :adjective},
             {:word => :enemy, :grammar => :adjective},
-            {:word => :friendly, :grammar => :adjective}
+            {:word => :friendly, :grammar => :adjective},
+            
+            {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
+            {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade}
       ]   
       
    @@shipname = "ship"    
@@ -59,32 +62,40 @@ class Dictionary
      return res   
    end
    
-   def self.complete_me(str, filter)
+   def self.complete_me(str, filter, context)
      res = nil
      following = nil
+     
+     info "str = #{str}, context = #{context}"
             
      @@Words.each do |k|
-       if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar])) 
+       if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar]) and 
+           (context.nil? or k[:sys].nil? or k[:sys] == context)) 
          res = k
          k[:following] = @@shipname if k[:following] == :self
        end          
      end
           
-     following = matching_word(res[:following].to_s) if res[:following]     
+     following = matching_word(res[:following].to_s) if (res and res[:following])      
      return res, following   
    end
    
    def self.add_discovered_proper_noun(str, sgo)
      @@shipname = str if sgo.nil?
-     @@Words << {:word => str.to_sym, :grammar => :proper_noun, :systems =>[:navigation], :sgo => sgo}
+     @@Words << {:word => str.to_sym, :grammar => :proper_noun, :sgo => sgo}
    end
 
+   def self.add_double_discovered_proper_noun(str, follow, sgo)
+     @@Words << {:word => str.to_sym, :grammar => :proper_noun, :following => follow, :sgo => sgo}
+   end
+
+
    def self.add_discovered_subject(str, item)
-     @@Words << {:word => str.to_sym, :grammar => :subject, :systems =>[:trade], :sgo => item}
+     @@Words << {:word => str.to_sym, :grammar => :subject, :sys =>:trade, :sgo => item}
    end
    
    def self.add_system_nouns(sys)
-     @@Words << {:word => sys, :grammar => :noun, :systems =>[:myself]}
+     @@Words << {:word => sys, :grammar => :noun, :sys =>:myself}
    end
    
 end

@@ -48,8 +48,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   listeningPost = SpaceStation.new("Hawk23", "Earth military control listening post", mars.orbitPoint)
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
-  trader = Trader.new("Buffet Industries", "BuffetInd", "Trading in ice cream components", station.centrePoint)
-  trader2 = Trader.new("Amstrad International", "AmstradInt", "Trading in faulty computing equipment", station.centrePoint) 
+  trader = Trader.new("Buffet", :Industries, "Trading in ice cream components", station.centrePoint)
+  trader2 = Trader.new("Amstrad", :Intergalactic, "Trading in faulty computing equipment", station.centrePoint) 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
   Dictionary.add_discovered_subject(item.name, item)  
   trader.contracts << Contract.new(:sink, item)
@@ -61,7 +61,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   trader2.contracts << Contract.new(:source, item, earth)
   trader.contracts << Contract.new(:sink, item)
     
-  Dictionary.add_discovered_proper_noun(trader.index_name, trader)
+  Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
+  Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)
 
   @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
   Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
@@ -205,14 +206,16 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
        end
 
        if (@state == :complete_me)
-          res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter)
+          res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
           if (res == nil)
             @rq.enq SystemsMessage.new("#{@dr.req_str} is not in dictionary", SystemMyself, :warn)
+            raise
           else
              SoundPlay.play_sound(0)
              @dr.req_str = res[:word]
              @dr.req_grammar = res[:grammar]
              @gr.set_grammar(res[:grammar])
+             @gr.context ||= res[:sys]
 
              unless following.nil?
                @dr.add_req               
