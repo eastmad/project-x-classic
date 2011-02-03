@@ -1,6 +1,7 @@
 class SystemMyself < ShipSystem 
   Operation.register_sys(:myself)  
 
+
   def self.cursor_str
     "myself:"
   end
@@ -21,6 +22,12 @@ class SystemMyself < ShipSystem
       {:success => false}
     end
   end
+
+  def _suggest(args = nil)
+    @@rq.enq @@ship.suggest
+    
+    {:success => true}
+  end 
 
   def _summarize(args = nil)
     
@@ -54,8 +61,9 @@ class SystemMyself < ShipSystem
     para1 = <<-END.gsub(/^ {6}/, '')
       You are commanding the small spacecraft #{@@ship.name}. I will help you talk to the other onboard systems.
       
-      Type 'summarize' to list all online systems.
-      Type 'describe' to find information about stars, palnets and satellites.
+      Try 'suggest' for what you could do next.
+      Try 'describe' to find out about things.
+      Try 'summarize' to find out about ship systems.
     END
 
     @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)

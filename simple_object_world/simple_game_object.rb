@@ -219,12 +219,12 @@ class SpaceStation < CelestialObject
     ret << "Contract to find a buyer for\n"    
     traders.each do | trader | 
       #ret << "#{trader.to_s}\n"
-      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.index_name})\n" if contract.contract_type == :source}
+      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.name} #{trader.index_name})\n" if contract.contract_type == :source}
     end
     ret << "\nContract to find a source of\n"
     traders.each do | trader | 
       #ret << "#{trader.to_s}\n"
-      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.index_name})\n" if contract.contract_type == :sink}
+      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.name} #{trader.index_name})\n" if contract.contract_type == :sink}
     end 
     
     ret
@@ -234,7 +234,7 @@ class SpaceStation < CelestialObject
     ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     traders.each do | trader | 
-      ret << "\n-#{trader.name} (#{trader.index_name})\n#{trader.desc}\n" 
+      ret << "\n-#{trader.name} #{trader.index_name}\n#{trader.desc}\n" 
     end
     
     ret

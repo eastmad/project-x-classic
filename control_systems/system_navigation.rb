@@ -17,27 +17,6 @@ class SystemNavigation < ShipSystem
   def _course(arg = nil)        
   end    
   
-  def _describe(arg = nil)
-    begin
-      sgo = ShipSystem.find_sgo_from_name(@obj)
-       
-      sgo = @@ship.locationPoint.body.root_body if (@obj.nil?)
-      
-      para1 = "#{sgo}\n\n"
-      para1 << sgo.describe
-      para1 << "\n- " << sgo.desc
-      para1 << "\n- " << sgo.describe_owns
-      para1 << "\n\n(Type 'describe Mars' to find information about any catalogued object)" if @obj.nil?
-
-      @@rq.enq SystemsMessage.new(para1, SystemNavigation, :report)
-      {:success => true, :media => :describe}
-    rescue RuntimeError => ex
-      resp_hash = {:success => false}
-      @@rq.enq ex
-      @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
-    end
-  end
-  
   def _compute(arg = nil)
     {:str => "Poo\nPoo\nPoo\nPoo\nPoo", :success => true, :media => :travel}
   end

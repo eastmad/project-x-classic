@@ -18,8 +18,8 @@ class Dictionary
             {:word => :contract, :grammar => :noun, :sys => :trade},
             {:word => :describe, :grammar => :verb, :sys => :library},
             {:word => :summarize, :grammar => :verb, :sys => :myself},
+            {:word => :suggest, :grammar => :verb, :sys => :myself},
             {:word => :help, :grammar => :verb, :sys => :myself},
-            {:word => :describe, :grammar => :verb, :sys => :navigation},
             {:word => :status, :grammar => :verb, :sys => :myself}, 
             {:word => :release, :grammar => :verb, :sys => :security},
             {:word => :gate, :grammar => :noun, :sys => :navigation},
@@ -31,7 +31,7 @@ class Dictionary
             {:word => :message, :grammar => :noun, :sys => :comms},
             {:word => :vessel, :grammar => :noun, :sys => :weapon},
             {:word => :drive, :grammar => :noun, :sys => :power},
-            {:word => :traders, :grammar => :noun, :sys => :comms},            
+            {:word => :traders, :grammar => :noun, :sys => :trade},            
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},
@@ -86,7 +86,7 @@ class Dictionary
    end
 
    def self.add_double_discovered_proper_noun(str, follow, sgo)
-     @@Words << {:word => str.to_sym, :grammar => :proper_noun, :following => follow, :sgo => sgo}
+     @@Words << {:word => str.to_sym, :grammar => :proper_noun, :sys =>:trade, :following => follow, :sgo => sgo}
    end
 
 

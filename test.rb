@@ -27,6 +27,7 @@ require "control_systems/system_navigation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
 require "control_systems/system_myself"
+require "control_systems/system_library"
 
 Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   
@@ -74,7 +75,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :release, :security, 1
   Operation.register_op :compute, :navigation, 1
   Operation.register_op :dock, :power, 1
-  Operation.register_op :describe, :navigation, 1
+  Operation.register_op :describe, :library, 1
   Operation.register_op :orbit, :navigation, 1
   Operation.register_op :plot, :navigation, 1
   Operation.register_op :engage, :power, 1
@@ -85,6 +86,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :accept, :trade, 1
   Operation.register_op :fulfill, :trade, 1
   Operation.register_op :browse, :trade, 1
+  Operation.register_op :suggest, :myself, 1
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
@@ -208,7 +210,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
        if (@state == :complete_me)
           res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
           if (res == nil)
-            @rq.enq SystemsMessage.new("#{@dr.req_str} is not in dictionary", SystemMyself, :warn)
+            @rq.enq SystemsMessage.new("#{@dr.req_str} is not in #{@gr.context} dictionary", SystemMyself, :warn)
             raise
           else
              SoundPlay.play_sound(0)

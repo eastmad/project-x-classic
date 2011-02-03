@@ -1,5 +1,6 @@
 require "#{File.dirname(__FILE__)}/impl_security"
 require "#{File.dirname(__FILE__)}/impl_trade"
+require "#{File.dirname(__FILE__)}/impl_help"
 
 class ShipData
    attr_reader :name, :locationPoint, :status, :headingPoint   
@@ -16,6 +17,11 @@ class ShipData
       @status = :dependent
       @security = ImplSecurity.new
       @trade = ImplTrade.new
+      @help = ImplHelp.new
+   end
+   
+   def suggest
+      SystemsMessage.new(@help.suggest(@locationPoint, @status), SystemMyself, :respond)
    end
 
    def set_heading(planet)
