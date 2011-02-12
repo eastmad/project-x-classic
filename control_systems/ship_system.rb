@@ -117,22 +117,19 @@ class ShipSystem
    word = methId.id2name
    info "(methId, *args) Call method missing:#{word} and #{args.length} "
 
-   word.slice!(0)
+   ret = word.slice!(0)
    info "is #{word} proper noun?"
    if ShipSystem.is_proper_noun?(word)
+     ret = ShipSystem.make_proper_noun(word)
      if (@obj.nil?)
-       @obj = ShipSystem.make_proper_noun(word)
-     elsif (@subj.nil?)
-       @subj = ShipSystem.make_proper_noun(word)
+       @obj = ret
      end
    elsif ShipSystem.is_subject?(word)
      if (@obj.nil?)
-       @obj = word
-     elsif (@subj.nil?)
-       @subj = word
+       @obj = ret
      end
-   else
-     word
    end
+
+   ret
  end
 end

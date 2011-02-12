@@ -21,13 +21,16 @@ class SystemPower < ShipSystem
   end   
   
   def _land(args=nil)   
+    
     begin
       raise SystemsMessage.new("#{@@ship.name} is not within a planet's atmosphere", SystemPower, :info) unless @@ship.locationPoint.band == :atmosphere
       
-      unless @obj.nil?
-        sgo = ShipSystem.find_sgo_from_name(@obj)
+      @obj = nil if args == @obj    
+      unless args.nil?
+        sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
+        
+        raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo        
         sgo ||= @@ship.locationPoint.body
-        raise SystemsMessage.new("No planet to land on", SystemNavigation, :info) unless sgo.kind_of? Planet
         @@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)
         @@rq.enq @@ship.land sgo         
       end

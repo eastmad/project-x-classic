@@ -10,13 +10,13 @@ class SystemTrade < ShipSystem
       station = @@ship.locationPoint.body
       raise SystemsMessage.new("No trade channel found", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
-      @subj ||= :contract      
+      subj = arg || :contract      
 
-      if (sgo = ShipSystem.find_sgo_from_name(@obj))
+      if (sgo = ShipSystem.find_sgo_from_name(arg))
         para1 = sgo.describe      
-      elsif (@subj == :contract)
+      elsif (subj == :contract)
          para1 = station.contracts_page
-      elsif (@subj == :trader)
+      elsif (subj == :trader)
         para1 = station.traders_page
       end  
  
@@ -30,19 +30,19 @@ class SystemTrade < ShipSystem
   end
 
   def _contract(args = nil)
-    @subj = :contract
+    :contract
   end
   
   def _contracts(args = nil)
-    @subj = :contract
+    :contract
   end   
   
   def _trader(args = nil)
-    @subj = :trader
+    :trader
   end
   
   def _traders(args = nil)
-    @subj = :trader
+    :trader
   end   
    
   def _industries(args = nil)

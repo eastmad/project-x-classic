@@ -13,7 +13,7 @@ class ImplHelp
    {:txt => "You can approach satellites from orbit; try 'approach TradeMall'", 
     :chk => lambda {@band == :orbit and @status == :sync}},
    {:txt => "You can land on a space port city; try 'land ProjectX'", 
-    :chk => lambda {@band == :atmosphere and body.kind_of? Planet}},
+    :chk => lambda {@band == :atmosphere and @body.kind_of? Planet}},
    {:txt => "You can leave a space port; try 'launch'", 
     :chk => lambda {@band == :surface and @body.kind_of? Planet}},
    {:txt => "You can visit another planet; try 'plot course to Mars'", 

@@ -38,6 +38,7 @@ class Dictionary
             {:word => :to, :grammar => :preposition},
             {:word => :from, :grammar => :preposition},
             {:word => :with, :grammar => :preposition},
+            {:word => :on, :grammar => :preposition},
             
             {:word => :nearest, :grammar => :adjective},
             {:word => :enemy, :grammar => :adjective},
