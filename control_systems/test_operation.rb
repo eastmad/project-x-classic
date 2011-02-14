@@ -1,55 +1,52 @@
 require "ship_system"
+require "dictionary"
+require "operation"
+require "../interface/system_message"
+require "../interface/response_queue"
 require "system_power"
 require "system_weapon"
-require "operation"
+require "system_security"
+require "system_trade"
+require "system_navigation"
+require "system_communication"
+require "system_myself"
+require "system_library"
+
+require "ship_data"
 require "ship_registry"
-require "ship_state_machine"
-require "dictionary"
 require "../simple_object_world/location_point.rb"
 require "../simple_object_world/location_link.rb"
 require "../simple_object_world/simple_body.rb"
 require "../simple_object_world/simple_game_object.rb"
+require "system_test_helper"
 
-Shoes.app do
-   info "Debug Operation"
+include TestHelper
+
+rq = ResponseQueue.new
+ShipSystem.set_rq rq
+
+mySpaceStation = SpaceStation.new("Sputnik","Old soviet",LocationPoint.new("void","void"))
+myPlanet = Planet.new("Earth","Nowehere",LocationPoint.new("void","void"))
+myCity = City.new("Houston","Old soviet",myPlanet.centrePoint)
+
+@ship = ShipRegistry.register_ship("ProjectX",mySpaceStation.surfacePoint)
+ShipSystem.christen(@ship)
    
-   mySpaceStation = SpaceStation.new("Sputnik","Old soviet",LocationPoint.new("void","void"))
-   @ship = ShipRegistry.register_ship("The Marco Polo", mySpaceStation.outerPoint)
-   info @ship.describeLocation
-   ShipSystem.christen(@ship)
-   
-   info ShipStateMachine.launch
-   info ShipStateMachine.land
-   info ShipStateMachine.land
-   
-   Operation.register_op :launch, :power, 1
-   Operation.register_op :fire, :weapon, 1
-   Operation.register_op :dock, :power, 1
-   
-    
-   TestHelper.find_and_evaluate 'fire cannon at alien vessel'
-   TestHelper.find_and_evaluate 'fire torpedoe at nearest vessel'
-   TestHelper.find_and_evaluate 'attack police vessel'
-   TestHelper.find_and_evaluate 'launch'
-   TestHelper.find_and_evaluate 'launch probe'   
-   TestHelper.find_and_evaluate 'dock'
-   TestHelper.find_and_evaluate 'dock with station 4'        
-end 
+Operation.register_op :launch, :power, 1
+
+puts "\n#{@ship.describeLocation}"
+test_command 'launch', rq
+
+ShipSystem.christen(@ship = ShipRegistry.register_ship("ProjectX",myPlanet.surfacePoint))
+puts "\n#{@ship.describeLocation}"      
+test_command 'launch', rq
+
+ShipSystem.christen(@ship = ShipRegistry.register_ship("ProjectX",myCity.centrePoint))
+puts "\n#{@ship.describeLocation}"
+test_command 'launch', rq
+
+ShipSystem.christen(@ship = ShipRegistry.register_ship("ProjectX",myPlanet.atmospherePoint))
+puts "\n#{@ship.describeLocation}"
+test_command 'launch', rq
 
 
-module TestHelper
-   def self.find_and_evaluate(command_str)
-      req_op = Operation.find_op_from_command(command_str)
-      if !req_op
-         warn "(No operation available - #{command_str})" 
-         return
-      end   
-      my_sys = ShipSystem.find_system(req_op[:ship_system])   
-      if !my_sys
-         warn "(No system available - #{command_str})"
-         return
-      end
-      resp_hash = my_sys.evaluate(command_str)
-      info resp_hash[:str]
-   end   
-end

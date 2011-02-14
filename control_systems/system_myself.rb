@@ -1,7 +1,6 @@
 class SystemMyself < ShipSystem 
   Operation.register_sys(:myself)  
 
-
   def self.cursor_str
     "myself:"
   end
@@ -21,6 +20,18 @@ class SystemMyself < ShipSystem
       @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
       {:success => false}
     end
+  end
+  
+  def _trade(args = nil)
+    :trade
+  end
+
+  def _navigation(args = nil)
+    :navigation
+  end
+
+  def _power(args = nil)
+    :power
   end
 
   def _suggest(args = nil)
@@ -55,8 +66,8 @@ class SystemMyself < ShipSystem
          
     return resp_hash
   end
-   
-  def _help
+  
+  def _help (args = nil)
  
     para1 = <<-END.gsub(/^ {6}/, '')
       You are commanding the small spacecraft #{@@ship.name}. I will help you talk to the other onboard systems.
@@ -65,7 +76,41 @@ class SystemMyself < ShipSystem
       Try 'describe' to find out about things.
       Try 'summarize' to find out about ship systems.
     END
+   
+    para1 = <<-END.gsub(/^ {6}/, '') if args == :trade
+      Trade
+      
+      You can connect a buyer to a seller.
+      When you are on a space station you can
+      access the trade channel.
+      
+      Try 'browse' to list traders and contracts.
+      Try 'accept contract for ' to find a buyer
+      Try 'fulfill contract for ' to complete a deal.
+    END
 
+    para1 = <<-END.gsub(/^ {6}/, '') if args == :navigation
+      Navigation
+      
+      To dock with a space station or land on a
+      planet approach from a stable orbit.
+      
+      Try 'orbit Earth'.
+      Try 'plot course to Mars'.
+      Try 'help power' for more.
+    END
+    
+    para1 = <<-END.gsub(/^ {6}/, '') if args == :power
+      Power
+      
+      To dock with a space station or land on a
+      planet approach from a stable orbit.
+      
+      Try 'approach Earth' to steer.
+      Try 'engage ' after plotting a course.
+      Try 'launch' to leave a planet.
+    END
+    
     @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)
    
     {:success => true}
