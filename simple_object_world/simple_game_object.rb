@@ -7,7 +7,7 @@ class City < SimpleBody
       @links = []
       
       @centrePoint = LocationPoint.new(self, :centre)               
-      @centrePoint.add_link([:up, :launch], ownerPoint) 
+      @centrePoint.add_link([:up, :launch], ownerPoint.find_linked_location(:up).first) 
       ownerPoint.add_link([:city, :land], @centrePoint)   
    end      
 

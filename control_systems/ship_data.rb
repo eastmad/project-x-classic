@@ -14,8 +14,8 @@ class ShipData
       @name = ship_name
       @locationPoint = locationPoint
       @headingPoint = nil
-      @status = :rest     
-      @status = :dependent if locationPoint.is_linked? :launch
+      @status = :rest
+      @status = :dependent if locationPoint.has_link_type? :launch   
       @security = ImplSecurity.new
       @trade = ImplTrade.new
       @help = ImplHelp.new
