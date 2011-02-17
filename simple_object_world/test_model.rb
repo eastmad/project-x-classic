@@ -4,28 +4,27 @@ require "simple_body"
 require "simple_game_object"
 require "location_point"
 require "location_link"
+require "../control_systems/system_test_helper"
 
+include TestHelper
 
-Shoes.app do
-  myStar = Star.new("Sol")
-  otherStar = Star.new("Betelgeuse")
-  myPlanet = Planet.new("Earth", myStar.outerPoint)
-  myPlanetMars = Planet.new("Mars", myStar.outerPoint)
-  mySpaceStation = SpaceStation.new("Sputnik", myPlanet.orbitPoint) 
+  myStar = Star.new("Sol", "old star")
+  otherStar = Star.new("Betelgeuse", "far star")
+  myPlanet = myStar.planetFactory("Earth", "nice planet")
+  myPlanetMars = myStar.planetFactory("Mars", "Very martian")
+  mySpaceStation = myPlanet.stationFactory("Sputnik", "sputty") 
   
-  info "#{myPlanet.describe}"
-  info "#{myStar.describe}"
-  info "#{mySpaceStation.describe}"
-  info "#{myPlanetMars.describe}"
+  puts "#{myPlanet.describe}"
+  puts "#{myStar.describe}"
+  puts "#{mySpaceStation.describe}"
+  puts "#{myPlanetMars.describe}"
 
-  info "#{myStar} contains = #{myStar.owns}"
-  info "#{myPlanet} contains = #{myPlanet.owns}"
+  puts "#{myStar} contains = "
+  myStar.owns.each {|planet| puts planet.body.name}
+  puts "#{myPlanet} contains = "
+  myPlanet.owns.each {|sat| puts sat.body.name}
   #info "Is #{mySpaceStation} in #{myStar}? #{mySpaceStation.isLinked? myStar.outerPoint}"
  # info "Is #{mySpaceStation} in #{otherStar}? #{mySpaceStation.isLinked? otherStar.outerPoint}"
   
   sp = mySpaceStation.centrePoint
-  info "Starting from #{sp}"
-  sp = sp.out
-  info "Outwards is #{sp}"
-  
-end   
+  info "Starting from #{sp}"  

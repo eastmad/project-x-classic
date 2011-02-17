@@ -40,7 +40,7 @@ class LocationPoint
     links.each do |link|    
        locpoints << link.locPoint if link.link_types.include? link_type 
     end
-    
+     
     locpoints
   end
   

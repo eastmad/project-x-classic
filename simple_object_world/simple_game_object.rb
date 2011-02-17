@@ -6,9 +6,10 @@ class City < SimpleBody
       super(name, desc, ownerPoint.body)
       @links = []
       
-      @centrePoint = LocationPoint.new(self, :centre)               
-      @centrePoint.add_link([:up, :launch], ownerPoint.find_linked_location(:up).first) 
-      ownerPoint.add_link([:city, :land], @centrePoint)   
+      @centrePoint = LocationPoint.new(self, :centre)
+      @centrePoint.add_link([:up, :launch], ownerPoint)
+      ownerPoint.add_link([:city, :land], @centrePoint)
+     
    end      
 
    def owned_by? body
@@ -64,7 +65,8 @@ end
 
 
 
-class Star < CelestialObject      
+class Star < CelestialObject
+    
    def initialize(name, desc, owner = nil)      
       super(name, desc, owner)
       
@@ -77,6 +79,10 @@ class Star < CelestialObject
       lp2.add_link([:up],@orbitPoint)
       @orbitPoint.add_link([:up], @outerPoint)
       
+   end
+   
+   def planetFactory(name, desc)
+      Planet.new(name, desc, @orbitPoint)
    end
    
    def status_word(status, band)
@@ -136,6 +142,19 @@ class Planet < CelestialObject
        @orbitPoint.find_linked_location(:satellite)
    end
    
+   def stationFactory(name, desc)
+      SpaceStation.new(name, desc, @orbitPoint)
+   end
+   
+   def structureFactory(name, desc)
+      SmallStructure.new(name, desc, @orbitPoint)
+   end
+   
+   def cityFactory(name, desc)
+      City.new(name, desc, @atmospherePoint)
+   end
+  
+   
    def describe_owns 
        ret = "No orbiting bodies"
        satellites = owns.collect{|locPoint| locPoint.body}
@@ -168,6 +187,7 @@ class Planet < CelestialObject
 end
 
 class SpaceStation < CelestialObject
+  :private
   def initialize(name, desc, ownerPoint)      
     super(name, desc, ownerPoint.body)
 
@@ -182,7 +202,7 @@ class SpaceStation < CelestialObject
     @outerPoint.add_link([:planet, :orbit], ownerPoint) 
     ownerPoint.add_link([:satellite], @outerPoint)      
   end
-
+  :public
   def status_word(status, band)
     if status == :rest
        sw = "above"
@@ -199,6 +219,10 @@ class SpaceStation < CelestialObject
     :planet
   end
 
+  def traderFactory(name, index,  desc)
+    Trader.new(name, index, desc, @centrePoint)
+  end
+  
   def describe
     "#{@name} is a satellite of #{@owning_body.name}"
   end

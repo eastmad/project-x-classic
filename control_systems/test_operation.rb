@@ -25,9 +25,10 @@ include TestHelper
 rq = ResponseQueue.new
 ShipSystem.set_rq rq
 
-mySpaceStation = SpaceStation.new("Sputnik","Old soviet",LocationPoint.new("void","void"))
-myPlanet = Planet.new("Earth","Nowehere",LocationPoint.new("void","void"))
-myCity = City.new("Houston","Old soviet",myPlanet.centrePoint)
+myStar = Star.new("Star","hot")
+mySpaceStation = myPlanet.stationFactory("Sputnik","Old soviet")
+myPlanet = myStar.planetFactory("Earth","Nowehere")
+myCity = myPlanet.cityFactory("Houston","Old soviet")
 
 @ship = ShipRegistry.register_ship("ProjectX",mySpaceStation.surfacePoint)
 ShipSystem.christen(@ship)
