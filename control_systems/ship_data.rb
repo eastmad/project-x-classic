@@ -3,18 +3,19 @@ require "#{File.dirname(__FILE__)}/impl_trade"
 require "#{File.dirname(__FILE__)}/impl_help"
 
 class ShipData
-   attr_reader :name, :locationPoint, :status, :headingPoint   
+  attr_reader :name, :locationPoint, :status, :headingPoint   
    
    
   THRUSTERS = "Plasma thrusters"
   DRIVE = "Tunnel drive"
   JUMP = "Rift generator"
    
-   def initialize(ship_name, locationPoint = nil)
+   def initialize(ship_name, locationPoint)
       @name = ship_name
       @locationPoint = locationPoint
       @headingPoint = nil
-      @status = :dependent
+      @status = :rest
+      @status = :dependent if locationPoint.has_link_type? :launch   
       @security = ImplSecurity.new
       @trade = ImplTrade.new
       @help = ImplHelp.new

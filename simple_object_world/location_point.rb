@@ -17,11 +17,13 @@ class LocationPoint
   end
   
   def is_linked? (locPoint, link_type = nil) 
-    links.each do |link|
+    links.each do |link|     
       if (link_type == nil or link.link_types.include? link_type)
          return true if (locPoint == link.locPoint) 
       end
     end
+    
+    false
   end  
   
   def has_link_type? link_type

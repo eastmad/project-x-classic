@@ -7,7 +7,7 @@ class City < SimpleBody
       @links = []
       
       @centrePoint = LocationPoint.new(self, :centre)               
-      @centrePoint.add_link([:up, :launch], ownerPoint) 
+      @centrePoint.add_link([:up, :launch], ownerPoint.find_linked_location(:up).first) 
       ownerPoint.add_link([:city, :land], @centrePoint)   
    end      
 
@@ -120,7 +120,7 @@ class Planet < CelestialObject
       @orbitPoint = LocationPoint.new(self, :orbit)      
             
       @centrePoint.add_link([:up], @surfacePoint)
-      @surfacePoint.add_link([:up], @atmospherePoint)
+      @surfacePoint.add_link([:up, :launch], @atmospherePoint)
       @atmospherePoint.add_link([:up],@orbitPoint)       
       
       @orbitPoint.add_link([:star], ownerPoint)  
@@ -165,9 +165,6 @@ class Planet < CelestialObject
       :star
    end
 
-   
-
-
 end
 
 class SpaceStation < CelestialObject
@@ -179,7 +176,7 @@ class SpaceStation < CelestialObject
     @outerPoint = LocationPoint.new(self, :outer)
 
     @centrePoint.add_link([:up], @surfacePoint)
-    @surfacePoint.add_link([:up], @outerPoint)
+    @surfacePoint.add_link([:up, :launch], @outerPoint)
     @outerPoint.add_link([:dock], @surfacePoint)
 
     @outerPoint.add_link([:planet, :orbit], ownerPoint) 
