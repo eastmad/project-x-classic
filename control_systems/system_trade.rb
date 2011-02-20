@@ -18,6 +18,8 @@ class SystemTrade < ShipSystem
          para1 = station.contracts_page
       elsif (subj == :trader)
         para1 = station.traders_page
+      elsif (subj == :consignments)
+        para1 = station.consignments_page
       end  
  
       @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
@@ -44,6 +46,10 @@ class SystemTrade < ShipSystem
   def _traders(args = nil)
     :trader
   end   
+   
+  def _consignment(args = nil)
+    :consignments
+  end  
    
   def _industries(args = nil)
     :industries

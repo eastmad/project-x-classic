@@ -53,6 +53,17 @@ class Item
   end
 end
 
+class Trade
+  attr_reader :state, :con, :trade_type, :item
+  
+  def initialize(item, trade_type, trader)
+    @state = :available
+    @trade_type = trade_type
+    @item = item
+    @con = Consignment.new(item, trader)
+  end
+end
+
 class Consignment
   attr_reader :item, :origin_trader
   attr_accessor :amount

@@ -18,7 +18,7 @@ class SystemGhost < ShipSystem
         Fit your ship out and use the gate.
     END
     
-    SystemsMessage.new(para1, SystemGhost, :mail)
+    para1
   end  
      
   def to_s

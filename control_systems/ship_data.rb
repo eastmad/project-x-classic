@@ -1,6 +1,7 @@
 require "#{File.dirname(__FILE__)}/impl_security"
 require "#{File.dirname(__FILE__)}/impl_trade"
 require "#{File.dirname(__FILE__)}/impl_help"
+require "#{File.dirname(__FILE__)}/impl_mail"
 
 class ShipData
   attr_reader :name, :locationPoint, :status, :headingPoint   
@@ -19,6 +20,19 @@ class ShipData
       @security = ImplSecurity.new
       @trade = ImplTrade.new
       @help = ImplHelp.new
+      @mail = ImplMail.new
+   end
+   
+   def push_mail(txt, from)
+      @mail.accept_mail(txt, from)
+   end
+
+   def has_new_mail?
+      @mail.read_mail(:position => :new, :consume => false)
+   end
+   
+   def read_mail(opts = {})
+      @mail.read_mail(opts)
    end
    
    def suggest

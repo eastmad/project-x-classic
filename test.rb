@@ -61,13 +61,21 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Dictionary.add_discovered_subject(item.name, item)  
   trader2.add_source_contract(item)
   trader.add_sink_contract(item)
-    
+  
+  eye = Item.new("Eye of Horus", "Alien artifact of uknown origin", :unique, [:controlled, :asgaard])
+  Dictionary.add_discovered_subject(eye.name, eye)
+  trade = Trade.new(eye, :give, trader2)
+  trader2.delay(1, trade)
+      
   Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
   Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)
 
   @ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
   Dictionary.add_discovered_proper_noun(@ship.name, nil) #should be an sgo
   ShipSystem.christen(@ship)
+  
+  @ship.push_mail(SystemGhost.welcome, "ghost")
+  
   Operation.register_op :launch, :power, 1
   Operation.register_op :land, :power, 1
   Operation.register_op :undock, :power, 1
@@ -187,7 +195,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     @rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
     @rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
     @rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
-    @rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
+    #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
 
     keypress { |k|
 
@@ -229,8 +237,6 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
           end                           
           @dr.add_req               
           @dr.replace_req @arr    
-
-
        end
 
        if (@state == :done)                 
@@ -254,6 +260,12 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
              local_body = @ship.locationPoint.body
              local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
              @planet_inscription.replace local_planet, :stroke => white
+             
+             #read mail
+             if @ship.has_new_mail?
+               new_mail = @ship.read_mail({:position => :new, :consume => :false})
+               @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response)
+             end  
           rescue => ex
              @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
           end

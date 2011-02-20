@@ -31,7 +31,8 @@ class Dictionary
             {:word => :message, :grammar => :noun, :sys => :comms},
             {:word => :vessel, :grammar => :noun, :sys => :weapon},
             {:word => :drive, :grammar => :noun, :sys => :power},
-            {:word => :traders, :grammar => :noun, :sys => :trade},            
+            {:word => :traders, :grammar => :noun, :sys => :trade},
+            {:word => :consignment, :grammar => :noun, :sys => :trade},
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},

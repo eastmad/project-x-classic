@@ -7,13 +7,13 @@ class SystemCommunication < ShipSystem
   def _read(args = nil)
     begin
       
-      mes = args
-      mes = SystemGhost.welcome if args.nil?      
-      
-      @@rq.enq mes
+      mail = @@ship.read_mail
+           
+      @@rq.enq SystemsMessage.new(mail.txt, SystemCommunication, :mail)
     
       {:success => true}
-    rescue
+    rescue => ex
+      info "Ooh dear #{ex}"
       @@rq.enq SystemsMessage.new("No mail.", SystemCommunication, :response_bad)
       {:success => false}
     end
