@@ -7,9 +7,11 @@ class SystemCommunication < ShipSystem
   def _read(args = nil)
     begin
       
-      mail = @@ship.read_mail
+      mail = @@ship.read_mail args
+      
+      txt = mail.txt || "No new mail"
            
-      @@rq.enq SystemsMessage.new(mail.txt, SystemCommunication, :mail)
+      @@rq.enq SystemsMessage.new(txt, mail.from, :mail) 
     
       {:success => true}
     rescue => ex
@@ -20,6 +22,23 @@ class SystemCommunication < ShipSystem
   end
   
   def _mail(args = nil)
-    return SystemGhost.welcome
+    {:position => :last}
   end
+  
+  def _last(args = nil)
+    {:position => :last}
+  end
+  
+  def _first(args = nil)
+    {:position => :first}
+  end
+  
+  def _previous(args = nil)
+    {:direction => :prev}
+  end
+  
+  def _next(args = nil)
+    {:direction => :prev}
+  end
+  
  end

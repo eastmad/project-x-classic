@@ -9,7 +9,7 @@ class ActionLine
      @line_type.contents[1].replace(message.make_string)
      if (message.flavour == :mail)
        @line_type.contents[0].underline = "single"
-       @line_type.contents[0].replace((@origin.nil?)? "": "                   mail from #{@origin.cursor_str}\n")  
+       @line_type.contents[0].replace((@origin.nil?)? "": "                   mail from #{@origin}\n")  
      elsif (message.flavour == :report)
        @line_type.contents[0].underline = "single"
        @line_type.contents[0].replace((@origin.nil?)? "": "                     #{@origin.to_s}\n")    

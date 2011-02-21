@@ -262,10 +262,15 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
              @planet_inscription.replace local_planet, :stroke => white
              
              #read mail
+             mail = SimpleBody.get_mail.shift
+             @ship.push_mail(mail.txt, mail.from) unless mail.nil?
+             
              if @ship.has_new_mail?
-               new_mail = @ship.read_mail({:position => :new, :consume => :false})
+               new_mail = @ship.read_mail(:position => :new, :consume => false)
                @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response)
-             end  
+             end
+             
+             
           rescue => ex
              @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
           end

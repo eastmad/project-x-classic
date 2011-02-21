@@ -1,52 +1,25 @@
 require "contract.rb"
 require "simple_body.rb"
+require "trader.rb"
 require "simple_game_object.rb"
 require "../control_systems/system_test_helper"
 include TestHelper
 
-class TraderMock
+class TraderMock < Trader
   attr_reader :contracts
-  attr_reader :trades
+  attr_reader :consignments
   
-  def initialize(name)      
-    @trust_score = 0
+  def initialize(name)
     @name = name
+    @index_name = "Poo"
     @contracts = []
-    @trades = []
+    @consignments = []
     @trust_list = []
+    @trust_score = 0
   end
 
   def to_s
    "mock trader #{@name}"
-  end
-
-  def trust(amount)
-    puts "#{self} likes you"
-    @trust_score += amount
-    check_trust_bucket
-  end
-  
-  
-  def delay trust_needed, trade
-    @trust_list << {:trust => trust_needed, :trade => trade}
-  end
-  
-  def add_sink_contract(item)
-    contracts << Contract.new(:sink, item, self)    
-  end
-  
-  def add_source_contract(item)
-    contracts << Contract.new(:source, item, self)    
-  end
-  
-  private
-  
-  def check_trust_bucket
-    @trust_list.each do | t |
-      if t[:trust] <= @trust_score
-        @trades << t[:trade]
-      end
-    end
   end
 end
 
@@ -92,11 +65,11 @@ end
       puts "wrong item passed? #{ex}"
   end
   
-  puts "Trades should be empty? #{trader2.trades.count}"
+  puts "Trades should be empty? #{trader2.consignments.count}"
   
   sink_contract.fulfill(source_consignment, source_contract)
   
-  puts "Trades should be 1? #{trader2.trades.count}"  
+  puts "Trades should be 1? #{trader2.consignments.count}"  
 
   puts "sink contract = #{sink_contract}"
   

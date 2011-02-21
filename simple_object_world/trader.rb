@@ -39,18 +39,38 @@ class Trader < SimpleBody
     ret
   end
   
+  def to_s
+   "#{@name} #{@index_name}"
+  end
+  
   private
   
   def check_trust_bucket
     @trust_list.each do | t |
       if t[:trust] <= @trust_score
-        @consignments << t[:trade]
-        info "#{t[:trade]} added to consignments"
+        trade = t[:trade]
+        @consignments << trade
+        info "#{trade.item} added to consignments"
+        push_message thanks(trade), to_s
       end
     end
   end
-
-  def to_s
-   "#{@name} #{@index_name}"
+  
+  def thanks trade
+    
+    desc = "a uinique '#{trade.item.name}'" if trade.item.item_type == :unique
+    desc = "a consignment of '#{trade.item.name}'" if trade.item.item_type == :rare
+    
+    para1 = <<-END.gsub(/^ {8}/, '')
+        Customer,
+        
+         Thank you for previous business.
+        You may be interested in taking from us 
+        #{desc}
+        which we will make available at 
+        #{trade.con.origin_trader.owning_body}      
+    END
+    
+    para1
   end
 end

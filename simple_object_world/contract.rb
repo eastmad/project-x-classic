@@ -33,8 +33,7 @@ class Contract
     @status = :fulfilled
     
     contract.origin_trader.trust(1)
-    @origin_trader.trust(1)
-    
+    @origin_trader.trust(1)    
   end
 end
 

@@ -44,6 +44,8 @@ class Dictionary
             {:word => :nearest, :grammar => :adjective},
             {:word => :enemy, :grammar => :adjective},
             {:word => :friendly, :grammar => :adjective},
+            {:word => :first, :grammar => :adjective},
+            {:word => :last, :grammar => :adjective},         
             
             {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
             {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade}
