@@ -1,15 +1,14 @@
 class ImplTrade
-  attr_reader :contracts, :cargo 
+  attr_reader :cargo 
    
   def initialize
-    @contracts = [] 
     @cargo = [] 
   end
   
   def source_offered (station, item)
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     traders.each do | trader | 
-      trader.contracts.each { |contract| return contract if contract.item == item and contract.contract_type == :source}
+      trader.trades.each { |trade| return trade if trade.item == item and trade.trade_type == :source}
     end 
     
     nil
@@ -20,9 +19,9 @@ class ImplTrade
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
 info "traders =  #{traders.count}"
     traders.each do | trader | 
-      trader.contracts.each do |contract| 
-        info "sink_offered #{contract.item} == #{item} #{:sink} == #{contract.contract_type}"
-        return contract if contract.item == item and contract.contract_type == :sink
+      trader.trades.each do |trade| 
+        info "sink_offered #{trade.item} == #{item} #{:sink} == #{trade.trade_type}"
+        return trade if trade.item == item and trade.trade_type == :sink
        end
     end 
 info "sink_offered nil"
@@ -36,14 +35,14 @@ info "sink_offered nil"
     end
   end
   
-  def find_contract(type, item)
-    info "contracts"
-    @contracts.each do | contract |
-      info "contract #{contract.item} == #{item} #{contract.contract_type} == #{type}"
-      return contract if contract.item == item and contract.contract_type == type
+  def find_trade(type, item)
+    info "trades"
+    @trades.each do | trade |
+      info "trade #{trade.item} == #{item} #{trade.trade_type} == #{type}"
+      return trade if trade.item == item and trade.trade_type == type
     end
     
-    info "no contract"
+    info "no trade"
   end
 
 end

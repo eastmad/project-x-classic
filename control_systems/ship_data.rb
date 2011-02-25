@@ -126,13 +126,12 @@ class ShipData
    def accept(item)
      raise SystemsMessage.new("You can only accept a contract at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
      raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
-     contract = @trade.source_offered(@locationPoint.body, item)
-     raise SystemsMessage.new("No source of #{item} on offer", SystemTrade, :info) if contract.nil?
+     trade = @trade.source_offered(@locationPoint.body, item)
+     raise SystemsMessage.new("No source of #{item} on offer", SystemTrade, :info) if trade.nil?
      
-     contract.status = :accepted
+     trade.status = :accepted
      
-     @trade.cargo << contract.accept()
-     @trade.contracts << contract
+     @trade.cargo << trade.accept()
      
      SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
    end
@@ -143,22 +142,21 @@ class ShipData
     info "at station"
     raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
     info "item #{item}"
+    trade = nil
     begin
       info "sink offered for #{@locationPoint.body}"
-      contract = @trade.sink_offered(@locationPoint.body, item)
+      trade = @trade.sink_offered(@locationPoint.body, item)
       info "done"
     rescue
       raise SystemsMessage.new("Cannot find sink for #{item}", SystemTrade, :info)
     end
-    raise SystemsMessage.new("No request for #{item} is asked for", SystemTrade, :info) if contract.nil?
+    raise SystemsMessage.new("No request for #{item} is asked for", SystemTrade, :info) if trade.nil?
  
     consignment = @trade.find_consignment(item)
-    source_contract = @trade.find_contract(:source,item)
 
-    raise SystemsMessage.new("You have no source contract for #{item}", SystemTrade, :info) if source_contract.nil? 
-    raise SystemsMessage.new("You have no source consignment of #{item}", SystemTrade, :info) if consignment.nil?   
+    raise SystemsMessage.new("You have no consignment of #{item}", SystemTrade, :info) if consignment.nil?   
     
-    contract.fulfill(consignment, source_contract)
+    trade.fulfill(consignment)
  
     SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
   end

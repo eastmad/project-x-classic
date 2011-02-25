@@ -1,12 +1,11 @@
 class Trader < SimpleBody
-  attr_reader :tradePoint, :index_name, :contracts, :consignments
+  attr_reader :tradePoint, :index_name, :trades, :trust_score
   
   def initialize(name, index, desc, ownerPoint)      
     super(name, desc, ownerPoint.body) 
     @index_name = index
     ownerPoint.add_link([:trader], LocationPoint.new(self, :centre)) 
-    @contracts = []
-    @consignments = []
+    @trades = []
     @trust_list = []
     @trust_score = 0
   end
@@ -17,12 +16,12 @@ class Trader < SimpleBody
     check_trust_bucket
   end
 
-  def add_sink_contract(item)
-    contracts << Contract.new(:sink, item, self)    
+  def add_sink_trade(item)
+    @trades << Trade.new(item, :sink, self)    
   end
   
-  def add_source_contract(item)
-    contracts << Contract.new(:source, item, self)    
+  def add_source_trade(item)
+    @trades << Trade.new(item, :source, self)    
   end
   
   def delay trust_needed, trade
@@ -34,8 +33,8 @@ class Trader < SimpleBody
   end
 
   def describe_owns
-    ret = "No contracts"
-    ret = "Contracts:\n #{contracts.join('\n ')}" unless contracts.empty? 
+    ret = "No Trades"
+    ret = "Trades:\n #{trades.join('\n ')}" unless trades.empty? 
     ret
   end
   
@@ -49,8 +48,8 @@ class Trader < SimpleBody
     @trust_list.each do | t |
       if t[:trust] <= @trust_score
         trade = t[:trade]
-        @consignments << trade
-        info "#{trade.item} added to consignments"
+        @trades << trade
+        info "#{trade.item} added to trades"
         push_message thanks(trade), to_s
       end
     end
@@ -58,7 +57,7 @@ class Trader < SimpleBody
   
   def thanks trade
     
-    desc = "a uinique '#{trade.item.name}'" if trade.item.item_type == :unique
+    desc = "a unique '#{trade.item.name}'" if trade.item.item_type == :unique
     desc = "a consignment of '#{trade.item.name}'" if trade.item.item_type == :rare
     
     para1 = <<-END.gsub(/^ {8}/, '')
@@ -68,7 +67,7 @@ class Trader < SimpleBody
         You may be interested in taking from us 
         #{desc}
         which we will make available at 
-        #{trade.con.origin_trader.owning_body}      
+        #{trade.origin_trader.owning_body}      
     END
     
     para1

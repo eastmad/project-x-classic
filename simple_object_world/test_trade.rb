@@ -1,4 +1,4 @@
-require "contract.rb"
+require "trade.rb"
 require "simple_body.rb"
 require "trader.rb"
 require "simple_game_object.rb"
@@ -6,16 +6,14 @@ require "../control_systems/system_test_helper"
 include TestHelper
 
 class TraderMock < Trader
-  attr_reader :contracts
-  attr_reader :consignments
   
   def initialize(name)
     @name = name
     @index_name = "Poo"
-    @contracts = []
-    @consignments = []
+    @trades = []
     @trust_list = []
     @trust_score = 0
+    @owning_body = "Jupiter"
   end
 
   def to_s
@@ -23,66 +21,71 @@ class TraderMock < Trader
   end
 end
 
-describe Contract do
-end
+describe Trade do
 
-  coffee = Item.new("coffee", "Still a legal stimulent in most markets", :commodity, [:dry])
-  gold = Item.new("gold", "Valuable and shiny metal", :rare)
-  eye = Item.new("Eye of Horus", "Alien artifact of uknown origin", :unique, [:controlled, :asgaard])
+  before(:each) do
+    @coffee = Item.new("coffee", "Still a legal stimulent in most markets", :commodity, [:dry])
+    @gold = Item.new("gold", "Valuable and shiny metal", :rare)
+    @eye = Item.new("Eye of Horus", "Alien artifact of uknown origin", :unique, [:controlled, :asgaard])
   
-  trader1 = TraderMock.new("Bob Sink")
-  trader2 = TraderMock.new("Bill Source")
-  trader3 = TraderMock.new("Ben Neither")
-  trader1.add_sink_contract(coffee)
-  trader2.add_source_contract(coffee)
-  trade = Trade.new(eye, :give, trader2)
-  trader2.delay(1, trade)
-  
-  puts "sink = #{trader1.contracts.first}"
-  puts "source = #{trader2.contracts.first}"
-  
-  consignment_coffee = Consignment.new(coffee, trader1) 
-  consignment_gold = Consignment.new(gold, trader3)
-  consignment_eye = Consignment.new(eye, trader3)
+    @trader1 = TraderMock.new("Bob Sink")
+    @trader2 = TraderMock.new("Bill Source")
+    @trader3 = TraderMock.new("Ben Neither")
+    @trader1.add_sink_trade(@coffee)
+    @trader2.add_source_trade(@coffee)
+    @trade = Trade.new(@eye, :give, @trader2)
+    @trader2.delay(1, @trade)
     
-  source_contract = trader2.contracts.first
-  sink_contract = trader1.contracts.first
-  source_consignment = source_contract.accept
-  
-  puts "source consignment = #{source_consignment}"
-  
-  begin
-    sink_contract.fulfill(consignment_coffee, source_contract)
-    puts "FAIL - consignment not from source"
-  rescue => ex
-    puts "consignment not from source? #{ex}"
+    @consignment_coffee = Consignment.new(@coffee, @trader1) 
+    @consignment_gold = Consignment.new(@gold, @trader3)
+    @consignment_eye = Consignment.new(@eye, @trader3)
+      
+    @source_trade = @trader2.trades.first
+    @sink_trade = @trader1.trades.first
   end
   
-  begin
-    sink_contract.fulfill(consignment_gold, source_contract)
-    puts "FAIL - wrong item passed"
-  rescue => ex
-      puts "wrong item passed? #{ex}"
+  it "should be able to accept" do
+    source_consignment = @source_trade.accept
+    source_consignment.item.should == @coffee
   end
   
-  puts "Trades should be empty? #{trader2.consignments.count}"
   
-  sink_contract.fulfill(source_consignment, source_contract)
-  
-  puts "Trades should be 1? #{trader2.consignments.count}"  
-
-  puts "sink contract = #{sink_contract}"
-  
-  puts "source_consignment = #{source_consignment}"
-  
-  source_consignment.amount += 1
-  
-  
-  begin
-    sink_contract.fulfill(source_consignment, source_contract)
-    puts "FAIL - already fulfilled"
-  rescue => ex
-    puts "contract already fulfild? #{ex}"
+  it "can't fulfill with wrong item" do
+    expect { @sink_trade.fulfill(@consignment_gold) }.to raise_error(RuntimeError, "Wrong item")
   end
+  
+  it "should be 1 trade" do
+    @trader2.trades.count.should == 1
+  end
+  
+  context "after a fulfill" do
+  
+    before(:each) do
+      @source_consignment = @source_trade.accept
+      @sink_trade.fulfill(@source_consignment)
+    end
+  
+    it "should increment trades as we get hidden trade" do
+      @trader2.trades.count.should == 2
+    end
     
+    it "should increase trust in both traders" do
+      @trader2.trust_score.should == 1
+      @trader1.trust_score.should == 1
+      @trader3.trust_score.should == 0
+    end 
+   
+    it "should get a message" do
+      txt = SimpleBody.get_mail.last.txt
+      txt.should include("Eye of Horus")
+      txt.should include("Jupiter")
+    end
+  
+    it "cannot fulfill a fulfilled trade" do
+      @source_consignment.amount.should == 0
+      @source_consignment.amount += 1
+      expect { sink_trade.fulfill(@source_consignment) }.to raise_error
+    end
+  end
+end  
   

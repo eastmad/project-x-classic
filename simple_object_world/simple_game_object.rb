@@ -234,35 +234,23 @@ class SpaceStation < CelestialObject
     ret
   end
   
-  def contracts_page 
+  def trades_page 
     ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
-    ret << "Contract to find a buyer for\n"    
+    ret << "Consignments to go\n"    
     traders.each do | trader | 
       #ret << "#{trader.to_s}\n"
-      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.name} #{trader.index_name})\n" if contract.contract_type == :source}
+      trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :source}
     end
-    ret << "\nContract to find a source of\n"
+    ret << "\nConsignments needed\n"
     traders.each do | trader | 
       #ret << "#{trader.to_s}\n"
-      trader.contracts.each { |contract| ret << "-#{contract.item} (#{trader.name} #{trader.index_name})\n" if contract.contract_type == :sink}
+      trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :sink}
     end 
     
     ret
   end
-  
-  def consignments_page 
-    ret = ""
-    traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
-    ret << "Consignments\n"    
-    traders.each do | trader | 
-      #ret << "#{trader.to_s}\n"
-      trader.consignments.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n"} 
-    end
- 
-    ret
-  end
-  
+   
   def traders_page 
     ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
