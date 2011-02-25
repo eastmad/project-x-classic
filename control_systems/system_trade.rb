@@ -10,19 +10,17 @@ class SystemTrade < ShipSystem
       station = @@ship.locationPoint.body
       raise SystemsMessage.new("No trade channel found", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
-      subj = arg || :contract      
+      subj = arg || :trades      
 
       if (sgo = ShipSystem.find_sgo_from_name(arg))
         para1 = sgo.describe      
-      elsif (subj == :contracts)
-         para1 = station.contracts_page
-      elsif (subj == :traders)
+      elsif (subj == :trader)
         para1 = station.traders_page
-      elsif (subj == :consignments)
-        para1 = station.consignments_page
+      elsif (subj == :trades)
+        para1 = station.trades_page
       end  
  
-      @@rq.enq SystemsMessage.new(para1, "#{subj} on #{station}", :report)
+      @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
       {:success => true, :media => :trade}
     rescue RuntimeError => ex
       resp_hash = {:success => false}
@@ -31,16 +29,16 @@ class SystemTrade < ShipSystem
     end
   end
 
-  def _contract(args = nil)
-    :contracts
-  end   
+  def _trader(args = nil)
+    :trader
+  end
   
   def _traders(args = nil)
-    :traders
+    :trader
   end   
    
-  def _consignment(args = nil)
-    :consignments
+  def _trade(args = nil)
+    :trades
   end  
    
   def _industries(args = nil)
@@ -56,7 +54,7 @@ class SystemTrade < ShipSystem
       item = ShipSystem.find_sgo_from_name(@obj)
      
       @@rq.enq @@ship.accept(item)
-      @@rq.enq SystemsMessage.new("Accepted contract to find a buyer for #{@obj}", SystemTrade, :response)
+      @@rq.enq SystemsMessage.new("Accepted consignment of #{@obj}", SystemTrade, :response)
       {:success => true, :media => :trade}
     rescue => ex
       @@rq.enq ex
@@ -70,7 +68,7 @@ class SystemTrade < ShipSystem
      item = ShipSystem.find_sgo_from_name(@obj)
 
      @@rq.enq @@ship.fulfill(item)
-     @@rq.enq SystemsMessage.new("Fulfilled contract to find a source of #{@obj}", SystemTrade, :response)
+     @@rq.enq SystemsMessage.new("Fulfilled request for #{@obj}", SystemTrade, :response)
      {:success => true, :media => :trade}
     rescue => ex
      @@rq.enq ex

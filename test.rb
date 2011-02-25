@@ -6,7 +6,7 @@ require "media_manager"
 require "sound_play"
 require "simple_object_world/simple_body"
 require "simple_object_world/simple_game_object"
-require "simple_object_world/contract"
+require "simple_object_world/trade"
 require "simple_object_world/trader"
 require "simple_object_world/location_point"
 require "simple_object_world/location_link"
@@ -53,14 +53,14 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   trader2 = station.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment") 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
   Dictionary.add_discovered_subject(item.name, item)  
-  trader.add_sink_contract(item)
+  trader.add_sink_trade(item)
   item = Item.new("choclate chips", "Confectionary additions", :commodity)
   Dictionary.add_discovered_subject(item.name, item)  
-  trader.add_sink_contract(item)
+  trader.add_sink_trade(item)
   item = Item.new("wafer cones", "Confectionary containers", :commodity)
   Dictionary.add_discovered_subject(item.name, item)  
-  trader2.add_source_contract(item)
-  trader.add_sink_contract(item)
+  trader2.add_source_trade(item)
+  trader.add_sink_trade(item)
   
   eye = Item.new("Eye of Horus", "Alien artifact of uknown origin", :unique, [:controlled, :asgaard])
   Dictionary.add_discovered_subject(eye.name, eye)

@@ -20,7 +20,7 @@ class ImplHelp
     :chk => lambda {@band != :surface}},
    {:txt => "To turn on the inter-planetery drive system; try 'engage drive'", 
     :chk => lambda {@band != :outer}},
-   {:txt => "Read the traders channel; try 'browse contracts'", 
+   {:txt => "Read the traders channel; try 'browse trades'", 
     :chk => lambda {@body.kind_of? SpaceStation}}
    ]
   end 

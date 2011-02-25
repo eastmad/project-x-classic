@@ -86,9 +86,9 @@ class SystemMyself < ShipSystem
       When you are on a space station you can
       access the trade channel.
       
-      Try 'browse' to list traders and contracts.
-      Try 'accept contract for ' to find a buyer
-      Try 'fulfill contract for ' to complete a deal.
+      Try 'browse' to list traders and trades.
+      Try 'accept trade for ' to take a consignment
+      Try 'fulfill trade for ' to give a consignment.
     END
 
     para1 = <<-END.gsub(/^ {6}/, '') if args == :navigation      
