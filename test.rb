@@ -62,10 +62,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   trader2.add_source_trade(item)
   trader.add_sink_trade(item)
   
-  eye = Item.new("Eye of Horus", "Alien artifact of uknown origin", :unique, [:controlled, :asgaard])
+  eye = Item.new("horus eye", "Alien artifact of unknown origin", :unique, [:controlled, :alien])
   Dictionary.add_discovered_subject(eye.name, eye)
-  trade = Trade.new(eye, :give, trader2)
-  trader2.delay(1, trade)
+
+  trader2.add_delayed_source(1, eye)
       
   Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
   Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)
@@ -81,7 +81,6 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :undock, :power, 1
   Operation.register_op :approach, :power, 1
   Operation.register_op :release, :security, 1
-  Operation.register_op :compute, :navigation, 1
   Operation.register_op :dock, :power, 1
   Operation.register_op :describe, :library, 1
   Operation.register_op :orbit, :navigation, 1
@@ -95,6 +94,9 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :fulfill, :trade, 1
   Operation.register_op :browse, :trade, 1
   Operation.register_op :suggest, :myself, 1
+  Operation.register_op :manifest, :trade, 1
+  Operation.register_op :bay, :trade, 1
+
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]

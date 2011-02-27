@@ -92,9 +92,10 @@ class ShipData
    end
    
    def orbit(planet)      
-     raise SystemsMessage.new("Cannot orbit #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
      raise SystemsMessage.new("#{@name} is in orbit around #{planet}", SystemNavigation, :info) if (@status == :sync and @locationPoint == planet.orbitPoint)
      raise SystemsMessage.new("#{@name} is stationary", SystemNavigation, :info) if (@status ==:dependent)
+     raise SystemsMessage.new("Cannot orbit #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
+     
      #location must be planet or there must be a link to orbit
      #state must be at rest
 
@@ -123,6 +124,14 @@ class ShipData
      end   
    end
    
+   def bay bay_number
+      @trade.bay(bay_number) if bay_number > 0 and bay_number <= 6
+   end
+   
+   def manifest
+     @trade.manifest
+   end
+   
    def accept(item)
      raise SystemsMessage.new("You can only accept a contract at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
      raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
@@ -136,30 +145,31 @@ class ShipData
      SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
    end
    
-  def fulfill(item)
-    info "fulfill"
-    raise SystemsMessage.new("You can only fulfill a contract at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
-    info "at station"
-    raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
-    info "item #{item}"
-    trade = nil
-    begin
-      info "sink offered for #{@locationPoint.body}"
-      trade = @trade.sink_offered(@locationPoint.body, item)
-      info "done"
-    rescue
-      raise SystemsMessage.new("Cannot find sink for #{item}", SystemTrade, :info)
-    end
-    raise SystemsMessage.new("No request for #{item} is asked for", SystemTrade, :info) if trade.nil?
+   def fulfill(item)
+     info "fulfill"
+     raise SystemsMessage.new("You can only fulfill a contract at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
+     info "at station"
+     raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
+     info "item #{item}"
+     trade = nil
+     begin
+       info "sink offered for #{@locationPoint.body}"
+       trade = @trade.sink_offered(@locationPoint.body, item)
+       info "done"
+     rescue
+       raise SystemsMessage.new("Cannot find sink for #{item}", SystemTrade, :info)
+     end
+     raise SystemsMessage.new("No request for #{item} is asked for", SystemTrade, :info) if trade.nil?
+  
+     consignment = @trade.find_consignment(item)
  
-    consignment = @trade.find_consignment(item)
-
-    raise SystemsMessage.new("You have no consignment of #{item}", SystemTrade, :info) if consignment.nil?   
-    
-    trade.fulfill(consignment)
- 
-    SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
-  end
+     raise SystemsMessage.new("You have no consignment of #{item}", SystemTrade, :info) if consignment.nil?   
+     
+     trade.fulfill(consignment)
+     @trade.cargo.delete consignment
+  
+     SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
+   end
    
    def land(city)
      

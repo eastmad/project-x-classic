@@ -20,14 +20,15 @@ class Trader < SimpleBody
     @trades << Trade.new(item, :sink, self)    
   end
   
+  def add_delayed_source(trust, item)
+    trade = Trade.new(item, :source, self)
+    @trust_list << {:trust => trust, :trade => trade}
+  end
+  
   def add_source_trade(item)
     @trades << Trade.new(item, :source, self)    
   end
-  
-  def delay trust_needed, trade
-    @trust_list << {:trust => trust_needed, :trade => trade}
-  end
-   
+    
   def describe
     "#{to_s} is a trader in space port #{@owning_body.name}"
   end

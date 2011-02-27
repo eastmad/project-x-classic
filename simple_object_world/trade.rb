@@ -27,7 +27,6 @@ class Trade
     raise "Empty consignment" if consignment.amount <= 0
     raise "Wrong item" unless consignment.item == @item 
 
-    consignment.amount -= 1
     @status = :fulfilled
     
     consignment.origin_trader.trust(1)
@@ -43,6 +42,16 @@ class Item
     @desc = desc
     @item_type = item_type
     @conditions =  conditions.dup
+  end
+  
+  def notes
+    para1 = ""
+    para1 << "\n* This item is controlled." if conditions.include? :controlled
+    para1 << "\n* Cannot be legally traded." if conditions.include? :illegal
+    para1 << "\n* This item is food." if conditions.include? :foodstuff
+    para1 << "\n* Alien technology." if conditions.include? :alien
+    
+    para1
   end
   
   def to_s

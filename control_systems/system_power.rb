@@ -41,7 +41,7 @@ class SystemPower < ShipSystem
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Landing cancelled", SystemPower, :response_bad)
+      @@rq.enq SystemsMessage.new("To land on a planet, first approach it from orbit.", SystemPower, :response_bad)
     end      
                 
     return resp_hash     
@@ -121,16 +121,18 @@ class SystemPower < ShipSystem
   
   def _approach (arg = nil)
     begin
-      sgo = ShipSystem.find_sgo_from_name(@obj)  
+      raise SystemsMessage.new("Approach what? No target given.", SystemMyself, :info) if arg.nil?
+      sgo = ShipSystem.find_sgo_from_name(arg)
+      
       @@rq.enq @@ship.approach sgo   
         
       SystemNavigation.status
         
       resp_hash = {:success => true, :media => :atmosphere}
     rescue RuntimeError => ex          
-        resp_hash = {:success => false}
-        @@rq.enq ex
-        @@rq.enq SystemsMessage.new("#{ShipData::THRUSTERS} not fired", SystemPower, :response_bad)
+      resp_hash = {:success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("#{ShipData::THRUSTERS} not fired", SystemPower, :response_bad)
     end      
            
     return resp_hash

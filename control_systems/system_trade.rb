@@ -4,6 +4,36 @@ class SystemTrade < ShipSystem
   def self.cursor_str
     "trade:"
   end
+
+  def _bay(arg = nil)
+    begin
+      num = arg.to_i unless arg.nil?
+      raise SystemsMessage.new("Cargo bays number from 1 to 6", SystemTrade, :info) if num < 1 or num > 6
+      para1 = @@ship.bay(num)
+      if para1.empty? 
+        @@rq.enq SystemsMessage.new("No cargo in bay", SystemTrade, :response)
+      else
+        @@rq.enq SystemsMessage.new(para1, "Cargo bay #{num}", :report)
+      end
+      
+      {:success => true, :media => :trade}
+    rescue RuntimeError => ex
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("No information available", SystemTrade, :response_bad)
+      {:success => false}
+    end
+  end
+
+  def _manifest(arg = nil)
+    para1 = @@ship.manifest
+    if para1.empty? 
+      @@rq.enq SystemsMessage.new("No cargo in hold", SystemTrade, :response)
+    else
+      @@rq.enq SystemsMessage.new(para1, "Cargo bays", :report)
+    end
+    
+    {:success => true, :media => :trade}
+  end
   
   def _browse(arg = nil)
     begin    
@@ -22,10 +52,10 @@ class SystemTrade < ShipSystem
  
       @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
       {:success => true, :media => :trade}
-    rescue RuntimeError => ex
-      resp_hash = {:success => false}
+    rescue RuntimeError
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
+      {:success => false}
     end
   end
 

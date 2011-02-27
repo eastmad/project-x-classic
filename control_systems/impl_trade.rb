@@ -5,6 +5,31 @@ class ImplTrade
     @cargo = [] 
   end
   
+  def manifest
+    
+    para1 = ""
+    ind = 1;
+    @cargo.each do |con|
+      para1 << "Bay #{ind}: #{con.to_s}\n"
+      ind += 1
+    end
+  
+    para1
+  end
+  
+  def bay n
+    
+    ind = n - 1
+    con = @cargo[ind]
+    return "" if con.nil?
+            
+    para1 = "#{con.to_s}\n"
+    para1 << "#{con.item.desc}\n"
+    para1 << "#{con.item.notes}\n"
+    
+    para1
+  end
+  
   def source_offered (station, item)
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     traders.each do | trader | 

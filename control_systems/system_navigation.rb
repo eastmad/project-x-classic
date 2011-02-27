@@ -17,10 +17,6 @@ class SystemNavigation < ShipSystem
   def _course(arg = nil)        
   end    
   
-  def _compute(arg = nil)
-    {:str => "Poo\nPoo\nPoo\nPoo\nPoo", :success => true, :media => :travel}
-  end
-  
   def _plot(args = nil)     
     begin        
       sgo = ShipSystem.find_sgo_from_name(@obj)          
@@ -40,13 +36,17 @@ class SystemNavigation < ShipSystem
   def _orbit(args = nil)     
     #info "Call orbit"
     begin      
-      sgo = ShipSystem.find_sgo_from_name(@obj)     
+      sgo = ShipSystem.find_sgo_from_name(args)
+      if sgo.nil?
+        lp = @@ship.locationPoint.find_linked_location :orbit
+        sgo = lp.first.body unless lp.empty?
+      end  
       @@rq.enq @@ship.orbit sgo
       resp_hash = {:success => true, :media => :orbit}
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Cannot enter orbit", SystemNavigation, :response_bad)
+      @@rq.enq SystemsMessage.new("Establish orbit after launching from station or planet.", SystemNavigation, :response_bad)
     end      
          
     return resp_hash  

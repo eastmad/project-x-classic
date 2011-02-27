@@ -33,8 +33,7 @@ describe Trade do
     @trader3 = TraderMock.new("Ben Neither")
     @trader1.add_sink_trade(@coffee)
     @trader2.add_source_trade(@coffee)
-    @trade = Trade.new(@eye, :give, @trader2)
-    @trader2.delay(1, @trade)
+    @trader2.add_delayed_source(1, @eye)
     
     @consignment_coffee = Consignment.new(@coffee, @trader1) 
     @consignment_gold = Consignment.new(@gold, @trader3)

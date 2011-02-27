@@ -1,7 +1,6 @@
 class Dictionary
    @@Words = [ 
             {:word => :approach, :grammar => :verb, :sys => :power},
-            {:word => :compute, :grammar => :verb, :sys => :navigation},
             {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :launch, :grammar => :verb, :sys => :power},
             {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
@@ -32,11 +31,14 @@ class Dictionary
             {:word => :vessel, :grammar => :noun, :sys => :weapon},
             {:word => :drive, :grammar => :noun, :sys => :power},
             {:word => :traders, :grammar => :noun, :sys => :trade},
+            {:word => :manifest, :grammar => :verb, :sys => :trade},
+            {:word => :bay, :grammar => :verb, :sys => :trade},
             {:word => :trade, :grammar => :noun, :sys => :trade},
             {:word => :consignment, :grammar => :noun, :sys => :trade},
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},
+            {:word => :of, :grammar => :preposition},
             {:word => :to, :grammar => :preposition},
             {:word => :from, :grammar => :preposition},
             {:word => :with, :grammar => :preposition},
