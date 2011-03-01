@@ -1,0 +1,19 @@
+class LocationLink
+
+  @@lls = []
+
+  def self.add_local(innerPoint, outerPoint)
+    @@lls << {:inner => innerPoint, :outer => outerPoint}
+  end
+
+  def self.add_satellite(childPoint, ownerPoint)
+    @@lls << {:inner => childPoint, :outer => ownerPoint}
+  end
+
+  
+  def self.find_satellites(ownerBody)
+      @@lls.collect do |ll|     
+        ll[:inner].body if ll[:outer].body == ownerBody and ll[:inner].body != ll[:outer].body        
+      end
+  end
+end
