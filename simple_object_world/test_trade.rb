@@ -1,7 +1,7 @@
-require "trade.rb"
-require "simple_body.rb"
-require "trader.rb"
-require "simple_game_object.rb"
+require "./trade.rb"
+require "./simple_body.rb"
+require "./trader.rb"
+require "./simple_game_object.rb"
 require "../control_systems/system_test_helper"
 include TestHelper
 
@@ -81,9 +81,7 @@ describe Trade do
     end
   
     it "cannot fulfill a fulfilled trade" do
-      @source_consignment.amount.should == 0
-      @source_consignment.amount += 1
-      expect { sink_trade.fulfill(@source_consignment) }.to raise_error
+      expect { @sink_trade.fulfill(@source_consignment) }.to raise_error(RuntimeError, "Trade already fulfilled")
     end
   end
 end  
