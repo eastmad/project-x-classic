@@ -28,6 +28,7 @@ require "control_systems/system_communication"
 require "control_systems/system_security"
 require "control_systems/system_myself"
 require "control_systems/system_library"
+require "long_text"
 
 Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   
@@ -100,7 +101,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
-  stack(:width =>210) {
+  @backstack = stack(:hidden => true){
+      @t = tagline "", :stroke => white
+  }
+  @mainstack1 = stack(:width =>210) {
     background black
     @im_win = ImageWindow.new(:stationdocked)     
 
@@ -137,7 +141,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     @iconstack.move(0,parent.height - 130)
   }
 
-  stack(:width => 330)  {  
+  @mainstack2 = stack(:width => 330)  {  
     @dr = DisplayResponse.new 
     @gr = GrammarTree.new
 
@@ -284,6 +288,29 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
 
 
   }
+  
+  def talk_screen
+    @mainstack1.hide
+    @mainstack2.hide
+    @backstack.show  
+          
+    str = LongText.txt :war
+    info "start timer"          
+
+    count = 0
+    txt_timer = animate(10){ |frame|
+      @t.replace(str[0,count])
+      count += 1
+      if count >= str.length
+        info "stop timer"
+        @mainstack1.show
+        @mainstack2.show
+        @backstack.hide
+        @t.replace("")
+        txt_timer.stop()
+      end
+    }
+  end
             
    
   def goodbye      
