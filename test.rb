@@ -101,8 +101,24 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
+  
   @backstack = stack(:hidden => true){
-      @t = tagline "", :stroke => white
+    flow(:width => 500) {
+      image "gifs/contact.jpg"
+      caption " Newton Todd", :stroke => white
+      inscription "        F1 - exit   F2 - finish", :stroke => darkgray
+    }  
+    
+    @t = tagline "", :stroke => white
+       
+    keypress {|k|
+      if k == :f1 
+        info "end it"
+        @end_text_talk = true
+      elsif k == :f2
+        @count_rate = 20
+      end
+    }
   }
   @mainstack1 = stack(:width =>210) {
     background black
@@ -204,7 +220,6 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
 
     keypress { |k|
-
        key_resp = KeystrokeReader.key_in(k,@dr.req_str)
        @dr.req_str = key_resp[:str]
        @state = key_resp[:state]                   
@@ -212,7 +227,11 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
 
        if (@state == :exit)
           goodbye()
-       end 
+       end
+       
+       if (@state == :talk_test)
+          talk_screen :war
+       end
 
        if (@state == :delete)
           @gr.undo_grammar
@@ -289,19 +308,21 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
 
   }
   
-  def talk_screen
+  def talk_screen txt_key
     @mainstack1.hide
     @mainstack2.hide
     @backstack.show  
           
-    str = LongText.txt :war
+    str = LongText.txt txt_key
     info "start timer"          
 
+    @end_text_talk = false
+    @count_rate = 1
     count = 0
     txt_timer = animate(10){ |frame|
-      @t.replace(str[0,count])
-      count += 1
-      if count >= str.length
+      @t.replace(str[0,count]) if count < str.length
+      count += @count_rate
+      if @end_text_talk
         info "stop timer"
         @mainstack1.show
         @mainstack2.show

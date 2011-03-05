@@ -17,6 +17,8 @@ class KeystrokeReader
          state = :done   
       elsif (k == :f10)
           state = :exit
+      elsif (k == :f11)
+          state = :talk_test   
       else   
          str = str + k
          state = :typing
