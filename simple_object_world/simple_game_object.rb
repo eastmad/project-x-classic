@@ -7,7 +7,6 @@ class City < SimpleBody
       @links = []
       @contacts = []
       @trust_list = []
-      @trust_score = 0
       
       @centrePoint = LocationPoint.new(self, :centre)
       @centrePoint.add_link([:up, :launch], ownerPoint)
@@ -39,7 +38,7 @@ class City < SimpleBody
    end
    
    def add_contact(contact, trust)
-     if trust <= @trust_score
+     if trust <= contact.org.trust_score
        @contacts << contact
      else  
        @trust_list << {:trust => trust, :contact => contact}
@@ -54,8 +53,8 @@ class City < SimpleBody
    
    def check_trust_bucket
      @trust_list.each do | t |
-       if t[:trust] <= @trust_score
-         contact = t[:trade]
+       contact = t[:contact]
+       if t[:trust] <= contact.org.trust_score  
          @contacts << contact
          info "#{contact.name} added to contacts"
          push_message thanks(trade), to_s

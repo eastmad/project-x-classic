@@ -22,5 +22,9 @@ describe Contact do
   it "city has no available contacts" do
     @city.contacts.should be_empty
   end
+  
+  it "contact trust score is organisations" do
+    @contact.org.trust_score.should == 0
+  end
 end
 
