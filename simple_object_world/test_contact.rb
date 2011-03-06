@@ -26,5 +26,12 @@ describe Contact do
   it "contact trust score is organisations" do
     @contact.org.trust_score.should == 0
   end
+  
+  it "no mail message sent" do
+      txt = SimpleBody.get_mail.shoud be_nil
+  end
+
+    
+  end
 end
 
