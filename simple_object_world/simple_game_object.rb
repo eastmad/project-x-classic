@@ -1,15 +1,17 @@
 class City < SimpleBody      
    attr_reader :centrePoint
-   attr_accessor :links
+   attr_accessor :links, :contacts
    
    def initialize(name, desc, ownerPoint)      
       super(name, desc, ownerPoint.body)
       @links = []
+      @contacts = []
+      @trust_list = []
+      @trust_score = 0
       
       @centrePoint = LocationPoint.new(self, :centre)
       @centrePoint.add_link([:up, :launch], ownerPoint)
       ownerPoint.add_link([:city, :land], @centrePoint)
-     
    end      
 
    def owned_by? body
@@ -36,8 +38,33 @@ class City < SimpleBody
      "The city port of #{@name} welcomes your visit."
    end
    
+   def add_contact(contact, trust)
+     if trust <= @trust_score
+       @contacts << contact
+     else  
+       @trust_list << {:trust => trust, :contact => contact}
+     end  
+   end 
+  
    def to_s
      @name
+   end
+   
+   private
+   
+   def check_trust_bucket
+     @trust_list.each do | t |
+       if t[:trust] <= @trust_score
+         contact = t[:trade]
+         @contacts << contact
+         info "#{contact.name} added to contacts"
+         push_message thanks(trade), to_s
+       end
+     end
+   end
+   
+   def thanks trade
+     "Contact added"
    end
 end
 
