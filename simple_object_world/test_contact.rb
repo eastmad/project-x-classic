@@ -19,18 +19,28 @@ describe Contact do
     @city.add_contact(@contact,1)    
   end
   
-  it "city has no available contacts" do
+  it "city has no available contacts - no mail sent from read" do
     @city.contacts.should be_empty
+    SimpleBody.get_mail.should be_empty
   end
   
   it "contact trust score is organisations" do
     @contact.org.trust_score.should == 0
   end
   
-  it "no mail message sent" do
-      txt = SimpleBody.get_mail.shoud be_nil
+  it "trust score is organisations" do
+    @contact.org.trust 1
+    @city.contacts.first.should == @contact 
+    txt = SimpleBody.get_mail.last.txt
+    txt.should include "added"
   end
-
+ 
+  
+  context "Visit Mars" do
+    
+    before(:each) do
+      @city.visited           
+    end
     
   end
 end

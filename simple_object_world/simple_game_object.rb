@@ -1,6 +1,6 @@
 class City < SimpleBody      
    attr_reader :centrePoint
-   attr_accessor :links, :contacts
+   attr_accessor :links, :visited
    
    def initialize(name, desc, ownerPoint)      
       super(name, desc, ownerPoint.body)
@@ -20,9 +20,13 @@ class City < SimpleBody
       return @owning_body.owned_by? body 
    end
    
+   def contacts
+      check_trust_bucket
+      @contacts
+   end
+   
    def status_word(status, band)
       "parked in"
-
    end
    
    def describe
@@ -57,13 +61,13 @@ class City < SimpleBody
        if t[:trust] <= contact.org.trust_score  
          @contacts << contact
          info "#{contact.name} added to contacts"
-         push_message thanks(trade), to_s
+         push_message thanks(contact), to_s
        end
      end
    end
    
-   def thanks trade
-     "Contact added"
+   def thanks contact
+     "Contact #{contact} added"
    end
 end
 

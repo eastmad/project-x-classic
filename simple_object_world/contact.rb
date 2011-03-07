@@ -17,4 +17,10 @@ class Organisation
     @visibility = visibility
     @trust_score = 0
   end
+
+  def trust(amount)
+    info "trust change #{amount} for #{to_s}"
+    @trust_score += amount
+  end
+
 end

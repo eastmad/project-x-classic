@@ -33,8 +33,7 @@ class SystemPower < ShipSystem
         sgo ||= @@ship.locationPoint.body
         @@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)
         @@rq.enq @@ship.land sgo         
-      end
-                       
+      end                    
              
       SystemNavigation.status
       resp_hash = {:success => true, :media => :land}
