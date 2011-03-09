@@ -1,12 +1,14 @@
 class City < SimpleBody      
    attr_reader :centrePoint
-   attr_accessor :links, :visited
+   attr_accessor :links
    
    def initialize(name, desc, ownerPoint)      
       super(name, desc, ownerPoint.body)
       @links = []
       @contacts = []
       @trust_list = []
+      @visit_triggers = []
+      @visited = false
       
       @centrePoint = LocationPoint.new(self, :centre)
       @centrePoint.add_link([:up, :launch], ownerPoint)
@@ -41,14 +43,27 @@ class City < SimpleBody
      "The city port of #{@name} welcomes your visit."
    end
    
-   def add_contact(contact, trust)
-     if trust <= contact.org.trust_score
-       @contacts << contact
-     else  
-       @trust_list << {:trust => trust, :contact => contact}
-     end  
-   end 
-  
+   def contactFactory(name, desc, org, trust)
+      contact = Contact.new(name, desc, org, @centrePoint)
+ 
+      if trust <= contact.org.trust_score
+         @contacts << contact
+      else  
+         @trust_list << {:trust => trust, :contact => contact}
+      end
+      
+      contact
+   end
+   
+   def visit
+     first_visit_trigger unless @visited  
+     @visited = true
+   end
+   
+   def add_visit_trigger(org, amount)
+      @visit_triggers << {:org => org, :amount => amount}
+   end
+   
    def to_s
      @name
    end
@@ -64,6 +79,12 @@ class City < SimpleBody
          push_message thanks(contact), to_s
        end
      end
+   end
+   
+   def first_visit_trigger
+      @visit_triggers.each do | trig |
+         trig[:org].trust(trig[:amount])
+      end
    end
    
    def thanks contact

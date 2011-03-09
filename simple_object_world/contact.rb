@@ -1,9 +1,13 @@
 class Contact < SimpleBody
-  attr_reader :trust_score, :org
+  attr_reader :org
   
-  def initialize(name, desc, org, ownerBody)
-    super(name,desc,ownerBody)
+  def initialize(name, desc, org, ownerPoint)
+    super(name,desc,ownerPoint.body)
     @org = org
+  end
+  
+  def to_s
+    @name
   end
 end
 
@@ -21,6 +25,10 @@ class Organisation
   def trust(amount)
     info "trust change #{amount} for #{to_s}"
     @trust_score += amount
+  end
+  
+  def to_s
+    @name
   end
 
 end
