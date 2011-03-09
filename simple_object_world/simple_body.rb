@@ -25,6 +25,10 @@ class SimpleBody
  def self.get_mail
     @@outgoing_mail
  end
+ 
+ def to_s
+   @name
+ end
 
 end
 

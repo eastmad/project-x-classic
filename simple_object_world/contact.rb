@@ -6,9 +6,6 @@ class Contact < SimpleBody
     @org = org
   end
   
-  def to_s
-    @name
-  end
 end
 
 
