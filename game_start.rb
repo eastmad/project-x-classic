@@ -12,7 +12,9 @@ class GameStart
   houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continentel America")
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = mars.cityFactory("Dundarach", "Only space port for Mars, sometimes refered to as Marsport")
+  nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
+  Dictionary.add_discovered_proper_noun(nicosia.name, nicosia)
   listeningPost = mars.structureFactory("Hawk23", "Earth military control listening post")
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
@@ -36,6 +38,12 @@ class GameStart
       
   Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
   Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)
+
+  freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
+  freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
+ If you want to know more about what's happening to Mars, talk to our contact on Earth.")
+  pers = houston.contactFactory("Pers Lindman", "Artifact trader",freemars,1)
+  nicosia.add_visit_trigger(freemars, 1, :visit_mars)
 
   ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
   Dictionary.add_discovered_proper_noun(ship.name, nil) #should be an sgo

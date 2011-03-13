@@ -9,6 +9,7 @@ class City < SimpleBody
       @trust_list = []
       @visit_triggers = []
       @visited = false
+      @new_contact = false
       
       @centrePoint = LocationPoint.new(self, :centre)
       @centrePoint.add_link([:up, :launch], ownerPoint)
@@ -36,7 +37,14 @@ class City < SimpleBody
    end
    
    def describe_owns
-       "No contacts known."
+      str = "No known contacts"
+      str = "Known contacts are #{contacts.join(', ')}" unless contacts.empty?
+      if @new_contact
+         str << "\nUPDATED"
+         @new_contact = false
+      end
+      
+      str
    end
    
    def welcome
@@ -60,8 +68,8 @@ class City < SimpleBody
      @visited = true
    end
    
-   def add_visit_trigger(org, amount)
-      @visit_triggers << {:org => org, :amount => amount}
+   def add_visit_trigger(org, amount, mail = nil)
+      @visit_triggers << {:org => org, :amount => amount, :mail => mail}
    end
    
    def to_s
@@ -76,7 +84,8 @@ class City < SimpleBody
        if t[:trust] <= contact.org.trust_score  
          @contacts << contact
          info "#{contact.name} added to contacts"
-         push_message thanks(contact), to_s
+         @new_contact = true
+         t[:trust] = 1000
        end
      end
    end
@@ -84,11 +93,9 @@ class City < SimpleBody
    def first_visit_trigger
       @visit_triggers.each do | trig |
          trig[:org].trust(trig[:amount])
+         info "mail id = #{trig[:mail]}, message #{trig[:org].get_message(trig[:mail])}"
+         push_message(trig[:org].get_message(trig[:mail]), trig[:org]) unless trig[:mail].nil?
       end
-   end
-   
-   def thanks contact
-     "Contact #{contact} added"
    end
 end
 

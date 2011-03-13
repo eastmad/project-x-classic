@@ -57,6 +57,7 @@ class Trader < SimpleBody
         @trades << trade
         info "#{trade.item} added to trades"
         push_message thanks(trade), to_s
+        t[:trust] = 1000
       end
     end
   end

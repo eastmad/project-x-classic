@@ -180,10 +180,14 @@ class ShipData
      #if a city specified check it is available to land at
      #take first for now
      target_point = city_points.first
+     city_points.each do | lp |
+        target_point = lp if lp.body == city
+     end
      
      if (@status == :rest)
        @status = :dependent
        @locationPoint = target_point
+       @locationPoint.body.visit
        return SystemsMessage.new("Landed at #{target_point.body.name}", SystemPower, :info)
      else
        raise SystemsMessage.new("Cannot land on #{target_point.body.name} from #{@locationPoint}", SystemNavigation, :info)

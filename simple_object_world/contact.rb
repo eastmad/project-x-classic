@@ -8,7 +8,6 @@ class Contact < SimpleBody
   
 end
 
-
 class Organisation
   attr_reader :name, :desc, :visibility, :trust_score
   
@@ -17,11 +16,20 @@ class Organisation
     @desc = desc
     @visibility = visibility
     @trust_score = 0
+    @messages = {}
   end
 
   def trust(amount)
     info "trust change #{amount} for #{to_s}"
     @trust_score += amount
+  end
+  
+  def add_message id, message
+    @messages[id] = message
+  end
+  
+  def get_message id
+    @messages[id.to_sym]
   end
   
   def to_s
