@@ -63,7 +63,7 @@ class ShipData
            
      @locationPoint = @headingPoint
      @headingPoint = nil
-     @state = :rest
+     @state = :sync 
      SystemsMessage.new("#{DRIVE} engaged", SystemPower, :info)
    end
    
@@ -206,20 +206,11 @@ class ShipData
       ret = "Docking clamps locked" if @security.docking_clamps.lock == :unlocked
       SystemsMessage.new(ret, SystemSecurity, :info)        
    end
-   
-   def leave_orbit()
-     #location must be planet
-     raise SystemsMessage.new("Cannot leave orbit from #{@location}", SystemNavigation, :info) unless (@locationPoint.body.kind_of? Planet and @status == :sync)
-           
-     @status = :rest
      
-     SystemsMessage.new("Leaving orbit of #{@locationPoint.body}", SystemPower, :info)
-   end
-   
    def up()
       if @locationPoint.has_link_type? :up
          @locationPoint = @locationPoint.find_linked_location(:up).first    
-         @status = :rest
+         @status = :sync
       else
          raise SystemsMessage.new("Movement prevented", SystemNavigation, :info)
       end

@@ -4,6 +4,10 @@ class SystemCommunication < ShipSystem
       "comms:"
   end
   
+  def _contact(args = nil)
+    {:success => true}
+  end
+  
   def _read(args = nil)
     begin
       

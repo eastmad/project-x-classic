@@ -2,7 +2,7 @@ class City < SimpleBody
    attr_reader :centrePoint
    attr_accessor :links
    
-   def initialize(name, desc, ownerPoint)      
+   def initialize(name, desc, ownerPoint, exitPoint)      
       super(name, desc, ownerPoint.body)
       @links = []
       @contacts = []
@@ -12,7 +12,7 @@ class City < SimpleBody
       @new_contact = false
       
       @centrePoint = LocationPoint.new(self, :centre)
-      @centrePoint.add_link([:up, :launch], ownerPoint)
+      @centrePoint.add_link([:up, :launch], exitPoint)
       ownerPoint.add_link([:city, :land], @centrePoint)
    end      
 
@@ -51,8 +51,8 @@ class City < SimpleBody
      "The city port of #{@name} welcomes your visit."
    end
    
-   def contactFactory(name, desc, org, trust)
-      contact = Contact.new(name, desc, org, @centrePoint)
+   def contactFactory(title, name, desc, org, trust)
+      contact = Contact.new(title, name, desc, org, @centrePoint)
  
       if trust <= contact.org.trust_score
          @contacts << contact
@@ -93,7 +93,7 @@ class City < SimpleBody
    def first_visit_trigger
       @visit_triggers.each do | trig |
          trig[:org].trust(trig[:amount])
-         info "mail id = #{trig[:mail]}, message #{trig[:org].get_message(trig[:mail])}"
+         info "mail id = #{trig[:mail]}, message #{trig[:org].get_message(trig[:mail])}" unless trig[:mail].nil?
          push_message(trig[:org].get_message(trig[:mail]), trig[:org]) unless trig[:mail].nil?
       end
    end
@@ -167,7 +167,6 @@ class Star < CelestialObject
       planets = owns.collect{|locPoint| locPoint.body}
       "The orbiting planets are #{planets.join(', ')}"
    end
-      
 end
 
 
@@ -178,13 +177,8 @@ class Planet < CelestialObject
    def initialize(name, desc, ownerPoint)      
       super(name, desc, ownerPoint.body)
       
-      @centrePoint = LocationPoint.new(self, :centre)      
-      @surfacePoint = LocationPoint.new(self, :surface)
       @atmospherePoint = LocationPoint.new(self, :atmosphere)
-      @orbitPoint = LocationPoint.new(self, :orbit)      
-            
-      @centrePoint.add_link([:up], @surfacePoint)
-      @surfacePoint.add_link([:up, :launch], @atmospherePoint)
+      @orbitPoint = LocationPoint.new(self, :orbit)                 
       @atmospherePoint.add_link([:up],@orbitPoint)       
       
       @orbitPoint.add_link([:star], ownerPoint)  
@@ -209,7 +203,7 @@ class Planet < CelestialObject
    end
    
    def cityFactory(name, desc)
-      City.new(name, desc, @atmospherePoint)
+      City.new(name, desc, @atmospherePoint, @orbitPoint)
    end
   
    
@@ -245,7 +239,7 @@ class Planet < CelestialObject
 end
 
 class SpaceStation < CelestialObject
-  :private
+
   def initialize(name, desc, ownerPoint)      
     super(name, desc, ownerPoint.body)
 
@@ -254,13 +248,13 @@ class SpaceStation < CelestialObject
     @outerPoint = LocationPoint.new(self, :outer)
 
     @centrePoint.add_link([:up], @surfacePoint)
-    @surfacePoint.add_link([:up, :launch], @outerPoint)
+    @surfacePoint.add_link([:up, :launch], ownerPoint)
     @outerPoint.add_link([:dock], @surfacePoint)
 
     @outerPoint.add_link([:planet, :orbit], ownerPoint) 
     ownerPoint.add_link([:satellite], @outerPoint)      
   end
-  :public
+
   def status_word(status, band)
     if status == :rest
        sw = "above"

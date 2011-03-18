@@ -42,7 +42,9 @@ class GameStart
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
  If you want to know more about what's happening to Mars, talk to our contact on Earth.")
-  pers = houston.contactFactory("Pers Lindman", "Artifact trader",freemars,1)
+  pers = houston.contactFactory("Pers", "Nordstrum", "Artifact trader", freemars, 1)
+  info "added #{pers}"
+  Dictionary.add_discovered_proper_noun(pers.name, pers, :comms)
   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
 
   ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)

@@ -12,7 +12,8 @@ class Dictionary
             {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
             {:word => :send, :grammar => :verb, :sys => :comms},
             {:word => :read, :grammar => :verb, :sys => :comms},
-            {:word => :browse, :grammar => :verb, :sys => :trade},           
+            {:word => :browse, :grammar => :verb, :sys => :trade},
+            {:word => :contact, :grammar => :verb, :sys => :comms},
             {:word => :mail, :grammar => :noun, :sys => :comms},
             {:word => :contract, :grammar => :noun, :sys => :trade},
             {:word => :describe, :grammar => :verb, :sys => :library},
@@ -51,7 +52,10 @@ class Dictionary
             {:word => :last, :grammar => :adjective},         
             
             {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
-            {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade}
+            {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade},
+            
+            {:word => :Doctor, :grammar => :proper_noun, :sys => :comms},
+            {:word => :Senator, :grammar => :proper_noun, :sys => :comms}
       ]   
       
    @@shipname = "ship"    
@@ -87,16 +91,19 @@ class Dictionary
      return res, following   
    end
    
-   def self.add_discovered_proper_noun(str, sgo)
+   def self.add_discovered_proper_noun(str, sgo, sys = nil)
      @@shipname = str if sgo.nil?
-     @@Words << {:word => str.to_sym, :grammar => :proper_noun, :sgo => sgo}
+     
+     noun = {:word => str.to_sym, :grammar => :proper_noun, :sgo => sgo}
+     noun.merge(:sys => sys) unless sys.nil?
+      
+     @@Words << noun
    end
 
    def self.add_double_discovered_proper_noun(str, follow, sgo)
      @@Words << {:word => str.to_sym, :grammar => :proper_noun, :sys =>:trade, :following => follow, :sgo => sgo}
    end
-
-
+   
    def self.add_discovered_subject(str, item)
      @@Words << {:word => str.to_sym, :grammar => :subject, :sys =>:trade, :sgo => item}
    end

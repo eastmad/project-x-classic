@@ -1,9 +1,15 @@
 class Contact < SimpleBody
-  attr_reader :org
+  attr_reader :org, :title
   
-  def initialize(name, desc, org, ownerPoint)
+  def initialize(title, name, desc, org, ownerPoint)
+    
     super(name,desc,ownerPoint.body)
     @org = org
+    @title = title
+  end
+  
+  def to_s
+    "#{@title} #{@name}"
   end
   
 end

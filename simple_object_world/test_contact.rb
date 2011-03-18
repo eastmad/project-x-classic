@@ -16,10 +16,10 @@ describe Contact do
     @earth = mock "earth", :body => @body, :add_link => true
     @mars = mock "mars", :body => @body, :add_link => true
     
-    @city = City.new("Houston", "Earth", @earth)
+    @city = City.new("Houston", "Earth", @earth, @earth)
     @freeMars = Organisation.new("Free Mars", "Dedicated to Mars freedom", :proscribed)
-    @contact = @city.contactFactory("Jesper Nordstrum", "Collector of alien artefacts", @freeMars, 1)
-    @contact2 = @city.contactFactory("Per Persen", "Tax inspector", @freeMars, 2)
+    @contact = @city.contactFactory(:Jesper, "Nordstrum", "Collector of alien artefacts", @freeMars, 1)
+    @contact2 = @city.contactFactory(:Per, "Persen", "Tax inspector", @freeMars, 2)
         
   end
   
@@ -53,7 +53,7 @@ describe Contact do
   context "Visit Mars" do
     
     before(:each) do
-      @visit_city = City.new("Nicosia", "The first martian city to revolt against Earth imperium", @mars)
+      @visit_city = City.new("Nicosia", "The first martian city to revolt against Earth imperium", @mars, @mars)
       @visit_city.add_visit_trigger(@freeMars,1)
     end
     
