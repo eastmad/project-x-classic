@@ -10,11 +10,12 @@ class Dictionary
             {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :undock, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
-            {:word => :send, :grammar => :verb, :sys => :comms},
-            {:word => :read, :grammar => :verb, :sys => :comms},
+            {:word => :send, :grammar => :verb, :sys => :communication},
+            {:word => :read, :grammar => :verb, :sys => :communication},
             {:word => :browse, :grammar => :verb, :sys => :trade},
-            {:word => :contact, :grammar => :verb, :sys => :comms},
-            {:word => :mail, :grammar => :noun, :sys => :comms},
+            {:word => :contact, :grammar => :verb, :sys => :communication},
+            {:word => :meet, :grammar => :verb, :sys => :communication},
+            {:word => :mail, :grammar => :noun, :sys => :communication},
             {:word => :contract, :grammar => :noun, :sys => :trade},
             {:word => :describe, :grammar => :verb, :sys => :library},
             {:word => :summarize, :grammar => :verb, :sys => :myself},
@@ -28,7 +29,7 @@ class Dictionary
             {:word => :cannon, :grammar => :noun, :sys => :weapon},
             {:word => :planet, :grammar => :noun, :sys => :navigation},
             {:word => :torpedo, :grammar => :noun, :sys => :weapon},
-            {:word => :message, :grammar => :noun, :sys => :comms},
+            {:word => :message, :grammar => :noun, :sys => :communication},
             {:word => :vessel, :grammar => :noun, :sys => :weapon},
             {:word => :drive, :grammar => :noun, :sys => :power},
             {:word => :traders, :grammar => :noun, :sys => :trade},
@@ -40,6 +41,7 @@ class Dictionary
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},
             {:word => :of, :grammar => :preposition},
+            {:word => :in, :grammar => :preposition},
             {:word => :to, :grammar => :preposition},
             {:word => :from, :grammar => :preposition},
             {:word => :with, :grammar => :preposition},
@@ -53,9 +55,6 @@ class Dictionary
             
             {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
             {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade},
-            
-            {:word => :Doctor, :grammar => :proper_noun, :sys => :comms},
-            {:word => :Senator, :grammar => :proper_noun, :sys => :comms}
       ]   
       
    @@shipname = "ship"    

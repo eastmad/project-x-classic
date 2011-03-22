@@ -48,7 +48,6 @@ describe Trade do
     source_consignment.item.should == @coffee
   end
   
-  
   it "can't fulfill with wrong item" do
     expect { @sink_trade.fulfill(@consignment_gold) }.to raise_error(RuntimeError, "Wrong item")
   end

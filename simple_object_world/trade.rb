@@ -37,6 +37,13 @@ end
 class Item
   attr_reader :name, :desc, :item_type,:conditions
   
+  @@details = {
+    :alien => "alien artifact or technology",
+    :foodstuff => "food or drink",
+    :illegal => "illegal goods",
+    :controlled => "controlled goods"
+    }
+  
   def initialize(name, desc, item_type, conditions = [])
     @name = name
     @desc = desc

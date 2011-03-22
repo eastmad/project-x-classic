@@ -33,6 +33,10 @@ class SystemMyself < ShipSystem
   def _power(args = nil)
     :power
   end
+  
+  def _communication(args = nil)
+    :communication
+  end
 
   def _suggest(args = nil)
     @@rq.enq @@ship.suggest
@@ -111,6 +115,16 @@ class SystemMyself < ShipSystem
       Try 'engage ' after plotting a course.
       Try 'launch' to leave a planet.
     END
+    
+    para1 = <<-END.gsub(/^ {6}/, '') if args == :communication
+      
+      Read mail or check contacts on a city.
+      
+      Try 'contact' to check contacts in a city
+      Try 'contact Nordstrum' to contact a contact.
+      Try 'meet Nordstrum' to meet after initial contact.
+    END
+
     
     @@rq.enq SystemsMessage.new(para1, "help with #{args}", :report)
    

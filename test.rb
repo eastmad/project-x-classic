@@ -5,6 +5,7 @@ require "image_window"
 require "media_manager"
 require "sound_play"
 require "simple_object_world/simple_body"
+require "simple_object_world/city"
 require "simple_object_world/simple_game_object"
 require "simple_object_world/trade"
 require "simple_object_world/trader"
@@ -57,6 +58,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   Operation.register_op :fulfill, :trade, 1
   Operation.register_op :browse, :trade, 1
   Operation.register_op :contact, :communication, 1
+  Operation.register_op :meet, :communication, 1 
   Operation.register_op :suggest, :myself, 1
   Operation.register_op :manifest, :trade, 1
   Operation.register_op :bay, :trade, 1
@@ -166,8 +168,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     num = 1
 
     if SoundPlay.sound?
-       while File.exists?(SoundPlay.load_sound(num)) do    
-         s = SoundPlay.load_sound(num)
+      while File.exists?(SoundPlay.load_sound(num)) do    
+        s = SoundPlay.load_sound(num)
         sound = video s          
         info "sound=#{sound.inspect}"
         SoundPlay.register_sound(sound)     
@@ -183,92 +185,93 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
 
     keypress { |k|
-       key_resp = KeystrokeReader.key_in(k,@dr.req_str)
-       @dr.req_str = key_resp[:str]
-       @state = key_resp[:state]                   
-       @dr.replace_req @arr
+      key_resp = KeystrokeReader.key_in(k,@dr.req_str)
+      @dr.req_str = key_resp[:str]
+      @state = key_resp[:state]                   
+      @dr.replace_req @arr
 
-       if (@state == :exit)
-          goodbye()
-       end
-       
-       if (@state == :talk_test)
-          talk_screen :war
-       end
+      if (@state == :exit)
+        goodbye()
+      end
+      
+      if (@state == :talk_test)
+         talk_screen :war
+      end
 
-       if (@state == :delete)
-          @gr.undo_grammar
-          needs_reset = @dr.remove_req @arr            
-          @dr.replace_req @arr
-          @gr.reset_grammar if needs_reset
-       end
+      if (@state == :delete)
+        @gr.undo_grammar
+        needs_reset = @dr.remove_req @arr            
+        @dr.replace_req @arr
+        @gr.reset_grammar if needs_reset
+      end
 
-       if (@state == :complete_me)
-          res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
-          if (res == nil)
-            @rq.enq SystemsMessage.new("#{@dr.req_str} is not in #{@gr.context} dictionary", SystemMyself, :warn)
-            raise
+      if (@state == :complete_me)
+        res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
+        if (res == nil)
+          @rq.enq SystemsMessage.new("#{@dr.req_str} is not in #{@gr.context} dictionary", SystemMyself, :warn)
+          raise
+        else
+          SoundPlay.play_sound(0)
+          @dr.req_str = res[:word]
+          @dr.req_grammar = res[:grammar]
+          @gr.set_grammar(res[:grammar])
+          @gr.context ||= res[:sys]
+
+          unless following.nil?
+            @dr.add_req               
+            @dr.replace_req @arr
+            @dr.req_str = following[:word]
+            @dr.req_grammar = following[:grammar]
+            @gr.set_grammar(following[:grammar])
+          end
+        end                           
+        @dr.add_req               
+        @dr.replace_req @arr    
+      end
+
+      if (@state == :done)                 
+        begin
+          if @dr.fullCommand.size > 1            
+            resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
+ 
+            if (resp_hash[:success])
+              MediaManager.show_media(@im_win,resp_hash[:media],@ship.locationPoint) unless resp_hash[:media].nil?
+            else 
+                SoundPlay.play_sound(5)
+            end
           else
-             SoundPlay.play_sound(0)
-             @dr.req_str = res[:word]
-             @dr.req_grammar = res[:grammar]
-             @gr.set_grammar(res[:grammar])
-             @gr.context ||= res[:sys]
-
-             unless following.nil?
-               @dr.add_req               
-               @dr.replace_req @arr
-               @dr.req_str = following[:word]
-               @dr.req_grammar = following[:grammar]
-               @gr.set_grammar(following[:grammar])
-             end
-          end                           
-          @dr.add_req               
-          @dr.replace_req @arr    
-       end
-
-       if (@state == :done)                 
-          begin
-             resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
-
-             if (resp_hash[:success])
-                MediaManager.show_media(@im_win,resp_hash[:media],@ship.locationPoint) unless resp_hash[:media].nil?
-             else 
-                 SoundPlay.play_sound(5)
-             end 
-
-             if (!@ship.headingPoint.nil?)
-                @heading_inscription.replace @ship.headingPoint, :stroke => white
-                @heading_icon.show
-             else
-                @heading_icon.hide
-             end   
-             @action_inscription.replace @ship.describeLocation, :stroke => white
-             #either the current body is a planet, or the owning body.
-             local_body = @ship.locationPoint.body
-             local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
-             @planet_inscription.replace local_planet, :stroke => white
-             
-             #read mail
-             mail = SimpleBody.get_mail.shift
-             @ship.push_mail(mail.txt, mail.from) unless mail.nil?
-             
-             if @ship.has_new_mail?
-               new_mail = @ship.read_mail(:position => :new, :consume => false)
-               @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response)
-             end
-             
-             
-          rescue => ex
-             @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
+            SystemNavigation.status
           end
 
-          @last_command.text = @dr.fullCommand  
-          reset
-       end
+          if (!@ship.headingPoint.nil?)
+            @heading_inscription.replace @ship.headingPoint, :stroke => white
+            @heading_icon.show
+          else
+            @heading_icon.hide
+          end   
+          @action_inscription.replace @ship.describeLocation, :stroke => white
+          #either the current body is a planet, or the owning body.
+          local_body = @ship.locationPoint.body
+          local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
+          @planet_inscription.replace local_planet, :stroke => white
+          
+          #read mail
+          mail = SimpleBody.get_mail.shift
+          @ship.push_mail(mail.txt, mail.from) unless mail.nil?
+          
+          if @ship.has_new_mail?
+            new_mail = @ship.read_mail(:position => :new, :consume => false)
+            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response)
+          end            
+           
+        rescue => ex
+           @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
+        end
+
+        @last_command.text = @dr.fullCommand  if @dr.fullCommand.size > 1
+        reset
+      end
     }
-
-
   }
   
   def talk_screen txt_key
@@ -296,7 +299,6 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     }
   end
             
-   
   def goodbye      
     exit()
   end

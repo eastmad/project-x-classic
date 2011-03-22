@@ -3,9 +3,48 @@ class SystemCommunication < ShipSystem
   def self.cursor_str
       "comms:"
   end
-  
+ 
   def _contact(args = nil)
-    {:success => true}
+    begin
+      
+      if args.nil?
+        city = @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(city.describe_owns, SystemCommunication, :info) if city.kind_of? City
+      else
+        sgo = ShipSystem.find_sgo_from_name(args)
+    
+        @@rq.enq @@ship.contact(sgo)
+      end
+
+      {:success => true}
+    rescue => ex
+      info "oops #{ex}"
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Cannot contact '#{args}'. Check a city's description for known contacts.", SystemCommunication, :response_bad)
+      {:success => false}
+    end  
+
+  end
+  
+  def _meet(args = nil)
+    begin
+      
+      if args.nil?
+        city = @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(city.describe_owns, SystemCommunication, :response_bad) if city.kind_of? City
+      else
+        sgo = ShipSystem.find_sgo_from_name(args)
+    
+        @@rq.enq @@ship.meet(sgo)
+      end
+
+      {:success => true}
+    rescue => ex
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Cannot meet '#{args}'. Check a city's description for known contacts.", SystemCommunication, :response_bad)
+      {:success => false}
+    end  
+
   end
   
   def _read(args = nil)

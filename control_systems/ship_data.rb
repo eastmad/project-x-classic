@@ -2,6 +2,7 @@ require "#{File.dirname(__FILE__)}/impl_security"
 require "#{File.dirname(__FILE__)}/impl_trade"
 require "#{File.dirname(__FILE__)}/impl_help"
 require "#{File.dirname(__FILE__)}/impl_mail"
+require "#{File.dirname(__FILE__)}/impl_contact"
 
 class ShipData
   attr_reader :name, :locationPoint, :status, :headingPoint   
@@ -11,17 +12,18 @@ class ShipData
   DRIVE = "Tunnel drive"
   JUMP = "Rift generator"
    
-   def initialize(ship_name, locationPoint)
-      @name = ship_name
-      @locationPoint = locationPoint
-      @headingPoint = nil
-      @status = :rest
-      @status = :dependent if locationPoint.has_link_type? :launch   
-      @security = ImplSecurity.new
-      @trade = ImplTrade.new
-      @help = ImplHelp.new
-      @mail = ImplMail.new
-   end
+  def initialize(ship_name, locationPoint)
+    @name = ship_name
+    @locationPoint = locationPoint
+    @headingPoint = nil
+    @status = :rest
+    @status = :dependent if locationPoint.has_link_type? :launch   
+    @security = ImplSecurity.new
+    @trade = ImplTrade.new
+    @help = ImplHelp.new
+    @mail = ImplMail.new
+    @contact = ImplContact.new
+  end
    
    def push_mail(txt, from)
       @mail.accept_mail(txt, from)
@@ -171,6 +173,26 @@ class ShipData
      SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
    end
    
+  def contact(person)
+    raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless @locationPoint.body.kind_of? City
+    raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact
+    
+    city =  @locationPoint.body
+    raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
+     
+    #check @meet.meet_me[name] for an entry
+    he_or_she = person.ppnoun.capitalize
+    mes = "#{person} doesn't want to meet you. You may not have anything #{he_or_she} wants."
+    if @contact.meet_me[person.name]
+      #take into account no interest
+      mes = "#{person} has already agreed to meet you. #{he_or_she} is interested in #{@contact.meet_me[person.name]}"
+    else
+      mes = "#{person} has agreed to meet you. #{he_or_she} is interested in #{@contact.meet_me[person.name]}" if @contact.check_cargo(person, @trade.cargo)
+    end
+    
+    SystemsMessage.new(mes, SystemCommunication, :info)
+  end
+               
    def land(city)
      
      #location must be city     

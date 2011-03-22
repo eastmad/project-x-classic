@@ -1,15 +1,24 @@
 class Contact < SimpleBody
-  attr_reader :org, :title
+  attr_reader :org, :title, :details, :gender
   
-  def initialize(title, name, desc, org, ownerPoint)
-    
+  def initialize(gender, title, name, desc, org, ownerPoint)
     super(name,desc,ownerPoint.body)
+    @gender = gender
     @org = org
     @title = title
+    @details = {}
+  end
+  
+  def add_details hash
+    @details.merge! hash
   end
   
   def to_s
     "#{@title} #{@name}"
+  end
+  
+  def ppnoun
+    (@gender == :m)? "he" : "she"
   end
   
 end

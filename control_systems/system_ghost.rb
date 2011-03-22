@@ -12,7 +12,7 @@ class SystemGhost < ShipSystem
         You do not know me. And I cannot 
         tell you yet why you are here. 
         You are in control of this small ship.
-        You must leave this solar system before i 
+        You must leave this solar system before I 
         can contact you any again.
         
         Fit your ship out and use the gate.
