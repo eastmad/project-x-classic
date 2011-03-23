@@ -77,6 +77,10 @@ class Consignment
   end
   
   def to_s
-    "#{@amount} units of #{@item.name} (origin: #{@origin_trader})"
+    if @item.item_type == :unique
+      "A #{@item.name}"
+    else  
+      "#{@amount} units of #{@item.name} (origin: #{@origin_trader})"
+    end
   end
 end

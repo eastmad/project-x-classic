@@ -261,7 +261,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
           
           if @ship.has_new_mail?
             new_mail = @ship.read_mail(:position => :new, :consume => false)
-            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response)
+            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response) if @rq.peek.flavour != :report
           end            
            
         rescue => ex
