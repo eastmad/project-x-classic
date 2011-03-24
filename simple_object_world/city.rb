@@ -8,7 +8,6 @@ class City < SimpleBody
       @contacts = []
       @trust_list = []
       @visit_triggers = []
-      @visited = false
       @new_contact = false
       
       @centrePoint = LocationPoint.new(self, :centre)
@@ -36,9 +35,18 @@ class City < SimpleBody
       "#{@name} is a city port of #{@owning_body.name}"
    end
    
+   def describe_contacts
+      para1 = "Contacts in #{@name}\n"
+      @contacts.each do | contact |
+         para1 << "-#{contact}; #{contact.desc}" 
+      end
+      
+      para1
+   end
+   
    def describe_owns
       str = "No known contacts"
-      str = "Known contacts are #{contacts.join(', ')}" unless contacts.empty?
+      str = "Known contacts are #{@contacts.join(', ')}" unless @contacts.empty?
       if @new_contact
          str << "\n>>UPDATED<<"
          @new_contact = false
@@ -65,8 +73,12 @@ class City < SimpleBody
    end
    
    def visit
-     first_visit_trigger unless @visited  
+     first_time = !@visited
+     
+     first_visit_trigger if first_time  
      @visited = true
+     
+     first_time
    end
    
    def add_visit_trigger(org, amount, mail = nil)

@@ -192,31 +192,41 @@ class ShipData
     
     SystemsMessage.new(mes, SystemCommunication, :info)
   end
-               
-   def land(city)
-     
-     #location must be city     
-     city_points = @locationPoint.find_linked_location :city
-     raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
+              
+  def land(city)
+    
+    #location must be city     
+    city_points = @locationPoint.find_linked_location :city
+    raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
 
-     #if a city specified check it is available to land at
-     #take first for now
-     target_point = city_points.first
-     city_points.each do | lp |
-        target_point = lp if lp.body == city
-     end
-     
-     if (@status == :rest)
-       @status = :dependent
-       @locationPoint = target_point
-       @locationPoint.body.visit
-       return SystemsMessage.new("Landed at #{target_point.body.name}", SystemPower, :info)
-     else
-       raise SystemsMessage.new("Cannot land on #{target_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
-     end   
-   end
-   
-   
+    #if a city specified check it is available to land at
+    #take first for now
+    target_point = city_points.first
+    city_points.each do | lp |
+       target_point = lp if lp.body == city
+    end
+    
+    if (@status == :rest)
+      @status = :dependent
+      @locationPoint = target_point
+      first_time = @locationPoint.body.visit
+      
+      if first_time
+        para1 = "#{city}\n\n"
+        para1 << city.describe
+        para1 << "\n- " << city.desc
+        para1 << "\n- " << city.describe_owns
+        para1 << "\n\n(Type 'describe #{city}' to see this)" 
+ 
+        return SystemsMessage.new(para1, SystemLibrary, :report)
+      else 
+        return SystemsMessage.new("Landed at #{target_point.body.name}", SystemPower, :info)
+      end
+    else
+      raise SystemsMessage.new("Cannot land on #{target_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
+    end   
+  end
+      
    def release_docking_clamp()
      ret = "Docking clamps are open"
      ret = "Docking clamps released" if @security.docking_clamps.unlock == :locked

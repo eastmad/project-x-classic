@@ -1,34 +1,35 @@
 class SimpleBody
 
- attr_reader :name, :desc, :owning_body, :boundary_point
- @@outgoing_mail = []
+  attr_reader :name, :desc, :owning_body, :boundary_point
+  @@outgoing_mail = []
+  
+  def initialize name, desc = "Unknown origin", owner = nil
+    @name = name
+    @desc = desc
+    @owning_body = owner
+    @visited = false
+  end
+  
+  def root_body
+    body = self
+    until body.owning_body.nil?
+       body = body.owning_body
+    end
+    
+    body
+  end
+  
+  def push_message txt, from
+    @@outgoing_mail << Mail.new(txt, from) 
+  end
  
- def initialize name, desc = "Unknown origin", owner = nil
-   @name = name
-   @desc = desc
-   @owning_body = owner
- end
- 
- def root_body
-   body = self
-   until body.owning_body.nil?
-      body = body.owning_body
-   end
-   
-   body
- end
- 
- def push_message txt, from
-   @@outgoing_mail << Mail.new(txt, from) 
- end
-
- def self.get_mail
+  def self.get_mail
     @@outgoing_mail
- end
- 
- def to_s
-   @name
- end
+  end
+  
+  def to_s
+    @name
+  end
 
 end
 

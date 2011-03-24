@@ -14,6 +14,8 @@ class Dictionary
             {:word => :read, :grammar => :verb, :sys => :communication},
             {:word => :browse, :grammar => :verb, :sys => :trade},
             {:word => :contact, :grammar => :verb, :sys => :communication},
+            {:word => :contacts, :grammar => :noun, :sys => :communication},
+            {:word => :view, :grammar => :verb, :sys => :communication, :following => :contacts},
             {:word => :meet, :grammar => :verb, :sys => :communication},
             {:word => :mail, :grammar => :noun, :sys => :communication},
             {:word => :contract, :grammar => :noun, :sys => :trade},

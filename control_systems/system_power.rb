@@ -35,7 +35,7 @@ class SystemPower < ShipSystem
         @@rq.enq @@ship.land sgo         
       end                    
              
-      SystemNavigation.status
+      #SystemNavigation.status
       resp_hash = {:success => true, :media => :land}
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
@@ -66,6 +66,11 @@ class SystemPower < ShipSystem
     #info "Call dock"
     begin
       sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?     
+      
+      if sgo.nil?
+        sgo = @@ship.locationPoint.body
+      end  
+      
       @@rq.enq @@ship.dock sgo
       @@rq.enq @@ship.lock_docking_clamp()
       @@rq.enq SystemsMessage.new("'#{sgo.welcome}'", SystemCommunication, :info)

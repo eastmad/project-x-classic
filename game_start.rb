@@ -9,7 +9,7 @@ class GameStart
   Dictionary.add_discovered_proper_noun(mars.name, mars)
   station = earth.stationFactory("Sputnik", "One of the oldest space stations")
   Dictionary.add_discovered_proper_noun(station.name, station)
-  houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continentel America")
+  houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continental America")
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = mars.cityFactory("Dundarach", "Only space port for Mars, sometimes refered to as Marsport")
   nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
@@ -34,7 +34,7 @@ class GameStart
   eye = Item.new("horus eye", "Alien artifact, possibly of Martian origin", :unique, [:controlled, :alien])
   Dictionary.add_discovered_subject(eye.name, eye)
 
-  trader2.add_source_trade(eye,0)
+  trader2.add_source_trade(eye,1)
       
   Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
   Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)

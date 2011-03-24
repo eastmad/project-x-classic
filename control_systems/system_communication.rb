@@ -3,6 +3,25 @@ class SystemCommunication < ShipSystem
   def self.cursor_str
       "comms:"
   end
+  
+  def _view(args = nil)
+    
+    sgo = ShipSystem.find_sgo_from_name(args) unless args.nil?
+    
+    #default to contacts in current city
+    sgo = @@ship.locationPoint.body if sgo.nil? 
+    
+    if sgo.kind_of? City  
+      para1 = sgo.describe_contacts
+    
+      para1 << "\n\nType 'contact person' to arrange a meeting"
+      @@rq.enq SystemsMessage.new(para1, SystemCommunication, :report)
+    else
+      @@rq.enq SystemsMessage.new("No contact information available", SystemCommunication, :info)     
+    end
+  
+    {:success => false}
+  end
  
   def _contact(args = nil)
     begin
@@ -23,7 +42,6 @@ class SystemCommunication < ShipSystem
       @@rq.enq SystemsMessage.new("Cannot contact '#{args}'. Check a city's description for known contacts.", SystemCommunication, :response_bad)
       {:success => false}
     end  
-
   end
   
   def _meet(args = nil)
@@ -84,4 +102,12 @@ class SystemCommunication < ShipSystem
     {:direction => :prev}
   end
   
+  
+  def self.to_s
+      "communication system"
+  end
+  
+  def self.cursor_str
+      "comms:"
+  end
  end
