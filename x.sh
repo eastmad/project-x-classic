@@ -1,3 +1,3 @@
 #!/bin/bash
 poo=`pwd`
-./shoes3.run.sh $poo/test.rb
+./shoes3.run.sh $poo/test1024600.rb

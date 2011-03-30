@@ -5,6 +5,8 @@ require "image_window"
 require "media_manager"
 require "sound_play"
 require "simple_object_world/simple_body"
+require "simple_object_world/trustee"
+require "simple_object_world/trust_holder"
 require "simple_object_world/city"
 require "simple_object_world/simple_game_object"
 require "simple_object_world/trade"
@@ -33,7 +35,7 @@ require "control_systems/system_library"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
+Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
   
   background rgb(20, 42, 42)
   stroke white
@@ -65,13 +67,13 @@ Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
   Operation.register_op :bay, :trade, 1
    
   @rq = ResponseQueue.new
-  @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
+  @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
   
   @backstack = stack(:hidden => true){
-    flow(:width => 800) {
+    flow(:width => 976) {
       image "gifs/contact.jpg"
       caption " Newton Todd", :stroke => white
-      inscription "        F1 - exit   F2 - finish", :stroke => darkgray
+      para "        F1 - exit   F2 - finish", :stroke => darkgray
     }  
     
     @t = tagline "", :stroke => white
@@ -98,31 +100,31 @@ Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
 
     @iconstack = stack {
       flow {
-        image "gifs/star_icon.gif", :width => 30, :height => 32
-        inscription "Sol", :stroke => white
+        image "gifs/star_icon.gif", :width => 60, :height => 64
+        para "Sol", :stroke => white
       }
 
       @planet_icon = flow {
-        image "gifs/planet_icon.gif"
-        @planet_inscription = inscription "Earth", :stroke => white
+        image "gifs/planet_icon.gif", :width => 30, :height => 32
+        @planet_para = para "Earth", :stroke => white
       }
 
       @heading_icon = flow {
-        image "gifs/head_icon.gif"
-        @heading_inscription = inscription "orbit", :stroke => white
+        image "gifs/head_icon.gif", :width => 30, :height => 32
+        @heading_para = para "orbit", :stroke => white
       }
       @heading_icon.hide
 
       @action_icon = flow {
-        image "gifs/loc_icon.gif"
-        @action_inscription = inscription @ship.describeLocation, :stroke => white
+        image "gifs/loc_icon.gif", :width => 30, :height => 32
+        @action_para = para @ship.describeLocation, :stroke => white
       }
     }
 
     @iconstack.move(0,parent.height - 260)
   }
 
-  @mainstack2 = stack(:width => 500)  {  
+  @mainstack2 = stack(:width => 615)  {  
     @dr = DisplayResponse.new 
     @gr = GrammarTree.new
 
@@ -133,17 +135,17 @@ Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
       border rgb(25,25,50) , :strokewidth => 1
       background rgb(20, 42, 42)
       flow {
-        para "> ", :stroke => white
-        @arr[0] = para "_", :stroke => white
-        (1..6).each{|n| @arr[n] = para " ", :stroke => white}
+        caption "> ", :stroke => white
+        @arr[0] = caption "_", :stroke => white
+        (1..6).each{|n| @arr[n] = caption " ", :stroke => white}
       }
-      @last_command = inscription "Waiting for command", :stroke => gray
+      @last_command = para "Waiting for command", :stroke => gray
     }  
 
-    stack(:width => 500, :height => 462){
+    stack(:width => 615, :height => 462){
       background rgb(20,20,40)
       border rgb(25,25,50) , :strokewidth => 1
-      (0..4).each{|n| @ap[n].line_type = para strong(""),""}
+      (0..7).each{|n| @ap[n].line_type = caption strong(""),""}
     }
     
     every (1) {
@@ -151,10 +153,10 @@ Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
         message = @rq.deq
 
         if (message.flavour == :mail || message.flavour == :report)
-          (4.downto 1).each {|n| @ap[n].line_type.hide}
+          (7.downto 1).each {|n| @ap[n].line_type.hide}
         else
           @ap[0].set_line @old_top_message if (@ap[0].flavour == :mail || @ap[0].flavour == :report)
-          (4.downto 1).each do |n|
+          (7.downto 1).each do |n|
              @ap[n].line_type.show
              @ap[n].set_line @ap[n - 1]
           end
@@ -195,7 +197,7 @@ Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
       end
       
       if (@state == :talk_test)
-         talk_screen :war
+        talk_screen :war
       end
 
       if (@state == :delete)
@@ -237,23 +239,25 @@ Shoes.app(:width => 1026, :height => 600, :title => "ProjectX") {
             if (resp_hash[:success])
               MediaManager.show_media(@im_win,resp_hash[:media],@ship.locationPoint) unless resp_hash[:media].nil?
             else 
-                SoundPlay.play_sound(5)
+              SoundPlay.play_sound(5)
             end
+            
+            talk_screen resp_hash[:talk] unless resp_hash[:talk].nil?
           else
             SystemNavigation.status
           end
 
           if (!@ship.headingPoint.nil?)
-            @heading_inscription.replace @ship.headingPoint, :stroke => white
+            @heading_para.replace @ship.headingPoint, :stroke => white
             @heading_icon.show
           else
             @heading_icon.hide
           end   
-          @action_inscription.replace @ship.describeLocation, :stroke => white
+          @action_para.replace @ship.describeLocation, :stroke => white
           #either the current body is a planet, or the owning body.
           local_body = @ship.locationPoint.body
           local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
-          @planet_inscription.replace local_planet, :stroke => white
+          @planet_para.replace local_planet, :stroke => white
           
           #read mail
           mail = SimpleBody.get_mail.shift

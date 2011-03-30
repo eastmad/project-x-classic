@@ -217,6 +217,7 @@ class SpaceStation < CelestialObject
 end
 
 class SmallStructure < CelestialObject
+  include TrustHolder
   attr_reader :damage_rating
   
   def initialize(name, desc, ownerPoint)      
@@ -238,11 +239,30 @@ class SmallStructure < CelestialObject
     sw
   end
 
+  def desc
+    check_trust_list
+    @desc
+  end
+
   def describe
     "#{@name} is a satellite of #{@owning_body.name}"
   end
   
   def describe_owns 
     "Low armour, and no active shielding"  
+  end
+  
+  def add_updated_desc trust, desc, trustee
+    add_to_trust_list trust, desc, trustee 
+  end
+  
+  def horizon trust, desc, org
+    if trust <= org.trust_score  
+      @desc = desc
+      info "#{desc} altered description"
+      return true
+    end
+   
+    false
   end
 end

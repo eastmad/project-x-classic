@@ -1,5 +1,7 @@
 require "./location_link"
 require "./location_point"
+require "./trust_holder"
+require "./trustee"
 require "./simple_body"
 require "./contact"
 require "./trader"

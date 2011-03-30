@@ -15,7 +15,7 @@ class GameStart
   nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
   Dictionary.add_discovered_proper_noun(nicosia.name, nicosia)
-  listeningPost = mars.structureFactory("Owl23", "Earth military control listening post")
+  listeningPost = mars.structureFactory("Owl23", "Unknown structure")
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
   trader = station.traderFactory("Buffet", :Industries, "Trading in ice cream components")
@@ -42,9 +42,11 @@ class GameStart
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
  If you want to know more about what's happening to Mars, talk to our contact on Earth.")
-  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Artifact trader", freemars, 0)
+  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Artifact trader", freemars, 1)
   pers.add_details(:interest => :alien, :talk => :war)
   info "added #{pers}"
+
+  listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
   
   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
 

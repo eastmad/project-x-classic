@@ -1,5 +1,6 @@
 #model tests
 
+require "trust_holder"
 require "simple_body"
 require "simple_game_object"
 require "location_point"

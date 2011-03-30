@@ -63,7 +63,7 @@ class City < SimpleBody
    def contactFactory(gender, title, name, desc, org, trust)
       contact = Contact.new(gender, title, name, desc, org, @centrePoint)
  
-      add_to_trust_list(trust,contact)
+      add_to_trust_list(trust,contact,org)
       
       contact
    end
@@ -87,17 +87,17 @@ class City < SimpleBody
    
    private
    
-   def horizon trust, contact
-      if trust <= contact.org.trust_score  
-         @contacts << contact
-         Dictionary.add_discovered_proper_noun(contact.name, contact, :comms)
-         info "#{contact.name} added to contacts"
-         @new_contact = true
-         return true
-      end
-     
-      false
-   end
+  def horizon trust, contact, org
+    if trust <= org.trust_score  
+      @contacts << contact
+      Dictionary.add_discovered_proper_noun(contact.name, contact, :comms)
+       info "#{contact.name} added to contacts"
+      @new_contact = true if trust > 0
+      return true
+    end
+   
+    false
+  end
    
    def first_visit_trigger
       @visit_triggers.each do | trig |

@@ -41,11 +41,11 @@ class Trader < SimpleBody
   
   private
 
-  def horizon trust, trade
+  def horizon trust, trade, trustee = nil
     if trust <= trust_score
       @trades << trade
-      info "#{trade.item} added to trades"
-      push_message thanks(trade), to_s
+      info "#{trade.item} added to trades trust = #{trust} type=#{trade.trade_type}"
+      push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
       return true
     end
     
@@ -53,7 +53,7 @@ class Trader < SimpleBody
   end
   
   def add_trade trade, trust
-    add_to_trust_list trust, trade
+    add_to_trust_list trust, trade, nil
   end
   
   def thanks trade

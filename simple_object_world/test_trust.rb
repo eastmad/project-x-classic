@@ -33,7 +33,7 @@ class TrustHolderMock
   end
   
   def add_to_list(trust,obj)
-    add_to_trust_list(trust, obj)
+    add_to_trust_list(trust, obj,  nil)
   end
 
   def to_s
@@ -42,7 +42,7 @@ class TrustHolderMock
   
   private
   
-  def horizon (trust,obj)
+  def horizon (trust,obj, trustee)
     false
   end
 end
@@ -64,7 +64,7 @@ class TrustHolderAndTrusteeMock
   end
   
   def add_to_list(trust,obj)
-    add_to_trust_list(trust, obj)
+    add_to_trust_list(trust, obj, nil)
   end
 
   def to_s
@@ -73,7 +73,7 @@ class TrustHolderAndTrusteeMock
   
   private
   
-  def horizon (trust,obj)
+  def horizon (trust, obj, trustee = nil)
     if trust <= trust_score
       @things << obj
       return true

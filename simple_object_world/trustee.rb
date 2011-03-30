@@ -9,5 +9,6 @@ module Trustee
   def trust(amount)
     @trust_score = 0 if @trust_score.nil? 
     @trust_score += amount
+    check_trust_list if self.kind_of? TrustHolder
   end
 end

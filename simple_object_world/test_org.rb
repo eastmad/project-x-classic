@@ -1,6 +1,9 @@
 require "./location_link"
 require "./location_point"
+require "./trustee.rb"
+require "./trust_holder.rb"
 require "./simple_body.rb"
+require "./city"
 require "./contact.rb"
 require "./trader.rb"
 require "./simple_game_object.rb"
@@ -16,7 +19,7 @@ describe Contact do
     @earth = mock "earth", :body => @body, :add_link => true
     @mars = mock "mars", :body => @body, :add_link => true
     
-    @city = City.new("Houston", "Earth", @earth)
+    @city = City.new("Houston", "Earth", @earth, @earth)
     @freeMars = Organisation.new("Free Mars", "Dedicated to Mars freedom", :proscribed)
     @freeMars.add_message(:poo, "Wo is me")
   end

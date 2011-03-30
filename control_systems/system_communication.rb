@@ -52,11 +52,13 @@ class SystemCommunication < ShipSystem
         @@rq.enq SystemsMessage.new(city.describe_owns, SystemCommunication, :response_bad) if city.kind_of? City
       else
         sgo = ShipSystem.find_sgo_from_name(args)
+        talk = nil
+        talk = sgo.details[:talk] if sgo.kind_of? Contact
     
         @@rq.enq @@ship.meet(sgo)
       end
 
-      {:success => true}
+      {:success => true, :talk => talk}
     rescue => ex
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("Cannot meet '#{args}'. Check a city's description for known contacts.", SystemCommunication, :response_bad)
