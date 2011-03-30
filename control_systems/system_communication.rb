@@ -39,7 +39,7 @@ class SystemCommunication < ShipSystem
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Cannot contact '#{args}'. Check a city's description for known contacts.", SystemCommunication, :response_bad)
+      @@rq.enq SystemsMessage.new("Cannot contact '#{args}'. Type 'view contacts' for known contacts.", SystemCommunication, :response_bad)
       {:success => false}
     end  
   end

@@ -174,10 +174,10 @@ class ShipData
    end
    
   def contact(person)
-    raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless @locationPoint.body.kind_of? City
-    raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact
-    
     city =  @locationPoint.body
+ 
+    raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless city.kind_of? City
+    raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact    
     raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
      
     #check @meet.meet_me[name] for an entry
@@ -191,6 +191,25 @@ class ShipData
     end
     
     SystemsMessage.new(mes, SystemCommunication, :info)
+  end
+
+  def meet(person)
+    raise SystemsMessage.new("You can only meet contacts in a city.", SystemCommunication, :info) unless @locationPoint.body.kind_of? City
+    raise SystemsMessage.new("You can only meet a person.", SystemCommunication, :info) unless person.kind_of? Contact
+
+    #check @meet.meet_me[name] for an entry
+    he_or_she = person.ppnoun.capitalize
+    mes = "#{person} doesn't want to meet you. You may not have anything #{he_or_she} wants."
+    if @contact.meet_me[person.name]
+      #take into account no interest
+      mes = "#{person} has not agreed to meet you. Contact #{he_or_she} first."
+    else
+      #take the consignment
+      consignment = @contact.meet_me[person.name]
+      talk = person.details[:talk]
+    end
+    
+    SystemsMessage.new("You met #{person}", SystemCommunication, :info)
   end
               
   def land(city)

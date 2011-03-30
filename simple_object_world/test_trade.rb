@@ -1,5 +1,7 @@
 require "./trade.rb"
 require "./simple_body.rb"
+require "./trust_holder.rb"
+require "./trustee.rb"
 require "./trader.rb"
 require "./simple_game_object.rb"
 require "../control_systems/system_test_helper"
@@ -11,14 +13,13 @@ class TraderMock < Trader
     @name = name
     @index_name = "Poo"
     @trades = []
-    @trust_list = []
-    @trust_score = 0
     @owning_body = "Jupiter"
   end
 
   def to_s
    "mock trader #{@name}"
   end
+  
 end
 
 describe Trade do
@@ -74,6 +75,7 @@ describe Trade do
     end 
    
     it "should get a message" do
+      @trader2.trades.count.should == 2
       txt = SimpleBody.get_mail.last.txt
       txt.should include("Eye of Horus")
       txt.should include("Jupiter")

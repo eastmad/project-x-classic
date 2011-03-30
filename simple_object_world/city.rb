@@ -1,4 +1,5 @@
-class City < SimpleBody      
+class City < SimpleBody
+   include TrustHolder
    attr_reader :centrePoint
    attr_accessor :links
    
@@ -6,7 +7,6 @@ class City < SimpleBody
       super(name, desc, ownerPoint.body)
       @links = []
       @contacts = []
-      @trust_list = []
       @visit_triggers = []
       @new_contact = false
       
@@ -23,7 +23,7 @@ class City < SimpleBody
    end
    
    def contacts
-      check_trust_bucket
+      check_trust_list
       @contacts
    end
    
@@ -37,7 +37,8 @@ class City < SimpleBody
    
    def describe_contacts
       para1 = "Contacts in #{@name}\n"
-      @contacts.each do | contact |
+      con = contacts
+      con.each do | contact |
          para1 << "-#{contact}; #{contact.desc}" 
       end
       
@@ -46,7 +47,7 @@ class City < SimpleBody
    
    def describe_owns
       str = "No known contacts"
-      str = "Known contacts are #{@contacts.join(', ')}" unless @contacts.empty?
+      str = "Known contacts are #{contacts.join(', ')}" unless contacts.empty?
       if @new_contact
          str << "\n>>UPDATED<<"
          @new_contact = false
@@ -62,12 +63,7 @@ class City < SimpleBody
    def contactFactory(gender, title, name, desc, org, trust)
       contact = Contact.new(gender, title, name, desc, org, @centrePoint)
  
-      if trust <= contact.org.trust_score
-         @contacts << contact
-        Dictionary.add_discovered_proper_noun(contact.name, contact, :comms)
-      else  
-         @trust_list << {:trust => trust, :contact => contact}
-      end
+      add_to_trust_list(trust,contact)
       
       contact
    end
@@ -91,17 +87,16 @@ class City < SimpleBody
    
    private
    
-   def check_trust_bucket
-     @trust_list.each do | t |
-       contact = t[:contact]
-       if t[:trust] <= contact.org.trust_score  
+   def horizon trust, contact
+      if trust <= contact.org.trust_score  
          @contacts << contact
          Dictionary.add_discovered_proper_noun(contact.name, contact, :comms)
          info "#{contact.name} added to contacts"
          @new_contact = true
-         t[:trust] = 1000
-       end
-     end
+         return true
+      end
+     
+      false
    end
    
    def first_visit_trigger

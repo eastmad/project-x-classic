@@ -1,21 +1,20 @@
 class Trader < SimpleBody
-  attr_reader :tradePoint, :index_name, :trades, :trust_score
+  attr_reader :tradePoint, :index_name, :trades
+  include TrustHolder
+  include Trustee
   
   def initialize(name, index, desc, ownerPoint)      
     super(name, desc, ownerPoint.body) 
     @index_name = index
     ownerPoint.add_link([:trader], LocationPoint.new(self, :centre)) 
     @trades = []
-    @trust_list = []
-    @trust_score = 0
   end
-  
-  def trust(amount)
-    info "trust change #{amount} for #{to_s}"
-    @trust_score += amount
-    check_trust_bucket
+ 
+  def trades
+    check_trust_list
+    @trades
   end
-
+ 
   def add_sink_trade(item, trust = 0)
     trade = Trade.new(item, :sink, self)
     add_trade trade, trust
@@ -41,25 +40,20 @@ class Trader < SimpleBody
   end
   
   private
-  
-  def add_trade trade, trust
-    if trust <= @trust_score
+
+  def horizon trust, trade
+    if trust <= trust_score
       @trades << trade
-    else  
-      @trust_list << {:trust => trust, :trade => trade}
-    end 
+      info "#{trade.item} added to trades"
+      push_message thanks(trade), to_s
+      return true
+    end
+    
+    false
   end
   
-  def check_trust_bucket
-    @trust_list.each do | t |
-      if t[:trust] <= @trust_score
-        trade = t[:trade]
-        @trades << trade
-        info "#{trade.item} added to trades"
-        push_message thanks(trade), to_s
-        t[:trust] = 1000
-      end
-    end
+  def add_trade trade, trust
+    add_to_trust_list trust, trade
   end
   
   def thanks trade
