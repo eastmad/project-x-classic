@@ -7,20 +7,28 @@ class ActionLine
      set_stroke message.flavour 
      @origin = message.origin
      @line_type.contents[1].replace(message.make_string)
+     spaces = ""
+     txt =""
      if (message.flavour == :mail)
        @line_type.contents[0].underline = "single"
-       @line_type.contents[0].replace((@origin.nil?)? "": "                   mail from #{@origin}\n")  
+       txt = "mail from #{@origin}\n" unless @origin.nil?
+       (1..80).each {|d| spaces += ' '}
+       spaces = spaces[0,(spaces.size - txt.size)]
      elsif (message.flavour == :report)
        @line_type.contents[0].underline = "single"
-       @line_type.contents[0].replace((@origin.nil?)? "": "                     #{@origin}\n")    
+       txt = "#{@origin}\n" unless @origin.nil?
+       (1..80).each {|d| spaces += ' '}
+       spaces = spaces[0,(spaces.size - txt.size)]
      else
-       @line_type.contents[0].underline = "none"
-       @line_type.contents[0].replace((@origin.nil?)? "": @origin.cursor_str)  
-     end  
+      @line_type.contents[0].underline = "none"
+      txt = @origin.cursor_str unless @origin.nil?
+     end
+     
+     @line_type.contents[0].replace("#{spaces}#{txt}")
    end  
    
    def make_string
-     line_type.contents[1]
+     @line_type.contents[1]
    end
    
    def set_stroke flav
@@ -33,8 +41,14 @@ class ActionLine
        when :warn
          @line_type.stroke = rgb(255,150,150)
        when :mail
-         @line_type.stroke = rgb(180,180,250)
+         @line_type.stroke = rgb(100,200,150)
          @line_type.leading = 2
+         #@line_type.fill =
+       when :report
+         @line_type.stroke = rgb(100,200,150)
+         @line_type.leading = 2
+         #@line_type.fill = 
+  
        else
          @line_type.stroke = rgb(255,255,255)
       end
