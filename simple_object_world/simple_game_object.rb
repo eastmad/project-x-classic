@@ -187,16 +187,21 @@ class SpaceStation < CelestialObject
   def trades_page 
     ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
+    num = 0
     ret << "Consignments to go\n"    
     traders.each do | trader | 
       #ret << "#{trader.to_s}\n"
+      num += 1
       trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :source}
     end
     ret << "\nConsignments needed\n"
     traders.each do | trader | 
       #ret << "#{trader.to_s}\n"
+      num += 1
       trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :sink}
-    end 
+    end
+  
+    ret = nil if num = 0  
     
     ret
   end

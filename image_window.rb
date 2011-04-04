@@ -10,6 +10,7 @@ class ImageWindow
    :summarize => ["gifs/summarize.jpg"],
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
    :city => ["gifs/cityport.jpg"],
+   :ruinedcity => ["gifs/ruinedcity22.jpg"],
    :atmosphere => ["gifs/atmosphere.jpg"],
    :stationdocked =>["gifs/station-closeup.jpg"],
    :crates =>["gifs/crates.jpg"],
@@ -19,7 +20,7 @@ class ImageWindow
       :Planet => {:surface => :terre, :outer => :terre, :orbit => :terre, :atmosphere => :atmosphere, :Mars => :mars},
       :Star => {:outer => :solar_system},
       :SpaceStation=> {:surface => :stationdocked, :outer => :station},
-      :City => {:centre => :city, :Houston => :city}
+      :City => {:centre => :city, :Houston => :city, :Nicosia => :ruinedcity}
    }
 
    def self.find_id locPoint

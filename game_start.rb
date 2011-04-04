@@ -7,8 +7,11 @@ class GameStart
   Dictionary.add_discovered_proper_noun(earth.name, earth)
   mars = sol.planetFactory("Mars", "Known as the red planet")
   Dictionary.add_discovered_proper_noun(mars.name, mars)
-  station = earth.stationFactory("Sputnik", "One of the oldest space stations")
-  Dictionary.add_discovered_proper_noun(station.name, station)
+  sputnik = earth.stationFactory("Sputnik", "One of the oldest space stations")
+  Dictionary.add_discovered_proper_noun(sputnik.name, sputnik)
+  mall = earth.stationFactory("Trade1", "Modern trading space stations")
+  Dictionary.add_discovered_proper_noun(mall.name, mall)
+  
   houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continental America")
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = mars.cityFactory("Dundarach", "Only space port for Mars, sometimes refered to as Marsport")
@@ -18,8 +21,8 @@ class GameStart
   listeningPost = mars.structureFactory("Owl23", "Unknown structure")
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
-  trader = station.traderFactory("Buffet", :Industries, "Trading in ice cream components")
-  trader2 = station.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment") 
+  trader = mall.traderFactory("Buffet", :Industries, "Trading in ice cream components")
+  trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment") 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
   Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
@@ -50,7 +53,7 @@ class GameStart
   
   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
 
-  ship = ShipRegistry.register_ship("ProjectX",station.surfacePoint)
+  ship = ShipRegistry.register_ship("ProjectX",sputnik.surfacePoint)
   Dictionary.add_discovered_proper_noun(ship.name, nil) #should be an sgo
   ShipSystem.christen(ship)
   

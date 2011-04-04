@@ -38,7 +38,7 @@ class SystemTrade < ShipSystem
   def _browse(arg = nil)
     begin    
       station = @@ship.locationPoint.body
-      raise SystemsMessage.new("No trade channel found", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      raise SystemsMessage.new("A trade channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
       subj = arg || :trades      
 
@@ -50,7 +50,11 @@ class SystemTrade < ShipSystem
         para1 = station.trades_page
       end  
  
-      @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
+      if para1.nil?
+        @@rq.enq SystemsMessage.new("There is no trade activity", SystemTrade, :info)
+      else  
+        @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
+      end
       {:success => true, :media => :trade}
     rescue RuntimeError
       @@rq.enq ex
