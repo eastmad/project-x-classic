@@ -21,18 +21,18 @@ class GameStart
   trader = station.traderFactory("Buffet", :Industries, "Trading in ice cream components")
   trader2 = station.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment") 
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
-  Dictionary.add_discovered_subject(item.name, item)  
+  Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
   item = Item.new("choclate chips", "Confectionary additions", :commodity)
-  Dictionary.add_discovered_subject(item.name, item)  
+  Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
   item = Item.new("wafer cones", "Confectionary containers", :commodity)
-  Dictionary.add_discovered_subject(item.name, item)  
+  Dictionary.add_discovered_item(item.name, item)  
   trader2.add_source_trade(item)
   trader.add_sink_trade(item)
   
   eye = Item.new("horus eye", "Alien artifact, possibly of Martian origin", :unique, [:controlled, :alien])
-  Dictionary.add_discovered_subject(eye.name, eye)
+  Dictionary.add_discovered_item(eye.name, eye)
 
   trader2.add_source_trade(eye,1)
       

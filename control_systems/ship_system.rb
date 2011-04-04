@@ -72,9 +72,9 @@ class ShipSystem
    false
  end
  
- def self.is_subject?(word)   
+ def self.is_item?(word)   
    dic_entry = Dictionary.matching_word(word)
-   if !dic_entry.nil? and (dic_entry[:grammar] == :subject) 
+   if !dic_entry.nil? and (dic_entry[:grammar] == :item) 
       return true
    end
    
@@ -124,7 +124,7 @@ class ShipSystem
      if (@obj.nil?)
        @obj = ret
      end
-   elsif ShipSystem.is_subject?(word)
+   elsif ShipSystem.is_item?(word)
      if (@obj.nil?)
        @obj = ret
      end

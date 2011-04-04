@@ -57,7 +57,7 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
   Operation.register_op :status, :myself, 1
   Operation.register_op :read, :communication, 1
   Operation.register_op :accept, :trade, 1
-  Operation.register_op :fulfill, :trade, 1
+  Operation.register_op :give, :trade, 1
   Operation.register_op :browse, :trade, 1
   Operation.register_op :contact, :communication, 1
   Operation.register_op :view, :communication, 1
@@ -155,12 +155,12 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
         #if (message.flavour == :mail || message.flavour == :report)
         #  (7.downto 1).each {|n| @ap[n].line_type.hide}
         #else
-          @ap[0].set_line @old_top_message if (@ap[0].flavour == :mail || @ap[0].flavour == :report)
+        #  @ap[0].set_line @old_top_message if (@ap[0].flavour == :mail || @ap[0].flavour == :report)
           (7.downto 1).each do |n|
              @ap[n].line_type.show
              @ap[n].set_line @ap[n - 1]
           end
-          @old_top_message = message.dup
+        #  @old_top_message = message.dup
         #end
         @ap[0].set_line message        
       end

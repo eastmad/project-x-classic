@@ -11,11 +11,11 @@ class KeystrokeReader
             str.chop!
             state = :typing
          end           
-      elsif (k == ' ')
+      elsif (k == ' ' || k == :tab)
          state = :complete_me         
       elsif (k == "\n" or k == :enter)
          state = :done   
-      elsif (k == :f10)
+      elsif (k == :f10 || k == :escape)
           state = :exit
       elsif (k == :f11)
           state = :talk_test   

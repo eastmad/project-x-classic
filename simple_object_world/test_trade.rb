@@ -49,19 +49,19 @@ describe Trade do
     source_consignment.item.should == @coffee
   end
   
-  it "can't fulfill with wrong item" do
-    expect { @sink_trade.fulfill(@consignment_gold) }.to raise_error(RuntimeError, "Wrong item")
+  it "can't give with wrong item" do
+    expect { @sink_trade.give(@consignment_gold) }.to raise_error(RuntimeError, "Wrong item")
   end
   
   it "should be 1 trade" do
     @trader2.trades.count.should == 1
   end
   
-  context "after a fulfill" do
+  context "after a give" do
   
     before(:each) do
       @source_consignment = @source_trade.accept
-      @sink_trade.fulfill(@source_consignment)
+      @sink_trade.give(@source_consignment)
     end
   
     it "should increment trades as we get hidden trade" do
@@ -82,7 +82,7 @@ describe Trade do
     end
   
     it "cannot fulfill a fulfilled trade" do
-      expect { @sink_trade.fulfill(@source_consignment) }.to raise_error(RuntimeError, "Trade already fulfilled")
+      expect { @sink_trade.give(@source_consignment) }.to raise_error(RuntimeError, "Trade already fulfilled")
     end
   end
 end  

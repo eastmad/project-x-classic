@@ -65,7 +65,7 @@ class DisplayResponse
             paras[i].stroke = rgb(200,50,50)
          elsif (@complete_words[i][:grammar] == :proper_noun)
             paras[i].stroke = rgb(150,255,150)
-         elsif (@complete_words[i][:grammar] == :subject)
+         elsif (@complete_words[i][:grammar] == :item)
             paras[i].stroke = rgb(150,150,255)   
          else
             paras[i].stroke = rgb(255,255,100)

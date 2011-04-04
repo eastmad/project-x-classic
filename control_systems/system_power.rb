@@ -127,6 +127,8 @@ class SystemPower < ShipSystem
     begin
       raise SystemsMessage.new("Approach what? No target given.", SystemMyself, :info) if arg.nil?
       sgo = ShipSystem.find_sgo_from_name(arg)
+      raise SystemsMessage.new("Cannot locate target", SystemNavigation, :info) if sgo.nil?
+ 
       
       @@rq.enq @@ship.approach sgo   
         

@@ -6,7 +6,7 @@ class Dictionary
             {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
             {:word => :orbit, :grammar => :verb, :sys => :navigation},
             {:word => :accept, :grammar => :verb, :sys => :trade},
-            {:word => :fulfill, :grammar => :verb, :sys => :trade},
+            {:word => :give, :grammar => :verb, :sys => :trade},
             {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :undock, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
@@ -105,8 +105,8 @@ class Dictionary
      @@Words << {:word => str.to_sym, :grammar => :proper_noun, :sys =>:trade, :following => follow, :sgo => sgo}
    end
    
-   def self.add_discovered_subject(str, item)
-     @@Words << {:word => str.to_sym, :grammar => :subject, :sys =>:trade, :sgo => item}
+   def self.add_discovered_item(str, item)
+     @@Words << {:word => str.to_sym, :grammar => :item, :sys =>:trade, :sgo => item}
    end
    
    def self.add_system_nouns(sys)

@@ -21,7 +21,7 @@ class Trade
     Consignment.new(@item, @origin_trader)
   end
   
-  def fulfill (consignment)
+  def give (consignment)
     raise "Only a sink trade can be fulfilled" unless @trade_type == :sink
     raise "Trade already fulfilled" if @status == :fulfilled
     raise "Empty consignment" if consignment.amount <= 0

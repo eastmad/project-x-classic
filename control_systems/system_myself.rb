@@ -91,8 +91,8 @@ class SystemMyself < ShipSystem
       access the trade channel.
       
       Try 'browse' to list traders and trades.
-      Try 'accept trade for ' to take a consignment
-      Try 'fulfill trade for ' to give a consignment.
+      Try 'accept wafer cones' to take a consignment
+      Try 'give wafer cones' to give a consignment.
     END
 
     para1 = <<-END.gsub(/^ {6}/, '') if args == :navigation      

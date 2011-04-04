@@ -93,11 +93,11 @@ class SystemTrade < ShipSystem
     end
   end
   
-  def _fulfill(args = nil)
+  def _give(args = nil)
     begin    
      item = ShipSystem.find_sgo_from_name(@obj)
 
-     @@rq.enq @@ship.fulfill(item)
+     @@rq.enq @@ship.give(item)
      @@rq.enq SystemsMessage.new("Fulfilled request for #{@obj}", SystemTrade, :response)
      {:success => true, :media => :trade}
     rescue => ex
@@ -127,13 +127,13 @@ class SystemTrade < ShipSystem
       elsif (@subj.nil?)
         @subj = ShipSystem.make_proper_noun(word)
       end
-    elsif ShipSystem.is_subject?(word)
+    elsif ShipSystem.is_item?(word)
       if (@obj.nil?)
         @obj = word
       elsif (@subj.nil?)
         @subj = word
       end
-    elsif ShipSystem.is_subject?("#{word} #{@second_obj}")
+    elsif ShipSystem.is_item?("#{word} #{@second_obj}")
       
         @obj = "#{word} #{@second_obj}" if (@obj.nil?)
     else

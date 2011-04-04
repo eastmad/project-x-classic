@@ -69,7 +69,7 @@ JUMP = "Rift generator"
     SystemsMessage.new("#{DRIVE} engaged", SystemPower, :info)
   end
   
-  def approach(local_body)  
+  def approach(local_body)
     inside = @locationPoint.body == local_body
     
     if (@status != :sync) 
@@ -147,19 +147,16 @@ JUMP = "Rift generator"
     SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
   end
   
-  def fulfill(item)
-    info "fulfill"
-    raise SystemsMessage.new("You can only fulfill a contract at a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
-    info "at station"
+  def give(item)
+    raise SystemsMessage.new("You can only move cargo in a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
     raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
-    info "item #{item}"
     trade_sink = nil
     begin
       info "sink offered for #{@locationPoint.body}"
       trade_sink = @trade.sink_offered(@locationPoint.body, item)
       info "done"
     rescue
-      raise SystemsMessage.new("Cannot find sink for #{item}", SystemTrade, :info)
+      raise SystemsMessage.new("Cannot find anyone wanting #{item}", SystemTrade, :info)
     end
     raise SystemsMessage.new("No request for #{item} is asked for", SystemTrade, :info) if trade_sink.nil?
  
@@ -167,7 +164,7 @@ JUMP = "Rift generator"
  
     raise SystemsMessage.new("You have no consignment of #{item}", SystemTrade, :info) if consignment.nil?   
     
-    trade_sink.fulfill(consignment)
+    trade_sink.give(consignment)
     @trade.cargo.delete consignment
  
     SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
@@ -233,6 +230,7 @@ JUMP = "Rift generator"
      first_time = @locationPoint.body.visit
      
      if first_time
+       city = @locationPoint.body
        para1 = "#{city}\n\n"
        para1 << city.describe
        para1 << "\n- " << city.desc
