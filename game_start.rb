@@ -47,7 +47,6 @@ class GameStart
  If you want to know more about what's happening to Mars, talk to our contact on Earth.")
   pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Artifact trader", freemars, 1)
   pers.add_details(:interest => :alien, :talk => :war)
-  info "added #{pers}"
 
   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
   

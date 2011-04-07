@@ -80,7 +80,6 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
        
     keypress {|k|
       if k == :f1 
-        info "end it"
         @end_text_talk = true
       elsif k == :f2
         @count_rate = 20
@@ -189,7 +188,9 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
     keypress { |k|
       key_resp = KeystrokeReader.key_in(k,@dr.req_str)
       @dr.req_str = key_resp[:str]
-      @state = key_resp[:state]                   
+      
+      @state = key_resp[:state]
+      
       @dr.replace_req @arr
 
       if (@state == :exit)
@@ -233,7 +234,8 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
 
       if (@state == :done)                 
         begin
-          if @dr.fullCommand.size > 1            
+          if @dr.fullCommand.size > 1
+            info "Full command = #{@dr.fullCommand}"
             resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
  
             if (resp_hash[:success])
@@ -284,7 +286,6 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
     @backstack.show  
           
     str = LongText.txt txt_key
-    info "start timer"          
 
     @end_text_talk = false
     @count_rate = 1
@@ -293,7 +294,6 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
       @t.replace(str[0,count]) if count < str.length
       count += @count_rate
       if @end_text_talk
-        info "stop timer"
         @mainstack1.show
         @mainstack2.show
         @backstack.hide

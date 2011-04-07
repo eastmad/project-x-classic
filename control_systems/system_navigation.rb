@@ -22,6 +22,8 @@ class SystemNavigation < ShipSystem
       sgo = ShipSystem.find_sgo_from_name(@obj)          
       if (!sgo.nil?)
          @@rq.enq @@ship.set_heading sgo
+      else
+        raise SystemsMessage.new("No planet to plot a course to.", SystemNavigation, :info)
       end
       resp_hash = {:success => true, :media => :plot_course}
     rescue RuntimeError => ex 

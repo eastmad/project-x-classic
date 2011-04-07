@@ -9,7 +9,7 @@ class ShipSystem
  def self.command_parser command_str, rq
  
    command_verb = command_str.split.first
-   info "command_verb = #{command_verb}"
+   #info "command_verb = #{command_verb}"
    req_op = Operation.find_op(command_verb.to_sym)
    raise "No operation corresponds to command '#{command_verb}'" if req_op.nil? 
    
@@ -34,7 +34,7 @@ class ShipSystem
       processed_script += "_#{word} "
     end 
     
-    info "processed '#{processed_script}'"
+    #info "processed '#{processed_script}'"
     
     self.new.instance_eval(processed_script)     
     
@@ -109,13 +109,12 @@ class ShipSystem
    sys_string = "System#{sym.to_s.capitalize}"
    info "Sys string #{sys_string}"
    sys = Kernel.const_get(sys_string)
-   info "System found #{sys}"
    sys
  end
  
  def method_missing (methId, *args)      
    word = methId.id2name
-   info "(methId, *args) Call method missing:#{word} and #{args.length} "
+   #info "(methId, *args) Call method missing:#{word} and #{args.length} "
 
    ret = word.slice!(0)
    info "is #{word} proper noun?"

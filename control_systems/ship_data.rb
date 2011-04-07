@@ -152,9 +152,7 @@ JUMP = "Rift generator"
     raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
     trade_sink = nil
     begin
-      info "sink offered for #{@locationPoint.body}"
       trade_sink = @trade.sink_offered(@locationPoint.body, item)
-      info "done"
     rescue
       raise SystemsMessage.new("Cannot find anyone wanting #{item}", SystemTrade, :info)
     end

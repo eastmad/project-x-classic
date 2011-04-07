@@ -40,34 +40,27 @@ class ImplTrade
   end
   
   def sink_offered (station, item)
-  info "sink offered #{item}"
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
-info "traders =  #{traders.count}"
     traders.each do | trader | 
       trader.trades.each do |trade| 
-        info "sink_offered #{trade.item} == #{item} #{:sink} == #{trade.trade_type}"
         return trade if trade.item == item and trade.trade_type == :sink
        end
     end 
-info "sink_offered nil"
     nil
   end
   
   def find_consignment(item)
     @cargo.each do | consignment |
-    info "consignment #{consignment.item} == #{item}"
       return consignment if consignment.item == item
     end
   end
   
   def find_trade(type, item)
-    info "trades"
     @trades.each do | trade |
-      info "trade #{trade.item} == #{item} #{trade.trade_type} == #{type}"
       return trade if trade.item == item and trade.trade_type == type
     end
-    
-    info "no trade"
+
+    nil    
   end
 
 end

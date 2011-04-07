@@ -31,9 +31,7 @@ class GrammarTree
 
 
    def set_grammar(word)
-      info "set grammer for #{word}"
       last_name = @name_stack.last
-      info "last name was #{last_name}"
       
       pos = 0
       seen_last_name = false
@@ -43,8 +41,6 @@ class GrammarTree
          end
          if (@@grammars[pos][:grammar] == word and seen_last_name)
             @name_stack << @@grammars[pos][:name]
-            info "grammer #{@@grammars[pos][:name]}"
-            info "@name_stack #{@name_stack}"
             return true
          end
          pos += 1         
@@ -54,13 +50,10 @@ class GrammarTree
    end
    
    def next_filter
-      info "next filter grammar"
       last_name = @name_stack.last
-      info "last name was #{last_name}"
       
       @@grammars.each do | grammar|
          if grammar[:name] == last_name
-            info "selected was #{grammar[:branches]}"
             return grammar[:branches]
          end
       end      

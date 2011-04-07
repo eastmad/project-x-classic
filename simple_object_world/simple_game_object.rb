@@ -201,7 +201,7 @@ class SpaceStation < CelestialObject
       trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :sink}
     end
   
-    ret = nil if num = 0  
+    ret = nil if num == 0  
     
     ret
   end

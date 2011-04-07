@@ -27,12 +27,10 @@ class ImageWindow
       body = locPoint.body
       klassname = body.class.name.to_sym
       instance_name = body.name.to_sym
-info "klassname: #{klassname}, instance_name = #{instance_name}, loc = #{locPoint}"      
       sgo_hash = @@sgo[klassname]
       image_id = sgo_hash[instance_name]
       ret = sgo_hash[locPoint.band]
       ret = image_id unless image_id.nil?
-info "ret =  #{ret}"            
       ret
     end
 

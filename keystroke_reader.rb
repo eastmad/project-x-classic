@@ -4,7 +4,6 @@ class KeystrokeReader
       state = :empty
       
       if (k == :backspace)
-         info "keystroke str='#{str}', length = #{str.length}"
          if (str.length == 0)
             state = :delete
          else

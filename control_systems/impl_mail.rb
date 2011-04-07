@@ -15,7 +15,6 @@ class ImplMail
   
   def read_mail opts = {}
     opts ||= {}
-    info "mail show ops #{opts} and new = #{@new}"
     return nil if  opts[:position] == :new and @new == false
     
     mail = @mails.last
@@ -27,11 +26,8 @@ class ImplMail
     
     unless opts[:consume] == false
       @new = false
-      info "mail consume"
       mail.consume unless mail.nil?
     end
-      
-    info "mail done"
     
     @current = mail
   end

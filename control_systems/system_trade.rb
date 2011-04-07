@@ -121,7 +121,7 @@ class SystemTrade < ShipSystem
   
   def method_missing (methId, *args)      
     word = methId.id2name
-    info "(methId, *args, #{args[0]}) Call method missing:#{word} and #{args.length} "
+    #info "(methId, *args, #{args[0]}) Call method missing:#{word} and #{args.length} "
 
     word.slice!(0)
     info "is #{word} proper noun?"

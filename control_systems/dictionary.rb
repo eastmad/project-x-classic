@@ -66,7 +66,6 @@ class Dictionary
       
      @@Words.each do |k|
        if (k[:word].to_s == str)
-         info "#{k[:word]}, #{k[:word].to_s}, #{str}"
          res = k           
        end          
      end
@@ -77,8 +76,6 @@ class Dictionary
    def self.complete_me(str, filter, context)
      res = nil
      following = nil
-     
-     info "str = #{str}, context = #{context}"
             
      @@Words.each do |k|
        if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar]) and 

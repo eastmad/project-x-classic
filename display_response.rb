@@ -30,7 +30,6 @@ class DisplayResponse
       @current_word -= 1
       @req_grammar = @complete_words[@current_word][:grammar]
       @req_str = @complete_words[@current_word][:word].to_s            
-      info "Delete: current words = #{@current_word}, str=#{@req_str}, gr=#{@req_grammar}"
       return false
    end
    

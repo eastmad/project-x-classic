@@ -13,7 +13,6 @@ class ImplContact
     
     return true if interests.nil?
     
-  info "interest = #{interests}"   
     cargo.each do | consignment |
       if consignment.item.conditions.include? interests
         @meet_me[contact.name] = consignment

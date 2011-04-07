@@ -102,7 +102,6 @@ class City < SimpleBody
    def first_visit_trigger
       @visit_triggers.each do | trig |
          trig[:org].trust(trig[:amount])
-         info "mail id = #{trig[:mail]}, message #{trig[:org].get_message(trig[:mail])}" unless trig[:mail].nil?
          push_message(trig[:org].get_message(trig[:mail]), trig[:org]) unless trig[:mail].nil?
       end
    end
