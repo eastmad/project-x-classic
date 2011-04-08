@@ -60,5 +60,30 @@ class GameStart
   
   ship
  end
+ 
+ def self.welcome
+  poop =  window(:title => "Welcome to Project-X", :width => 500, :height => 300)  do
+    background black
+    stack do
+      
+      flow {
+        caption strong("You are in control of the small vessel, project-x.\nWhatever you are looking for, it isn't in this solar system."), :stroke => white, :align => "center"
+      }
+      flow { 
+        para "\nYou start docked in an old space station.\n", :stroke => white, :align => "center"
+      }
+      flow {
+        para "- The first command to try is probably 'launch'\n", :stroke => azure
+        para "- Try 'summarize' and 'help' to find out more commands\n", :stroke => azure
+        para "- Type space or tab to complete any command\n", :stroke => azure
+      }
+      flow{
+        button(:right => 10, :text =>  "Start") do
+          poop.close
+        end
+      }
+    end
+  end
+ end 
 
 end

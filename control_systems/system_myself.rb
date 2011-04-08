@@ -120,11 +120,20 @@ class SystemMyself < ShipSystem
       
       Read mail or check contacts on a city.
       
-      Try 'contact' to check contacts in a city
+      Try 'view contacts' to check contacts in a city
       Try 'contact Nordstrum' to contact a contact.
       Try 'meet Nordstrum' to meet after initial contact.
+      Try 'read mail'.
     END
 
+    para1 = <<-END.gsub(/^ {6}/, '') if args == :mail
+      
+      Read current mail, or earlier ones.
+      
+      Try 'read mail' to read current or unread mail
+      Try 'read first' to start reading from first entry.
+      Try 'read next' to read next mail.
+    END
     
     @@rq.enq SystemsMessage.new(para1, "help with #{args}", :report)
    

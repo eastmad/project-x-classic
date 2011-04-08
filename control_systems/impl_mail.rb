@@ -17,12 +17,15 @@ class ImplMail
     opts ||= {}
     return nil if  opts[:position] == :new and @new == false
     
-    mail = @mails.last
     mail = @mails.first if opts[:position] == :first
     if opts[:direction] == :next
-      index = mails.index(@current)
-      mail = mails[index + 1]
-    end  
+      index = @mails.index(@current)
+      mail = @mails[index + 1]
+    elsif opts[:direction] == :prev
+      index = @mails.index(@current)
+      mail = @mails[index - 1]
+    end
+    mail = @mails.last if mail.nil? 
     
     unless opts[:consume] == false
       @new = false

@@ -50,6 +50,8 @@ class Dictionary
             {:word => :on, :grammar => :preposition},
             
             {:word => :nearest, :grammar => :adjective},
+            {:word => :previous, :grammar => :adjective},
+            {:word => :next, :grammar => :adjective},
             {:word => :enemy, :grammar => :adjective},
             {:word => :friendly, :grammar => :adjective},
             {:word => :first, :grammar => :adjective},

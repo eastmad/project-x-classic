@@ -69,6 +69,8 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
   
+  GameStart.welcome
+  
   @backstack = stack(:hidden => true){
     flow(:width => 976) {
       image "gifs/contact.jpg"
