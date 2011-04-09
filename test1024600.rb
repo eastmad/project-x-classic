@@ -35,7 +35,7 @@ require "control_systems/system_library"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
+Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   
   background rgb(20, 42, 42)
   stroke white
@@ -122,7 +122,7 @@ Shoes.app(:width => 1024, :height => 600, :title => "ProjectX") {
       }
     }
 
-    @iconstack.move(0,parent.height - 260)
+    @iconstack.move(0,parent.height - 200)
   }
 
   @mainstack2 = stack(:width => 615)  {  
