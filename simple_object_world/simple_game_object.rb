@@ -232,13 +232,14 @@ end
 
 class SmallStructure < CelestialObject
   include TrustHolder
-  attr_reader :damage_rating
+  attr_reader :damage_rating, :status
   
   def initialize(name, desc, ownerPoint)      
     super(name, desc, ownerPoint.body)
 
     @centrePoint = LocationPoint.new(self, :centre)   
-    ownerPoint.add_link([:satellite], @centrePoint)      
+    ownerPoint.add_link([:satellite], @centrePoint)
+    @status = :normal
   end
 
   def status_word(status, band)
