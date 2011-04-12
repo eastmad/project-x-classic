@@ -8,12 +8,12 @@ describe ImplWeapon do
   
   before :each do
     @impl = ImplWeapon.new 2
-    @torpedo1 = mock "GovTorpedo", :yield => 4
+    @torpedo1 = mock "GovTorpedo", :yield => 2
     @torpedo2 = mock "WeakTorpedo", :yield => 3
     @torpedo3 = mock "BigTorpedo", :yield => 4
     @torpedo4 = mock "BiggerTorpedo", :yield => 5
-    @torpedoclass1 = mock "GovTorpedoClass", :new => @torpedo1
-    @torpedoclass2 = mock "WeakTorpedoClass", :new => @torpedo2
+    @torpedoclass1 = mock "GovTorpedoClass", :new => @torpedo1, :yield => 2
+    @torpedoclass2 = mock "WeakTorpedoClass", :new => @torpedo2, :yield => 3
     @torpedoclass3 = mock "BigTorpedoClass", :new => @torpedo3
     @torpedoclass4 = mock "BiggerTorpedoClass", :new => @torpedo4
   end
@@ -64,7 +64,7 @@ describe ImplWeapon do
     
     it "torpedoe consumed when fired" do
       result = @impl.destroy @target
-      @impl_torpedoes == 1
+      @impl.torpedoes.size.should == 1
     end
 
   end
@@ -83,10 +83,40 @@ describe ImplWeapon do
     
     it "torpedoe consumed when fired" do
       result = @impl.destroy @target
-      @impl_torpedoes == 1
+      @impl.torpedoes.size.should == 1
     end
 
   end
 
-  
+  context "When loading missiles" do
+    it "should load missiles to max" do
+      @impl.load_torpedo(@torpedoclass1)
+      @impl.torpedoes.size.should == 2
+    end
+    
+    it "should replace inferior missiles" do
+      @impl.load_torpedo(@torpedoclass1)
+      @impl.load_torpedo(@torpedoclass2)
+      @impl.torpedoes[0].yield.should == 3
+      @impl.torpedoes[1].yield.should == 3
+    end
+    
+    it "should not replace superior missiles" do
+      @impl.load_torpedo(@torpedoclass2)
+      @impl.load_torpedo(@torpedoclass1)
+      @impl.torpedoes[0].yield.should == 3
+      @impl.torpedoes[1].yield.should == 3
+    end
+    
+    it "will add if needed" do
+      @impl.load_torpedo(@torpedoclass2)
+      @target = mock "SmallStructure", :kind_of? => true, :damage_rating => 4, :status => :normal
+      @impl.destroy @target
+      #@target.should_receive(:status=).with(:disabled)
+      
+      @impl.load_torpedo(@torpedoclass1)
+      @impl.torpedoes[0].yield.should == 3
+      @impl.torpedoes[1].yield.should == 2
+    end
+  end
 end

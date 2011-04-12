@@ -1,5 +1,7 @@
 class ImplWeapon
 
+  attr_reader :torpedoes
+
   def initialize max
     @torpedoes = []
     @max_torpedoes = max
@@ -33,7 +35,8 @@ class ImplWeapon
     raise "No torpedo with appropriate yield loaded" if torpedo.nil?
      
     outcome = torpedo.yield - target.damage_rating
-    @torpedoes.delete torpedo
+    ind = @torpedoes.index(torpedo)
+    @torpedoes.delete_at ind
    
     if outcome >= 0
       target.status = :disabled if outcome == 0
