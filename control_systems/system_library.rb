@@ -12,7 +12,7 @@ class SystemLibrary < ShipSystem
         para1 = "#{sgo}\n\n"
         para1 << sgo.describe
         para1 << "\n- " << sgo.desc
-        para1 << "\n- " << sgo.describe_owns
+        para1 << "\n- " << sgo.describe_owns if sgo.respond_to? :describe_owns
         para1 << "\n\n(Type 'describe Mars' to find information about any catalogued object)" if @obj.nil?
   
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)

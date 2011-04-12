@@ -36,26 +36,20 @@ class City < SimpleBody
    end
    
    def describe_contacts
-      para1 = "Contacts in #{@name}\n"
       con = contacts
+      para1 = ""
       con.each do | contact |
-         para1 << "-#{contact}; #{contact.desc}" 
+         para1 << "#{contact}; #{@name} - #{contact.desc}" 
+      end
+      
+      if @new_contact
+        para1 << "\n>>UPDATED<<"
+        @new_contact = false
       end
       
       para1
    end
-   
-   def describe_owns
-      str = "No known contacts"
-      str = "Known contacts are #{contacts.join(', ')}" unless contacts.empty?
-      if @new_contact
-         str << "\n>>UPDATED<<"
-         @new_contact = false
-      end
-      
-      str
-   end
-   
+     
    def welcome
      "The city port of #{@name} welcomes your visit."
    end

@@ -45,7 +45,7 @@ class GameStart
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
  If you want to know more about what's happening to Mars, talk to our contact on Earth.")
-  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Artifact trader", freemars, 1)
+  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Alien artifact trader", freemars, 0)
   pers.add_details(:interest => :alien, :talk => :war)
 
   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)

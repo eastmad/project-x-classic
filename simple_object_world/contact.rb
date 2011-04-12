@@ -17,8 +17,12 @@ class Contact < SimpleBody
     "#{@title} #{@name}"
   end
   
-  def ppnoun
+  def he_or_she
     (@gender == :m)? "he" : "she"
+  end
+  
+  def him_or_her
+    (@gender == :m)? "him" : "her"
   end
   
 end

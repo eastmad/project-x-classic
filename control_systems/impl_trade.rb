@@ -1,5 +1,5 @@
 class ImplTrade
-  attr_reader :cargo 
+  attr_accessor :cargo 
    
   def initialize
     @cargo = [] 

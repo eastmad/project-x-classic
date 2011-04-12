@@ -105,6 +105,15 @@ class Planet < CelestialObject
    end
   
    
+  def describe_contacts
+    cities = @atmospherePoint.find_linked_location(:city).collect{|cityPoint| cityPoint.body}
+    
+    para1 = ""
+    cities.each {|city| para1 <<  city.describe_contacts}
+  
+    para1
+  end
+   
    def describe_owns 
        ret = "No orbiting bodies"
        satellites = owns.collect{|locPoint| locPoint.body}

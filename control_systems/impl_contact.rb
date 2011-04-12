@@ -1,10 +1,9 @@
 class ImplContact
-  attr_reader :meet_me
+  attr_reader :contacts
   
   def initialize
-    @meet_me = {}
+    @contacts = {}
   end
-  
     
   #check for the first consignment that matches interest
   #most likely should check for a unique, then rare.
@@ -15,7 +14,10 @@ class ImplContact
     
     cargo.each do | consignment |
       if consignment.item.conditions.include? interests
-        @meet_me[contact.name] = consignment
+        contact_hash = @contacts[contact.name] unless @contacts.empty?
+        contact_hash = {} if contact_hash.nil?
+        contact_hash[:consignment] = consignment
+        @contacts[contact.name] = contact_hash
         return true
       end  
     end

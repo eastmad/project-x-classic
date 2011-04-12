@@ -6,40 +6,41 @@ class SystemCommunication < ShipSystem
   
   def _view(args = nil)
     
-    sgo = ShipSystem.find_sgo_from_name(args) unless args.nil?
+    sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
     
     #default to contacts in current city
-    sgo = @@ship.locationPoint.body if sgo.nil? 
-    
-    if sgo.kind_of? City  
+    sgo = @@ship.locationPoint.body.root_body if sgo.nil? 
+    para1 = "Contacts\n\n"
+    if sgo.kind_of? City or sgo.kind_of? Planet  
       para1 = sgo.describe_contacts
+    else
+      planets = sgo.owns.collect{|locPoint| locPoint.body}
+      planets.each {|planet| para1 << planet.describe_contacts}
+    end
     
+    if para1.empty?
+      @@rq.enq SystemsMessage.new("No known contacts", SystemCommunication, :info)
+    else
       para1 << "\n\nType 'contact person' to arrange a meeting"
       @@rq.enq SystemsMessage.new(para1, SystemCommunication, :report)
-    else
-      @@rq.enq SystemsMessage.new("No contact information available", SystemCommunication, :info)     
     end
-  
     {:success => false}
   end
  
   def _contact(args = nil)
     begin
       
-      if args.nil?
-        city = @@ship.locationPoint.body
-        @@rq.enq SystemsMessage.new(city.describe_owns, SystemCommunication, :info) if city.kind_of? City
-      else
-        sgo = ShipSystem.find_sgo_from_name(args)
+      raise SystemsMessage.new("Contact who?", SystemCommunication, :response_bad) if args.nil?
+      
+      sgo = ShipSystem.find_sgo_from_name(args)
     
-        @@rq.enq @@ship.contact(sgo)
-      end
-
+      @@rq.enq @@ship.contact(sgo)
+      
       {:success => true}
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Cannot contact '#{args}'. Type 'view contacts' for known contacts.", SystemCommunication, :response_bad)
+      @@rq.enq SystemsMessage.new("Type 'view contacts' for known contacts.", SystemCommunication, :info)
       {:success => false}
     end  
   end
@@ -50,15 +51,15 @@ class SystemCommunication < ShipSystem
       raise SystemsMessage.new("Meet who?", SystemCommunication, :response_bad) if args.nil?
       
       sgo = ShipSystem.find_sgo_from_name(args)
-      talk = nil
-      talk = sgo.details[:talk] if sgo.kind_of? Contact
     
       @@rq.enq @@ship.meet(sgo)
+      talk = sgo.details[:talk]
 
       {:success => true, :talk => talk}
     rescue => ex
+      info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Cannot arrange to meet. Check a city's description for known contacts.", SystemCommunication, :response_bad)
+      @@rq.enq SystemsMessage.new("Type 'view contacts' for known contacts.", SystemCommunication, :info)
       {:success => false}
     end  
 

@@ -176,37 +176,41 @@ JUMP = "Rift generator"
    raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
     
    #check @meet.meet_me[name] for an entry
-   he_or_she = person.ppnoun.capitalize
-   mes = "#{person} doesn't want to meet you. You may not have anything #{he_or_she} wants."
-   if @contact.meet_me[person.name]
+   mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
+   
+   unless @contact.contacts.empty? or @contact.contacts[person.name].nil?
      #take into account no interest
-     mes = "#{person} has already agreed to meet you. #{he_or_she} is interested in #{@contact.meet_me[person.name]}"
+     mes = "#{person} has already agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@contact.contacts[person.name][:consignment]}"
    else
-     mes = "#{person} has agreed to meet you. #{he_or_she} is interested in #{@contact.meet_me[person.name]}" if @contact.check_cargo(person, @trade.cargo)
+     mes = "#{person} has agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@contact.contacts[person.name][:consignment]}" if @contact.check_cargo(person, @trade.cargo)
    end
    
-   SystemsMessage.new(mes, SystemCommunication, :info)
+   SystemsMessage.new(mes, SystemCommunication, :response)
  end
  
   def meet(person)
-    raise SystemsMessage.new("You can only meet contacts in a city.", SystemCommunication, :info) unless @locationPoint.body.kind_of? City
-    raise SystemsMessage.new("You can only meet a person.", SystemCommunication, :info) unless person.kind_of? Contact
+    raise SystemsMessage.new("You can only meet contacts in a city.", SystemCommunication, :response_bad) unless @locationPoint.body.kind_of? City
+    raise SystemsMessage.new("You can only meet a person.", SystemCommunication, :response_bad) unless person.kind_of? Contact
   
     #check @meet.meet_me[name] for an entry
-    he_or_she = person.ppnoun.capitalize
-    mes = "#{person} doesn't want to meet you. You may not have anything #{he_or_she} wants."
-    if @contact.meet_me[person.name]
-      consignment = @contact.meet_me[person.name]
-      talk = person.details[:talk]
-      #automatic increase of trust
-      person.org.trust(1)
-    else
-      #take the consignment
-      #take into account no interest
-      mes = "#{person} has not agreed to meet you. Contact #{he_or_she} first." 
-     end
     
-    SystemsMessage.new("You met #{person}", SystemCommunication, :info)
+    unless @contact.contacts.empty? or @contact.contacts[person.name].nil?
+      consignment = @contact.contacts[person.name][:consignment]
+      unless @contact.contacts[person.name][:met]
+        @trade.cargo.delete consignment
+        #automatic increase of trust
+        person.org.trust(1)
+      end  
+      @contact.contacts[person.name][:met] = true
+    else
+      info "Can't meet #{person}"
+      #take into account no interest
+      mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
+      mes =  "#{person} has not agreed to meet you. Contact #{person.him_or_her} first." unless @contact.contacts[person.name]
+      raise SystemsMessage.new(mes, SystemCommunication, :response_bad) 
+    end
+    
+    SystemsMessage.new("You met #{person}", SystemCommunication, :response)
   end
              
  def land(city)
@@ -232,7 +236,6 @@ JUMP = "Rift generator"
        para1 = "#{city}\n\n"
        para1 << city.describe
        para1 << "\n- " << city.desc
-       para1 << "\n- " << city.describe_owns
        para1 << "\n\n(Type 'describe #{city}' to see this)" 
  
        return SystemsMessage.new(para1, SystemLibrary, :report)
