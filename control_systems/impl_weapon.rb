@@ -21,6 +21,7 @@ class ImplWeapon
 
   def destroy target
     raise "Not a structure this weapon can target" unless target.kind_of? SmallStructure
+    raise "Structure has insufficient integrity to target" if target.status == :destroyed 
     raise "No torpedoes loaded" unless @torpedoes.size > 0
     
     #select torpedo
@@ -36,7 +37,7 @@ class ImplWeapon
    
     if outcome >= 0
       target.status = :disabled if outcome == 0
-      target.status = :destroyed if outcome >= 0
+      target.status = :destroyed if outcome > 0
     end
     
     return outcome
