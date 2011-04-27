@@ -1,20 +1,42 @@
 class SystemWeapon < ShipSystem
   Operation.register_sys(:weapon)  
+  
+  def _destroy(arg = nil)
+    begin
+      sgo = ShipSystem.find_sgo_from_name(arg)
+      @@rq.enq @@ship.destroy(sgo)
+      {:success => true}
+    rescue => ex
+      @@rq.enq ex
+      {:success => false}
+    end
+  end
+  
+  def _load(arg = nil)
+    begin
+      @@rq.enq @@ship.load_torpedoes
+      {:success => true}
+    rescue => ex
+      @@rq.enq ex
+      {:success => false}
+    end
+  end  
+  
   def _fire(arg = nil)     
-   #info "Call fire"
+    #info "Call fire"
       
-   begin
-     ret = "#{@subj} fired at #{@adj} #{@obj}" 
-     resp_hash = {:str => ret, :success => true, :media => :travel}
-   rescue RuntimeError => ex 
-     resp_hash = {:str => ex, :success => false}
-   end      
+    begin
+      ret = "#{@subj} fired at #{@adj} #{@obj}" 
+      resp_hash = {:str => ret, :success => true, :media => :travel}
+    rescue RuntimeError => ex 
+      resp_hash = {:str => ex, :success => false}
+    end      
           
-   return resp_hash 
+    return resp_hash 
   end   
 
   def _torpedo(arg = nil)     
-   @subj = "torpedo" 
+   :torpedo 
   end   
   
   def _missile(arg = nil)        
@@ -36,15 +58,21 @@ class SystemWeapon < ShipSystem
   def _enemy(arg = nil)     
    @adj = "enemy"
   end 
-      
-  def initialize
-  end
    
-  def to_s
+  def self.to_s
       "Weapon system online"
   end
   
   def self.cursor_str
     "weapons:"
   end
+  
+  def self.status
+    para1 = <<-END.gsub(/^ {4}/, '')
+      Weapon system status      
+      -#{@@ship.weapons.torpedoes.size} torpedoes loaded.
+    END
+    @@rq.enq SystemsMessage.new(para1, SystemWeapon, :response)
+  end
+
 end

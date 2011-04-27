@@ -96,8 +96,8 @@ class Planet < CelestialObject
       SpaceStation.new(name, desc, @orbitPoint)
    end
    
-   def structureFactory(name, desc)
-      SmallStructure.new(name, desc, @orbitPoint)
+   def structureFactory(name, desc, toughness)
+      SmallStructure.new(name, desc, @orbitPoint, toughness)
    end
    
    def cityFactory(name, desc)
@@ -182,14 +182,21 @@ class SpaceStation < CelestialObject
     Trader.new(name, index, desc, @centrePoint)
   end
   
+  def garageFactory(name, index,  desc)
+    Garage.new(name, index, desc, @centrePoint)
+  end
+  
   def describe
     "#{@name} is a satellite of #{@owning_body.name}"
   end
 
   def describe_owns 
-    ret = "No trading companies"
+    ret = "No trading or ship services companies"
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
-    ret = "The trading companies are #{traders.join(', ')}" unless traders.empty? 
+    garages = @centrePoint.find_linked_location(:garage).collect{|traderPoint| traderPoint.body}
+
+    ret = "The trading companies are #{traders.join(', ')}" unless traders.empty?
+    ret = "Ship services by #{garages.join(', ')}" unless garages.empty?
     ret
   end
   
@@ -214,6 +221,22 @@ class SpaceStation < CelestialObject
     
     ret
   end
+  
+  def services_page 
+    ret = ""
+    garages = @centrePoint.find_linked_location(:garage).collect{|traderPoint| traderPoint.body}
+    num = 0
+    ret << "Ship services\n"    
+    garages.each do | garage | 
+      #ret << "#{trader.to_s}\n"
+      num += 1
+      garage.services.each { |service| ret << "-#{service.type} (#{garage.name} #{garage.index_name})\n"}
+    end
+    
+    ret = nil if num == 0  
+    
+    ret
+  end
    
   def traders_page 
     ret = ""
@@ -225,21 +248,33 @@ class SpaceStation < CelestialObject
     ret
   end
   
+  def garages_page 
+    ret = ""
+    garages = @centrePoint.find_linked_location(:garage).collect{|traderPoint| traderPoint.body}
+    garages.each do | garage | 
+      ret << "\n-#{garage.name} #{garage.index_name}\n#{garage.desc}\n" 
+    end
+    
+    ret
+  end
+  
   def welcome
-    "The trade station #{@name} welcomes your visit. Browse channel open."
+    "The space station #{@name} welcomes your visit. Browse channel open."
   end
 end
 
 class SmallStructure < CelestialObject
   include TrustHolder
-  attr_reader :damage_rating, :status
+  attr_reader :damage_rating
+  attr_accessor :status
   
-  def initialize(name, desc, ownerPoint)      
+  def initialize(name, desc, ownerPoint, toughness)      
     super(name, desc, ownerPoint.body)
 
     @centrePoint = LocationPoint.new(self, :centre)   
     ownerPoint.add_link([:satellite], @centrePoint)
     @status = :normal
+    @damage_rating = toughness
   end
 
   def status_word(status, band)
@@ -263,8 +298,13 @@ class SmallStructure < CelestialObject
     "#{@name} is a satellite of #{@owning_body.name}"
   end
   
-  def describe_owns 
-    "Low armour, and no active shielding"  
+  def describe_owns
+    armour = "No amour"
+    armour = "Standard amour" if @damage_rating == 2
+    armour = "Strong amour and shielding" if @damage_rating >= 2
+    armour = "Damaged - no longer functional" if @status == :disabled
+    armour = "Totally wrecked - dead" if @status == :destroyed
+    "#{armour}"  
   end
   
   def add_updated_desc trust, desc, trustee

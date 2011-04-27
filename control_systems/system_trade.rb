@@ -46,8 +46,17 @@ class SystemTrade < ShipSystem
         para1 = sgo.describe      
       elsif (subj == :trader)
         para1 = station.traders_page
+      elsif (subj == :garage)
+        para1 = station.services_page  
       elsif (subj == :trades)
-        para1 = station.trades_page
+        str1 = station.trades_page
+        str2 = station.services_page
+        para1 = str1
+        unless str1.nil?          
+          para1 = para1 + str2 unless str2.nil?
+        else
+          para1 = str2
+        end        
       end  
  
       if para1.nil?
@@ -84,11 +93,12 @@ class SystemTrade < ShipSystem
   end
    
   def _accept(args = nil)
-    begin    
+    begin
       item = ShipSystem.find_sgo_from_name(@obj)
      
       @@rq.enq @@ship.accept(item)
       @@rq.enq SystemsMessage.new("Accepted consignment of #{@obj}", SystemTrade, :response)
+      
       {:success => true, :media => :trade}
     rescue => ex
       @@rq.enq ex

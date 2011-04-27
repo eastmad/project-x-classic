@@ -1,11 +1,12 @@
-require "#{File.dirname(__FILE__)}/impl_security"
-require "#{File.dirname(__FILE__)}/impl_trade"
-require "#{File.dirname(__FILE__)}/impl_help"
-require "#{File.dirname(__FILE__)}/impl_mail"
-require "#{File.dirname(__FILE__)}/impl_contact"
+require_relative "impl_security"
+require_relative "impl_trade"
+require_relative "impl_help"
+require_relative "impl_mail"
+require_relative "impl_contact"
+require_relative "impl_weapon"
 
 class ShipData
-attr_reader :name, :locationPoint, :status, :headingPoint   
+attr_reader :name, :locationPoint, :status, :headingPoint, :weapons   
  
  
 THRUSTERS = "Plasma thrusters"
@@ -23,6 +24,7 @@ JUMP = "Rift generator"
     @help = ImplHelp.new
     @mail = ImplMail.new
     @contact = ImplContact.new
+    @weapons = ImplWeapon.new 2
   end
  
   def push_mail(txt, from)
@@ -147,6 +149,20 @@ JUMP = "Rift generator"
     SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
   end
   
+  def load_torpedoes
+info "load torps"
+    raise SystemsMessage.new("You can only get ship services at a space station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
+    #raise SystemsMessage.new("Cannot find any services offering torpedoes", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
+info "check services offered"
+    service = @trade.service_module_offered(@locationPoint.body, Torpedo.type)
+info "offered #{service}"
+    raise SystemsMessage.new("No source of service on offer", SystemTrade, :info) if service.nil?
+
+    @weapons.load_torpedoes service
+info "loaded"    
+    SystemsMessage.new("Torpedoes loaded", SystemTrade, :info)  
+  end
+  
   def give(item)
     raise SystemsMessage.new("You can only move cargo in a trade station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
     raise SystemsMessage.new("Cannot find any tradable item", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
@@ -246,6 +262,20 @@ JUMP = "Rift generator"
      raise SystemsMessage.new("Cannot land on #{target_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
    end   
  end
+ 
+  def destroy target
+    begin
+info "target income = #{target}"
+      outcome = @weapons.destroy target
+info "weapons outcome = #{outcome}"
+      mes = "Target destroyed." if outcome > 0
+      mes = "Target disabled." if outcome == 0
+      mes = "Target untouched." if outcome < 0
+      SystemsMessage.new(mes, SystemWeapon, :info)
+    rescue => ex
+      raise SystemsMessage.new(ex, SystemWeapon, :info)  
+    end  
+  end
      
   def release_docking_clamp()
     ret = "Docking clamps are open"

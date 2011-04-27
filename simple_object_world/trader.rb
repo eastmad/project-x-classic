@@ -74,3 +74,34 @@ class Trader < SimpleBody
     para1
   end
 end
+
+class Garage < SimpleBody
+  attr_reader :tradePoint, :index_name, :services 
+  
+  def initialize(name, index, desc, ownerPoint)      
+    super(name, desc, ownerPoint.body) 
+    @index_name = index
+    ownerPoint.add_link([:garage], LocationPoint.new(self, :centre))
+    @services = []
+  end
+  
+  #we will assume a torpedo for now
+  def add_service_module torpedoClass
+    @services << torpedoClass
+  end
+     
+  def describe
+    "#{to_s} is a service garage in satellite #{@owning_body.name}"
+  end
+
+  def describe_owns
+    ret = "No services"
+    ret = "Services:\n #{@services.join('\n ')}" unless services.empty? 
+    ret
+  end
+  
+  def to_s
+   "#{@name} #{@index_name}"
+  end
+  
+end

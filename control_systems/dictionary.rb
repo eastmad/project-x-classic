@@ -3,6 +3,8 @@ class Dictionary
             {:word => :approach, :grammar => :verb, :sys => :power},
             {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :launch, :grammar => :verb, :sys => :power},
+            {:word => :destroy, :grammar => :verb, :sys => :weapon},
+            {:word => :load, :grammar => :verb, :sys => :weapon},
             {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
             {:word => :orbit, :grammar => :verb, :sys => :navigation},
             {:word => :accept, :grammar => :verb, :sys => :trade},
@@ -59,6 +61,7 @@ class Dictionary
             
             {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
             {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade},
+            {:word => :Garages, :grammar => :proper_noun, :sys => :trade},
       ]   
       
    @@shipname = "ship"    

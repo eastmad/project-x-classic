@@ -7,13 +7,16 @@ class ImplWeapon
     @max_torpedoes = max
   end
   
-  def load_torpedo munition_class
-    remove_these = @torpedoes.select do |torp|
-      torp.yield < munition_class.yield
-    end
+  def load_torpedoes munition_class
     
-    remove_these.each do |torp|
-      @torpedoes.delete torp
+    unless @torpedoes.empty?
+      remove_these = @torpedoes.select do |torp|
+        torp.yield < munition_class.yield
+      end
+      
+      remove_these.each do |torp|
+        @torpedoes.delete torp
+      end    
     end
     
     while @torpedoes.size < @max_torpedoes
@@ -46,4 +49,24 @@ class ImplWeapon
     return outcome
   end
   
+end
+
+class Torpedo
+  
+  def yield()
+    3
+  end
+  
+  def self.yield
+    3
+  end
+  
+  def self.type
+    :torpedo
+  end
+  
+  def to_s
+    "Basic Torpedo"
+  end
+ 
 end

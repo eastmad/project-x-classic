@@ -39,6 +39,15 @@ class ImplTrade
     nil
   end
   
+  def service_module_offered (station, type)
+    garages = station.centrePoint.find_linked_location(:garage).collect{|traderPoint| traderPoint.body}
+    garages.each do | garage |
+      garage.services.each { |service| return service if service.type == type}
+    end 
+    
+    nil
+  end
+  
   def sink_offered (station, item)
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     traders.each do | trader | 

@@ -16,7 +16,8 @@ class SystemMyself < ShipSystem
       sys.status
     
       {:success => true}
-    rescue
+    rescue => ex
+      info "whoops #{ex}"
       @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
       {:success => false}
     end
@@ -36,6 +37,14 @@ class SystemMyself < ShipSystem
   
   def _communication(args = nil)
     :communication
+  end
+  
+  def _weapon(args = nil)
+    :weapon
+  end
+
+  def _library(args = nil)
+    :library
   end
 
   def _suggest(args = nil)

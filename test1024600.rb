@@ -65,6 +65,10 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :suggest, :myself, 1
   Operation.register_op :manifest, :trade, 1
   Operation.register_op :bay, :trade, 1
+  Operation.register_op :destroy, :weapon, 1
+  Operation.register_op :load, :weapon, 1
+
+ 
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]

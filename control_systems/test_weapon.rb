@@ -39,7 +39,7 @@ describe ImplWeapon do
   
   context "Insufficient damage" do
     before :each do
-      @impl.load_torpedo(@torpedoclass2)
+      @impl.load_torpedoes(@torpedoclass2)
     end
  
     it "a weak torpedo hits, but does not destroy" do
@@ -52,7 +52,7 @@ describe ImplWeapon do
   
   context "When sufficient damage to disable" do
     before :each do
-      @impl.load_torpedo(@torpedoclass3)
+      @impl.load_torpedoes(@torpedoclass3)
       @target = mock "SmallStructure", :kind_of? => true, :damage_rating => 4, :status => :normal
       @target.should_receive(:status=).with(:disabled)
     end
@@ -71,7 +71,7 @@ describe ImplWeapon do
   
   context "when sufficient damage to destroy" do
     before :each do
-      @impl.load_torpedo(@torpedoclass4)
+      @impl.load_torpedoes(@torpedoclass4)
       @target = mock "SmallStructure", :kind_of? => true, :damage_rating => 4, :status => :normal
       @target.should_receive(:status=).with(:destroyed)
     end
@@ -90,31 +90,33 @@ describe ImplWeapon do
 
   context "When loading missiles" do
     it "should load missiles to max" do
-      @impl.load_torpedo(@torpedoclass1)
+      @impl.load_torpedoes(@torpedoclass1)
       @impl.torpedoes.size.should == 2
+      @impl.torpedoes[0].yield.should == 2
+      @impl.torpedoes[1].yield.should == 2
     end
     
     it "should replace inferior missiles" do
-      @impl.load_torpedo(@torpedoclass1)
-      @impl.load_torpedo(@torpedoclass2)
+      @impl.load_torpedoes(@torpedoclass1)
+      @impl.load_torpedoes(@torpedoclass2)
       @impl.torpedoes[0].yield.should == 3
       @impl.torpedoes[1].yield.should == 3
     end
     
     it "should not replace superior missiles" do
-      @impl.load_torpedo(@torpedoclass2)
-      @impl.load_torpedo(@torpedoclass1)
+      @impl.load_torpedoes(@torpedoclass2)
+      @impl.load_torpedoes(@torpedoclass1)
       @impl.torpedoes[0].yield.should == 3
       @impl.torpedoes[1].yield.should == 3
     end
     
     it "will add if needed" do
-      @impl.load_torpedo(@torpedoclass2)
+      @impl.load_torpedoes(@torpedoclass2)
       @target = mock "SmallStructure", :kind_of? => true, :damage_rating => 4, :status => :normal
       @impl.destroy @target
       #@target.should_receive(:status=).with(:disabled)
       
-      @impl.load_torpedo(@torpedoclass1)
+      @impl.load_torpedoes(@torpedoclass1)
       @impl.torpedoes[0].yield.should == 3
       @impl.torpedoes[1].yield.should == 2
     end

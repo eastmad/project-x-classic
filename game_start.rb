@@ -7,22 +7,29 @@ class GameStart
   Dictionary.add_discovered_proper_noun(earth.name, earth)
   mars = sol.planetFactory("Mars", "Known as the red planet")
   Dictionary.add_discovered_proper_noun(mars.name, mars)
+  venus = sol.planetFactory("Venus", "Known for mining")
+  Dictionary.add_discovered_proper_noun(venus.name, venus)
+  listeningPost = mars.structureFactory("Owl23", "Unknown structure", 2)
+  Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
+
   sputnik = earth.stationFactory("Sputnik", "One of the oldest space stations")
   Dictionary.add_discovered_proper_noun(sputnik.name, sputnik)
-  mall = earth.stationFactory("Trade1", "Modern trading space stations")
+  mall = earth.stationFactory("OrbitalMall", "A Modern trading space stations")
   Dictionary.add_discovered_proper_noun(mall.name, mall)
+  servicestation = venus.stationFactory("ServiceShop", "A service station")
+  Dictionary.add_discovered_proper_noun(servicestation.name, servicestation)
   
   houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continental America")
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = mars.cityFactory("Dundarach", "Only space port for Mars, sometimes refered to as Marsport")
-  nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
+  nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
   Dictionary.add_discovered_proper_noun(nicosia.name, nicosia)
-  listeningPost = mars.structureFactory("Owl23", "Unknown structure")
-  Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
-
+  
   trader = mall.traderFactory("Buffet", :Industries, "Trading in ice cream components")
-  trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment") 
+  trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment")
+  #garage = servicestation.garageFactory("Minestar", :Garages, "Service garage")
+  garage = sputnik.garageFactory("Minestar", :Garages, "Service garage")
   item = Item.new("blackberries", "A juicy forest fruit", :commodity)
   Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
@@ -33,6 +40,7 @@ class GameStart
   Dictionary.add_discovered_item(item.name, item)  
   trader2.add_source_trade(item)
   trader.add_sink_trade(item)
+  garage.add_service_module(Torpedo)
   
   eye = Item.new("horus eye", "Alien artifact, possibly of Martian origin", :unique, [:controlled, :alien])
   Dictionary.add_discovered_item(eye.name, eye)
@@ -41,6 +49,7 @@ class GameStart
       
   Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
   Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)
+  Dictionary.add_double_discovered_proper_noun(garage.name, garage.index_name, garage)
 
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
