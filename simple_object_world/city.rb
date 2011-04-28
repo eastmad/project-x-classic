@@ -35,6 +35,10 @@ class City < SimpleBody
       "#{@name} is a city port of #{@owning_body.name}"
    end
    
+   def describe_owns 
+     "\n(Type 'view contacts' to see who you know in a city)"
+   end
+   
    def describe_contacts
       con = contacts
       para1 = ""

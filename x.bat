@@ -1,1 +1,1 @@
-shoes test.rb
+shoes test1024600.rb

@@ -30,8 +30,8 @@ describe Contact do
   end
   
   it "contact have personal pronoun set" do
-    @contact.ppnoun.should == "he"
-    @contact2.ppnoun.should == "she"
+    @contact.he_or_she.should == "he"
+    @contact2.he_or_she.should == "she"
   end
   
   it "names have interests satisfied" do
@@ -41,7 +41,7 @@ describe Contact do
   
   it "city has no available contacts - no mail sent from read" do
     @city.contacts.should be_empty
-    @city.describe_owns.should include "No known contacts"
+    @city.describe_contacts.should be_empty
   end
   
   it "contact trust score is organisations, and is 0" do
@@ -53,16 +53,16 @@ describe Contact do
     @contact.org.trust 1
     @city.contacts.size.should == 1
     @city.contacts.last.should == @contact
-    @city.describe_owns.should include "Jesper Nordstrum"
-    @city.describe_owns.should_not include "Per Persen"
+    @city.describe_contacts.should include "Jesper Nordstrum"
+    @city.describe_contacts.should_not include "Per Persen"
   end
   
   it "two contact added if trust goes up by two" do
     @contact.org.trust 2
     @city.contacts.size.should == 2
     @city.contacts.last.should == @contact2
-    @city.describe_owns.should include "Jesper Nordstrum"
-    @city.describe_owns.should include "Per Persen"
+    @city.describe_contacts.should include "Jesper Nordstrum"
+    @city.describe_contacts.should include "Per Persen"
   end
   
   context "Visit Mars" do
@@ -76,7 +76,7 @@ describe Contact do
       @visit_city.visit
       @city.contacts.last.should == @contact
       @city.contacts.size.should == 1
-      @city.describe_owns.should include "Jesper Nordstrum"
+      @city.describe_contacts.should include "Jesper Nordstrum"
     end
     
     it "subsequent visits don't add more" do
@@ -87,8 +87,8 @@ describe Contact do
        
     it "UPDATED only once" do
       @visit_city.visit
-      @city.describe_owns.should include "UPDATED"
-      @city.describe_owns.should_not include "UPDATED"
+      @city.describe_contacts.should include "UPDATED"
+      @city.describe_contacts.should_not include "UPDATED"
     end  
   end
 end

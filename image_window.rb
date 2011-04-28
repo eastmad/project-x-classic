@@ -9,17 +9,20 @@ class ImageWindow
    :solar_system => ["gifs/solar-system.jpg"],
    :summarize => ["gifs/summarize.jpg"],
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
+   :venus => ["gifs/venus.jpg"],
    :city => ["gifs/cityport.jpg"],
    :ruinedcity => ["gifs/ruinedcity22.jpg"],
    :atmosphere => ["gifs/atmosphere.jpg"],
    :stationdocked =>["gifs/station-closeup.jpg"],
+   :satellite =>["gifs/satellite.jpg"],
    :crates =>["gifs/crates.jpg"],
    }
    
    @@sgo = {
-      :Planet => {:surface => :terre, :outer => :terre, :orbit => :terre, :atmosphere => :atmosphere, :Mars => :mars},
+      :Planet => {:atmosphere => :atmosphere, :Earth => :terre, :Mars => :mars, :Venus => :venus},
       :Star => {:outer => :solar_system},
-      :SpaceStation=> {:surface => :stationdocked, :outer => :station},
+      :SpaceStation=> {:surface => :stationdocked, :outer => :station, :centre => :stationdocked},
+      :SmallStructure => {:centre => :satellite},
       :City => {:centre => :city, :Houston => :city, :Nicosia => :ruinedcity}
    }
 

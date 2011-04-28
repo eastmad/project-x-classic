@@ -1,6 +1,6 @@
-require "trust_holder"
-require "trustee"
-require "../control_systems/system_test_helper"
+require_relative "trust_holder"
+require_relative "trustee"
+require_relative "../control_systems/system_test_helper"
 
 class TrusteeMock
   include Trustee

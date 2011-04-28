@@ -75,6 +75,7 @@ class Planet < CelestialObject
    def initialize(name, desc, ownerPoint)      
       super(name, desc, ownerPoint.body)
       
+      @centrePoint = LocationPoint.new(self, :centre)
       @atmospherePoint = LocationPoint.new(self, :atmosphere)
       @orbitPoint = LocationPoint.new(self, :orbit)                 
       @atmospherePoint.add_link([:up],@orbitPoint)       
@@ -118,8 +119,9 @@ class Planet < CelestialObject
        ret = "No orbiting bodies"
        satellites = owns.collect{|locPoint| locPoint.body}
        cities = @atmospherePoint.find_linked_location(:city).collect{|cityPoint| cityPoint.body}
-       ret = "The orbiting satellites are #{satellites.join(', ')}" unless satellites.empty? 
-       ret << "\n- City ports are #{cities.join(', ')}" unless cities.empty? 
+       ret = "The orbiting satellites are: #{satellites.join(', ')}" unless satellites.empty? 
+       ret << "\n- City ports are: #{cities.join(', ')}" unless cities.empty?
+       ret << "\n(Futher information available for any city or satellite)"
        ret
    end
 

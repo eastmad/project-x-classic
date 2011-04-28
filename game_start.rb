@@ -54,7 +54,7 @@ class GameStart
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
  If you want to know more about what's happening to Mars, talk to our contact on Earth.")
-  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Alien artifact trader", freemars, 0)
+  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Alien artifact trader", freemars, 1)
   pers.add_details(:interest => :alien, :talk => :war)
 
   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
@@ -76,20 +76,19 @@ class GameStart
     stack do
       
       flow {
-        caption strong("You are in control of the small vessel, project-x.\nWhatever you are looking for, it isn't in this solar system."), :stroke => white, :align => "center"
+        caption strong("You are in control of the small vessel, Project-x.\nWhatever you are looking for, you can't remember what it is."), :stroke => white, :align => "center"
       }
-      flow { 
-        para "\nYou start docked in an old space station.\n", :stroke => white, :align => "center"
-      }
+
       flow {
-        para "- The first command to try is probably 'launch'\n", :stroke => azure
-        para "- Try 'summarize' and 'help' to find out more commands\n", :stroke => azure
+        para "\n\n- Type commands to control Project-x\n"
+        para "- Try 'summarize', 'status' or 'help' to find out more commands\n", :stroke => azure
         para "- Type space or tab to complete any command\n", :stroke => azure
+        para "- Your vessel is in an old space station\n", :stroke => azure
+        para "- The first command to try is probably 'launch'\n", :stroke => aquamarine
+
       }
-      flow{
-        button(:right => 10, :text =>  "Start") do
+      keypress { | k| 
           poop.close
-        end
       }
     end
   end

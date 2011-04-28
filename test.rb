@@ -72,8 +72,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
   @backstack = stack(:hidden => true){
     flow(:width => 500) {
       image "gifs/contact.jpg"
-      caption " Newton Todd", :stroke => white
-      inscription "        F1 - exit   F2 - finish", :stroke => darkgray
+      @talker = caption " #{@talker}", :stroke => lightgrey
+      inscription "        F1 - exit", :stroke => darkgray
     }  
     
     @t = tagline "", :stroke => white
@@ -105,7 +105,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       }
 
       @planet_icon = flow {
-        image "gifs/planet_icon.gif"
+        image "gifs/planet_icon.gif", :width => 15, :height => 16
         @planet_inscription = inscription "Earth", :stroke => white
       }
 
@@ -197,7 +197,7 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
       end
       
       if (@state == :talk_test)
-         talk_screen :war
+          talk_screen :war
       end
 
       if (@state == :delete)
@@ -276,7 +276,8 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     }
   }
   
-  def talk_screen txt_key
+  def talk_screen txt_key, talker
+    @talker.replace talker
     @mainstack1.hide
     @mainstack2.hide
     @backstack.show  
@@ -285,11 +286,10 @@ Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
     info "start timer"          
 
     @end_text_talk = false
-    @count_rate = 1
     count = 0
-    txt_timer = animate(10){ |frame|
-      @t.replace(str[0,count]) if count < str.length
-      count += @count_rate
+    txt_timer = animate(15){ |frame|
+      @t.replace(str[0,count]) if count <= str.length
+      count += 1
       if @end_text_talk
         info "stop timer"
         @mainstack1.show

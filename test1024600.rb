@@ -110,19 +110,19 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       }
 
       @planet_icon = flow {
-        image "gifs/planet_icon.gif", :width => 30, :height => 32
-        @planet_para = para "Earth", :stroke => white
+        image "gifs/planet_icon.gif", :width => 30, :height => 32, :left => 15
+        @planet_para = para "Earth", :stroke => white, :left => 50
       }
 
       @heading_icon = flow {
-        image "gifs/head_icon.gif", :width => 30, :height => 32
-        @heading_para = para "orbit", :stroke => white
+        image "gifs/head_icon.gif", :width => 30, :height => 32, :left => 15
+        @heading_para = para "orbit", :stroke => white, :left => 50
       }
       @heading_icon.hide
 
       @action_icon = flow {
-        image "gifs/loc_icon.gif", :width => 30, :height => 32
-        @action_para = para @ship.describeLocation, :stroke => white
+        image "gifs/loc_icon.gif", :width => 30, :height => 32, :left => 15
+        @action_para = para @ship.describeLocation, :stroke => white, :left => 50
       }
     }
 
@@ -242,10 +242,13 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
         begin
           if @dr.fullCommand.size > 1
             info "Full command = #{@dr.fullCommand}"
+
             resp_hash = ShipSystem.command_parser(@dr.fullCommand, @rq)
- 
+                     
             if (resp_hash[:success])
-              MediaManager.show_media(@im_win,resp_hash[:media],@ship.locationPoint) unless resp_hash[:media].nil?
+              media_lp = @ship.locationPoint
+              media_lp = resp_hash[:sgo].centrePoint unless resp_hash[:sgo].nil?
+              MediaManager.show_media(@im_win,resp_hash[:media],media_lp) unless resp_hash[:media].nil?
             else 
               SoundPlay.play_sound(5)
             end
@@ -256,16 +259,16 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
           end
 
           if (!@ship.headingPoint.nil?)
-            @heading_para.replace @ship.headingPoint, :stroke => white
+            @heading_para.replace @ship.headingPoint, :stroke => white, :left => 50
             @heading_icon.show
           else
             @heading_icon.hide
           end   
-          @action_para.replace @ship.describeLocation, :stroke => white
+          @action_para.replace @ship.describeLocation, :stroke => white, :left => 50
           #either the current body is a planet, or the owning body.
           local_body = @ship.locationPoint.body
           local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
-          @planet_para.replace local_planet, :stroke => white
+          @planet_para.replace local_planet, :stroke => white, :left => 50
           
           #read mail
           mail = SimpleBody.get_mail.shift

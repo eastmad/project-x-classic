@@ -10,7 +10,7 @@ class SystemCommunication < ShipSystem
     
     #default to contacts in current city
     sgo = @@ship.locationPoint.body.root_body if sgo.nil? 
-    para1 = "Contacts\n\n"
+    para1 = ""
     if sgo.kind_of? City or sgo.kind_of? Planet  
       para1 = sgo.describe_contacts
     else
@@ -22,9 +22,9 @@ class SystemCommunication < ShipSystem
       @@rq.enq SystemsMessage.new("No known contacts", SystemCommunication, :info)
     else
       para1 << "\n\nType 'contact person' to arrange a meeting"
-      @@rq.enq SystemsMessage.new(para1, SystemCommunication, :report)
+      @@rq.enq SystemsMessage.new("Contacts\n\n#{para1}", SystemCommunication, :report)
     end
-    {:success => false}
+    {:success => true}
   end
  
   def _contact(args = nil)

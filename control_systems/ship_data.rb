@@ -252,7 +252,7 @@ info "loaded"
        para1 = "#{city}\n\n"
        para1 << city.describe
        para1 << "\n- " << city.desc
-       para1 << "\n\n(Type 'describe #{city}' to see this)" 
+       para1 << "\n- " << city.describe_owns 
  
        return SystemsMessage.new(para1, SystemLibrary, :report)
      else 
