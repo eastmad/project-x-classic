@@ -4,6 +4,78 @@ require_relative "../simple_object_world/trustee"
 require_relative "../simple_object_world/simple_body"
 require_relative "../simple_object_world/simple_game_object"
 
+describe Torpedo do
+  
+  before :each do
+    @torp = Torpedo
+    @govtorp = GovTorpedo
+  end
+  
+  context "When torpedo class available" do
+    
+    it "should have the right type" do
+      @torp.type.should == :torpedo
+    end
+    
+    it "should get yield" do
+      @torp.yield.should == 1
+    end
+    
+    it "should get prinatble name" do
+      @torp.name.should == "Basic Torpedo"
+    end
+    
+  end
+  
+  context "When govtorpedo class available" do
+    
+    it "should have the right type" do
+      @govtorp.type.should == :torpedo
+    end
+    
+    it "should get yield" do
+      @govtorp.yield.should == 3
+    end
+    
+    it "should get prinatble name" do
+      @govtorp.name.should == "Standard issue torpedo"
+    end
+    
+  end
+  
+  context "When torpedo instance available" do
+    
+    before :each do
+      @torp_inst = Torpedo.new
+    end
+
+    it "should get yield" do
+      @torp_inst.yield.should == 1
+    end
+    
+    it "should get prinatble name" do
+      @torp_inst.name.should == "Basic Torpedo"
+    end
+
+  end
+  
+  context "When govtorpedo instance available" do
+    
+    before :each do
+      @torp_inst = GovTorpedo.new
+    end
+
+    it "should get yield" do
+      @torp_inst.yield.should == 3
+    end
+    
+    it "should get prinatble name" do
+      @torp_inst.name.should == "Standard issue torpedo"
+    end
+
+  end
+end
+
 describe ImplWeapon do
   
   before :each do

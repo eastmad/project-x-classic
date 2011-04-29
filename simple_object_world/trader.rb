@@ -76,13 +76,19 @@ class Trader < SimpleBody
 end
 
 class Garage < SimpleBody
-  attr_reader :tradePoint, :index_name, :services 
+  attr_reader :tradePoint, :index_name, :services, :owning_org
+  include TrustHolder
   
   def initialize(name, index, desc, ownerPoint)      
     super(name, desc, ownerPoint.body) 
     @index_name = index
     ownerPoint.add_link([:garage], LocationPoint.new(self, :centre))
     @services = []
+  end
+  
+  def set_owning_org org
+    raise "Attempting to set non org for garage" unless org.kind_of? Organisation
+    @owning_org = org
   end
   
   #we will assume a torpedo for now
@@ -102,6 +108,23 @@ class Garage < SimpleBody
   
   def to_s
    "#{@name} #{@index_name}"
+  end
+  
+  private
+
+  def horizon trust, service, trustee = nil
+    if trust <= trustee.trust_score
+      @services << service
+      info "#{service.item} added to service trust = #{trust} type=#{service.trade_type}"
+      push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
+      return true
+    end
+    
+    false
+  end
+  
+  def add_trade trade, trust
+    add_to_trust_list trust, trade, nil
   end
   
 end

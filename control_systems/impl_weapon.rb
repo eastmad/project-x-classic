@@ -52,21 +52,28 @@ class ImplWeapon
 end
 
 class Torpedo
+    
+  class << self; attr_accessor :yield end
+  @yield = 1
+  class << self; attr_accessor :name end
+  @name = "Basic Torpedo"
   
-  def yield()
-    3
-  end
-  
-  def self.yield
-    3
+  def yield
+    self.class.yield
   end
   
   def self.type
     :torpedo
   end
   
-  def to_s
-    "Basic Torpedo"
+  def name
+    self.class.name
   end
- 
+end
+
+class GovTorpedo < Torpedo
+    
+  @yield = 3
+  @name = "Standard issue torpedo"
+  
 end

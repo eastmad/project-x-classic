@@ -277,6 +277,7 @@ class SmallStructure < CelestialObject
     ownerPoint.add_link([:satellite], @centrePoint)
     @status = :normal
     @damage_rating = toughness
+    @death_listener = nil
   end
 
   def status_word(status, band)
@@ -289,6 +290,11 @@ class SmallStructure < CelestialObject
     end
 
     sw
+  end
+  
+  def status= st    
+    @status = st
+    @death_listener.trust(1) unless (st == :normal or @death_listener.nil?)
   end
 
   def desc
@@ -312,6 +318,13 @@ class SmallStructure < CelestialObject
   def add_updated_desc trust, desc, trustee
     add_to_trust_list trust, desc, trustee 
   end
+  
+  def add_death_listener trustee
+    raise "Not a trustee" unless trustee.kind_of? Trustee
+    @death_listener = trustee
+  end
+  
+  private
   
   def horizon trust, desc, org
     if trust <= org.trust_score  
