@@ -43,7 +43,8 @@ class SystemTrade < ShipSystem
       subj = arg || :trades      
 
       if (sgo = ShipSystem.find_sgo_from_name(arg))
-        para1 = sgo.describe      
+        para1 = sgo.describe
+        para1 << "\n#{sgo.desc}"
       elsif (subj == :trader)
         para1 = station.traders_page
       elsif (subj == :garage)
@@ -89,7 +90,11 @@ class SystemTrade < ShipSystem
   end  
   
   def _intergalactic(args = nil)
-      :intergalactic
+    :intergalactic
+  end
+  
+  def _trading(args = nil)
+    :trading
   end
    
   def _accept(args = nil)

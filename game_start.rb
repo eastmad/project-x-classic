@@ -10,6 +10,7 @@ class GameStart
   venus = sol.planetFactory("Venus", "Known for mining")
   Dictionary.add_discovered_proper_noun(venus.name, venus)
   listeningPost = mars.structureFactory("Owl23", "Unknown structure", 2)
+  
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)
 
   sputnik = earth.stationFactory("Sputnik", "One of the oldest space stations")
@@ -18,6 +19,8 @@ class GameStart
   Dictionary.add_discovered_proper_noun(mall.name, mall)
   servicestation = venus.stationFactory("ServiceShop", "A service station")
   Dictionary.add_discovered_proper_noun(servicestation.name, servicestation)
+  unionstation = venus.stationFactory("UnionServices", "Union run service station")
+  Dictionary.add_discovered_proper_noun(unionstation.name, unionstation)
   
   houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continental America")
   Dictionary.add_discovered_proper_noun(houston.name, houston)
@@ -29,17 +32,18 @@ class GameStart
   trader = mall.traderFactory("Buffet", :Industries, "Trading in ice cream components")
   trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment")
   garage = servicestation.garageFactory("Minestar", :Garages, "Service garage")
+  tuckshop = unionstation.traderFactory("Union", :Trading, "Miners Union run station")
   #garage = sputnik.garageFactory("Minestar", :Garages, "Service garage")
-  item = Item.new("blackberries", "A juicy forest fruit", :commodity)
+  item = Item.new("blackberries", "A juicy forest fruit", :commodity, [:foodstuff])
   Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
-  item = Item.new("choclate chips", "Confectionery additions", :commodity)
+  item = Item.new("choclate chips", "Confectionery additions", :commodity, [:foodstuff])
   Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
-  item = Item.new("wafer cones", "Confectionery containers", :commodity)
-  Dictionary.add_discovered_item(item.name, item)  
-  trader2.add_source_trade(item)
-  trader.add_sink_trade(item)
+  wafercones = Item.new("wafer cones", "Confectionery containers", :commodity, [:foodstuff])
+  Dictionary.add_discovered_item(wafercones.name, wafercones)  
+  trader2.add_source_trade(wafercones)
+  tuckshop.add_sink_trade(wafercones)
   garage.add_service_module(GovTorpedo)
   
   eye = Item.new("horus eye", "Alien artifact, possibly of Martian origin", :unique, [:controlled, :alien])
@@ -50,6 +54,7 @@ class GameStart
   Dictionary.add_double_discovered_proper_noun(trader.name, trader.index_name, trader)
   Dictionary.add_double_discovered_proper_noun(trader2.name, trader2.index_name, trader2)
   Dictionary.add_double_discovered_proper_noun(garage.name, garage.index_name, garage)
+  Dictionary.add_double_discovered_proper_noun(tuckshop.name, tuckshop.index_name, tuckshop)
 
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
@@ -58,6 +63,7 @@ class GameStart
   pers.add_details(:interest => :alien, :talk => :war)
 
   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
+  listeningPost.add_death_listener(freemars)
   
   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
 

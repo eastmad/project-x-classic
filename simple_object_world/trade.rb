@@ -39,7 +39,7 @@ class Item
   
   @@details = {
     :alien => "alien artifact or technology",
-    :foodstuff => "food or drink",
+    :foodstuff => "foodstuff",
     :illegal => "illegal goods",
     :controlled => "controlled goods"
     }
@@ -51,12 +51,18 @@ class Item
     @conditions =  conditions.dup
   end
   
+  def describe
+    para1 = "#{to_s} is a #{item_type} trading item."
+    para1 << notes
+    para1
+  end
+  
   def notes
     para1 = ""
-    para1 << "\n* This item is controlled." if conditions.include? :controlled
-    para1 << "\n* Cannot be legally traded." if conditions.include? :illegal
-    para1 << "\n* This item is food." if conditions.include? :foodstuff
-    para1 << "\n* Alien technology." if conditions.include? :alien
+    para1 << "\n* #{@@details[:controlled]}" if conditions.include? :controlled
+    para1 << "\n* #{@@details[:illegal]}" if conditions.include? :illegal
+    para1 << "\n* #{@@details[:foodstuff]}" if conditions.include? :foodstuff
+    para1 << "\n* #{@@details[:alien]}" if conditions.include? :alien
     
     para1
   end

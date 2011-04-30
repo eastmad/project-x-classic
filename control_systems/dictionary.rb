@@ -62,6 +62,7 @@ class Dictionary
             {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
             {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade},
             {:word => :Garages, :grammar => :proper_noun, :sys => :trade},
+            {:word => :Trading, :grammar => :proper_noun, :sys => :trade},
       ]   
       
    @@shipname = "ship"    

@@ -294,7 +294,10 @@ class SmallStructure < CelestialObject
   
   def status= st    
     @status = st
-    @death_listener.trust(1) unless (st == :normal or @death_listener.nil?)
+    unless (st == :normal or @death_listener.nil?)
+      @death_listener.trust(1)
+      push_message("thanks for blowing shit up", @death_listener)
+    end  
   end
 
   def desc

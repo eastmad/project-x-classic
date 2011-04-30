@@ -116,7 +116,7 @@ class Garage < SimpleBody
     if trust <= trustee.trust_score
       @services << service
       info "#{service.item} added to service trust = #{trust} type=#{service.trade_type}"
-      push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
+      #push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
       return true
     end
     
