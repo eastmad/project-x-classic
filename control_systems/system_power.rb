@@ -9,7 +9,15 @@ class SystemPower < ShipSystem
               
       @@rq.enq @@ship.up
       
-      SystemNavigation.status
+      first_time = @@ship.locationPoint.body.visit
+      
+      if first_time
+        para1 = SystemLibrary.desc @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+      else
+        SystemNavigation.status
+      end  
+        
       resp_hash = {:success => true, :media => :travel}
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
@@ -105,13 +113,19 @@ class SystemPower < ShipSystem
       return resp_hash  
   end
   
-  
   def _engage (arg = nil)
     #debug "Call engage"
     begin
       @@rq.enq @@ship.engage   
       
-      SystemNavigation.status
+      first_time = @@ship.locationPoint.body.visit
+      
+      if first_time
+        para1 = SystemLibrary.desc @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+      else
+        SystemNavigation.status
+      end 
       
       resp_hash = {:success => true, :media => :drive}
     rescue RuntimeError => ex          
@@ -128,7 +142,6 @@ class SystemPower < ShipSystem
       raise SystemsMessage.new("Approach what? No target given.", SystemMyself, :info) if arg.nil?
       sgo = ShipSystem.find_sgo_from_name(arg)
       raise SystemsMessage.new("Cannot locate target", SystemNavigation, :info) if sgo.nil?
- 
       
       @@rq.enq @@ship.approach sgo   
         

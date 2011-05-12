@@ -14,6 +14,7 @@ class TraderMock < Trader
     @index_name = "Poo"
     @trades = []
     @owning_body = "Jupiter"
+    @owning_org = self
   end
 
   def to_s

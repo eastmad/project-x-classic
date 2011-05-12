@@ -17,6 +17,7 @@ module TrustHolder
       
       obj = t[:obj]
       trustee = t[:trustee]
+info "Considering trustee #{trustee}"
       t[:used] = true if horizon(t[:trust], obj, trustee)        
     end
   end

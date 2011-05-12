@@ -5,7 +5,15 @@ class CelestialObject < SimpleBody
    def initialize(name, desc = "Nondescript", owning = nil)      
       super(name, desc, owning)
       @links = []
-   end      
+   end
+   
+  def visit
+    first_time = !@visited
+
+    @visited = true
+    
+    first_time
+  end
 
    def owned_by? body
       return false if @owning_body.nil?

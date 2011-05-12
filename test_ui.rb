@@ -1,6 +1,6 @@
 require "control_systems/ship_system"
 require "control_systems/system_power"
-require "control_systems/system_weapon"
+require "control_systems/system_weaponry"
 require "control_systems/system_navigation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
@@ -28,7 +28,7 @@ Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
             elsif (@ed.text.include? "undock")
                @rq.enq SystemsMessage.new("Releasing docking clamps.", SystemSecurity, :response)
             elsif (@ed.text.include? "fire")
-               @rq.enq SystemsMessage.new("Fire controls locked out when docked.", SystemWeapon, :warn)   
+               @rq.enq SystemsMessage.new("Fire controls locked out when docked.", SystemWeaponry, :warn)   
             else
               @feedback.text = "Parser: I don't know #{@ed.text}" 
             end          

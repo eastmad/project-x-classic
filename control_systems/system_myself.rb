@@ -9,7 +9,7 @@ class SystemMyself < ShipSystem
     begin
     
       info "status for #{args}"
-      sys = get_system_from_symbol(args) unless args.nil?
+      sys = get_system_from_symbol(args.to_sym()) unless args.nil?
       @@rq.enq SystemsMessage.new("Type 'status navigation' to get status report for that system", SystemMyself, :response) if args.nil?
       sys = SystemNavigation if sys.nil?
     
@@ -23,29 +23,6 @@ class SystemMyself < ShipSystem
     end
   end
   
-  def _trade(args = nil)
-    :trade
-  end
-
-  def _navigation(args = nil)
-    :navigation
-  end
-
-  def _power(args = nil)
-    :power
-  end
-  
-  def _communication(args = nil)
-    :communication
-  end
-  
-  def _weapon(args = nil)
-    :weapon
-  end
-
-  def _library(args = nil)
-    :library
-  end
 
   def _suggest(args = nil)
     @@rq.enq @@ship.suggest
@@ -65,7 +42,7 @@ class SystemMyself < ShipSystem
           Type 'summarize navigation' to find all commands known to that system.
         END
       else
-         all_commands = Operation.find_sys_commands(args).join(", ") 
+         all_commands = Operation.find_sys_commands(args.to_sym()).join(", ") 
          para1 = "#{args} recognises the following commands: #{all_commands}."
       end
       
@@ -82,7 +59,7 @@ class SystemMyself < ShipSystem
   
   def _help (args = nil)
   
-    args ||= :everyting
+    args ||= :everything
  
     para1 = <<-END.gsub(/^ {6}/, '')
       
@@ -93,7 +70,7 @@ class SystemMyself < ShipSystem
       Try 'summarize' to find out about ship systems.
     END
    
-    para1 = <<-END.gsub(/^ {6}/, '') if args == :trade      
+    para1 = <<-END.gsub(/^ {6}/, '') if args == "trade"      
       
       You can connect a buyer to a seller.
       When you are on a space station you can
@@ -104,7 +81,7 @@ class SystemMyself < ShipSystem
       Try 'give wafer cones' to give a consignment.
     END
 
-    para1 = <<-END.gsub(/^ {6}/, '') if args == :navigation      
+    para1 = <<-END.gsub(/^ {6}/, '') if args == "navigation"      
       
       To dock with a space station or land on a
       planet approach from a stable orbit.
@@ -114,7 +91,7 @@ class SystemMyself < ShipSystem
       Try 'help power' for more.
     END
     
-    para1 = <<-END.gsub(/^ {6}/, '') if args == :power
+    para1 = <<-END.gsub(/^ {6}/, '') if args == "power"
       
       From a stable orbit you may approach a
       planet or space station.
@@ -125,7 +102,7 @@ class SystemMyself < ShipSystem
       Try 'launch' to leave a planet.
     END
     
-    para1 = <<-END.gsub(/^ {6}/, '') if args == :communication
+    para1 = <<-END.gsub(/^ {6}/, '') if args == "communication"
       
       Read mail or check contacts on a city.
       
@@ -135,7 +112,7 @@ class SystemMyself < ShipSystem
       Try 'read mail'.
     END
 
-    para1 = <<-END.gsub(/^ {6}/, '') if args == :mail
+    para1 = <<-END.gsub(/^ {6}/, '') if args == "mail"
       
       Read current mail, or earlier ones.
       
@@ -151,5 +128,18 @@ class SystemMyself < ShipSystem
    
   def self.to_s
     "self aware system"
+  end
+  
+  private
+  
+  def method_missing (methId, *args)      
+    word = methId.id2name
+    info "(methId, *args) Call method myself missing:#{word} and #{args.length} "
+
+    ret = word.slice!(0)
+    info "is #{word} system?"
+    return word if ShipSystem.is_ship_system?(word)
+    
+    nil  
   end
 end

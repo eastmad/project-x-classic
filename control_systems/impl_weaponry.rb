@@ -1,4 +1,4 @@
-class ImplWeapon
+class ImplWeaponry
 
   attr_reader :torpedoes
 
@@ -19,13 +19,17 @@ class ImplWeapon
       end    
     end
     
+    torp_loaded = nil
     while @torpedoes.size < @max_torpedoes
-      @torpedoes << munition_class.new
+      torp_loaded = munition_class.new
+      @torpedoes << torp_loaded
     end
+    
+    torp_loaded
   end
 
   def destroy target
-    raise "Not a structure this weapon can target" unless target.kind_of? SmallStructure
+    raise "Not a structure this weaponry can target" unless target.kind_of? SmallStructure
     raise "Structure has insufficient integrity to target" if target.status == :destroyed 
     raise "No torpedoes loaded" unless @torpedoes.size > 0
     
@@ -48,32 +52,5 @@ class ImplWeapon
     
     return outcome
   end
-  
-end
-
-class Torpedo
-    
-  class << self; attr_accessor :yield end
-  @yield = 1
-  class << self; attr_accessor :name end
-  @name = "Basic Torpedo"
-  
-  def yield
-    self.class.yield
-  end
-  
-  def self.type
-    :torpedo
-  end
-  
-  def name
-    self.class.name
-  end
-end
-
-class GovTorpedo < Torpedo
-    
-  @yield = 3
-  @name = "Standard issue torpedo"
   
 end

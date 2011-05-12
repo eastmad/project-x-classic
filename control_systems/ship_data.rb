@@ -3,10 +3,11 @@ require_relative "impl_trade"
 require_relative "impl_help"
 require_relative "impl_mail"
 require_relative "impl_contact"
-require_relative "impl_weapon"
+require_relative "impl_weaponry"
+require_relative "impl_modification"
 
 class ShipData
-attr_reader :name, :locationPoint, :status, :headingPoint, :weapons   
+attr_reader :name, :locationPoint, :status, :headingPoint, :weaponry, :modification   
  
  
 THRUSTERS = "Plasma thrusters"
@@ -24,7 +25,8 @@ JUMP = "Rift generator"
     @help = ImplHelp.new
     @mail = ImplMail.new
     @contact = ImplContact.new
-    @weapons = ImplWeapon.new 2
+    @weaponry = ImplWeaponry.new 2
+    @modification = ImplModification.new
   end
  
   def push_mail(txt, from)
@@ -84,7 +86,6 @@ JUMP = "Rift generator"
     
     
     lp = lps.find {| lp | lp.body == local_body}
- 
      
     unless lp.nil? 
      @locationPoint = lp
@@ -149,18 +150,25 @@ JUMP = "Rift generator"
     SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
   end
   
-  def load_torpedoes
-info "load torps"
-    raise SystemsMessage.new("You can only get ship services at a space station", SystemTrade, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
+  def install mod_type
+    raise SystemsMessage.new("You can only install modules at a space station", SystemModification, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
     #raise SystemsMessage.new("Cannot find any services offering torpedoes", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
-info "check services offered"
-    service = @trade.service_module_offered(@locationPoint.body, Torpedo.type)
-info "offered #{service}"
-    raise SystemsMessage.new("No source of service on offer", SystemTrade, :info) if service.nil?
+    offered_module = @trade.service_module_offered(@locationPoint.body, mod_type)
+    raise SystemsMessage.new("No source of module on offer", SystemTrade, :info) if offered_module.nil?
 
-    @weapons.load_torpedoes service
-info "loaded"    
-    SystemsMessage.new("Torpedoes loaded", SystemTrade, :info)  
+    inst_mod = @modification.install offered_module
+    SystemsMessage.new("#{offered_module.name} installed - #{inst_mod.desc}", SystemModification, :info)  
+  end
+
+  
+  def load_torpedoes
+    raise SystemsMessage.new("You can only load torpdeoes at a space station", SystemWeaponry, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
+    #raise SystemsMessage.new("Cannot find any services offering torpedoes", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)
+    torps = @trade.service_module_offered(@locationPoint.body, Torpedo.type)
+    raise SystemsMessage.new("No torpdoes on offer", SystemTrade, :info) if torps.nil?
+
+    loaded_torp = @weaponry.load_torpedoes torps
+    SystemsMessage.new("#{torps.name} loaded - #{loaded_torp.desc}", SystemWeaponry, :info)  
   end
   
   def give(item)
@@ -266,14 +274,14 @@ info "loaded"
   def destroy target
     begin
 info "target income = #{target}"
-      outcome = @weapons.destroy target
+      outcome = @weaponry.destroy target
 info "weapons outcome = #{outcome}"
       mes = "Target destroyed." if outcome > 0
       mes = "Target disabled." if outcome == 0
       mes = "Target untouched." if outcome < 0
-      SystemsMessage.new(mes, SystemWeapon, :info)
+      SystemsMessage.new(mes, SystemWeaponry, :info)
     rescue => ex
-      raise SystemsMessage.new(ex, SystemWeapon, :info)  
+      raise SystemsMessage.new(ex, SystemWeaponry, :info)  
     end  
   end
      

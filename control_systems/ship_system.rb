@@ -61,25 +61,43 @@ class ShipSystem
    word = word[0, 1].capitalize + word[1..-1]
  end
  
- def self.is_proper_noun?(word)   
-   word = ShipSystem.make_proper_noun(word)
-   
+ def self.is_ship_system?(word)
    dic_entry = Dictionary.matching_word(word)
-   if !dic_entry.nil? and (dic_entry[:grammar] == :proper_noun) 
+   if !dic_entry.nil? and (dic_entry[:sys] == :myself) 
       return true
    end
    
    false
  end
  
- def self.is_item?(word)   
-   dic_entry = Dictionary.matching_word(word)
-   if !dic_entry.nil? and (dic_entry[:grammar] == :item) 
+  def self.is_proper_noun?(word)   
+    word = ShipSystem.make_proper_noun(word)
+    
+    dic_entry = Dictionary.matching_word(word)
+    if !dic_entry.nil? and (dic_entry[:grammar] == :proper_noun) 
       return true
-   end
-   
-   false
- end
+    end
+    
+    false
+  end
+  
+  def self.is_module?(word)   
+    dic_entry = Dictionary.matching_word(word)
+    if !dic_entry.nil? and (dic_entry[:sys] == :modification) 
+      return true
+    end
+    
+    false
+  end
+ 
+  def self.is_item?(word)   
+    dic_entry = Dictionary.matching_word(word)
+    if !dic_entry.nil? and (dic_entry[:grammar] == :item) 
+      return true
+    end
+    
+    false
+  end
  
  def self.find_sgo_from_name(name)
    dic_entry = Dictionary.matching_word(name)
@@ -112,23 +130,23 @@ class ShipSystem
    sys
  end
  
- def method_missing (methId, *args)      
-   word = methId.id2name
-   #info "(methId, *args) Call method missing:#{word} and #{args.length} "
-
-   ret = word.slice!(0)
-   info "is #{word} proper noun?"
-   if ShipSystem.is_proper_noun?(word)
-     ret = ShipSystem.make_proper_noun(word)
-     if (@obj.nil?)
-       @obj = ret
-     end
-   elsif ShipSystem.is_item?(word)
-     if (@obj.nil?)
-       @obj = ret
-     end
-   end
-
-   ret
- end
+  def method_missing (methId, *args)      
+    word = methId.id2name
+    info "(methId, *args) Call method missing:#{word} and #{args.length} "
+ 
+    ret = word.slice!(0)
+    info "is #{word} proper noun?"
+    if ShipSystem.is_proper_noun?(word)
+      ret = ShipSystem.make_proper_noun(word)
+      if (@obj.nil?)
+        @obj = ret
+      end
+    elsif ShipSystem.is_item?(word)
+      if (@obj.nil?)
+        @obj = ret
+      end
+    end
+ 
+    ret
+  end
 end

@@ -29,8 +29,8 @@ class Trade
 
     @status = :fulfilled
     
-    consignment.origin_trader.trust(1)
-    @origin_trader.trust(1)    
+    consignment.origin_trader.owning_org.trust(1)
+    @origin_trader.owning_org.trust(1)    
   end
 end
 

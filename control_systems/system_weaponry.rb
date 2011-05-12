@@ -1,5 +1,5 @@
-class SystemWeapon < ShipSystem
-  Operation.register_sys(:weapon)  
+class SystemWeaponry < ShipSystem
+  Operation.register_sys(:weaponry)  
   
   def _destroy(arg = nil)
     begin
@@ -60,19 +60,19 @@ class SystemWeapon < ShipSystem
   end 
    
   def self.to_s
-      "Weapon system online"
+      "weaponry system online"
   end
   
   def self.cursor_str
-    "weapons:"
+    "weaponry:"
   end
   
   def self.status
     para1 = <<-END.gsub(/^ {4}/, '')
-      Weapon system status      
-      -#{@@ship.weapons.torpedoes.size} torpedoes loaded.
+      weaponry system status      
+      -#{@@ship.weaponry.torpedoes.size} torpedoes loaded.
     END
-    @@rq.enq SystemsMessage.new(para1, SystemWeapon, :response)
+    @@rq.enq SystemsMessage.new(para1, SystemWeaponry, :response)
   end
 
 end

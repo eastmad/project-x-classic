@@ -32,7 +32,7 @@ class GameStart
   trader = mall.traderFactory("Buffet", :Industries, "Trading in ice cream components")
   trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment")
   garage = servicestation.garageFactory("Minestar", :Garages, "Service garage")
-  tuckshop = unionstation.traderFactory("Union", :Trading, "Miners Union run station")
+  tuckshop = unionstation.traderFactory("Union", :Trading, "Miner's Union run station")
   #garage = sputnik.garageFactory("Minestar", :Garages, "Service garage")
   item = Item.new("blackberries", "A juicy forest fruit", :commodity, [:foodstuff])
   Dictionary.add_discovered_item(item.name, item)  
@@ -41,10 +41,20 @@ class GameStart
   Dictionary.add_discovered_item(item.name, item)  
   trader.add_sink_trade(item)
   wafercones = Item.new("wafer cones", "Confectionery containers", :commodity, [:foodstuff])
-  Dictionary.add_discovered_item(wafercones.name, wafercones)  
+  Dictionary.add_discovered_item(wafercones.name, wafercones)
+  titanium = Item.new("titanium alloy", "Pure deep mined titanium", :rare)
+  Dictionary.add_discovered_item(titanium.name, titanium)
   trader2.add_source_trade(wafercones)
+  vmu = Organisation.new("Venus Mining Union", "Keeping the red flag flying!", :public)
+  tuckshop.set_owning_org vmu
   tuckshop.add_sink_trade(wafercones)
+  tuckshop.add_source_trade(titanium,1)
+  
+  info "tuckshop owning org #{tuckshop.owning_org}"
+  
+  garage.set_owning_org vmu
   garage.add_service_module(GovTorpedo)
+  garage.add_service_module(HeatShieldModule,1)
   
   eye = Item.new("horus eye", "Alien artifact, possibly of Martian origin", :unique, [:controlled, :alien])
   Dictionary.add_discovered_item(eye.name, eye)

@@ -1,4 +1,5 @@
-require_relative "impl_weapon"
+require_relative "../simple_object_world/modification"
+require_relative "impl_weaponry"
 require_relative "../simple_object_world/trust_holder"
 require_relative "../simple_object_world/trustee"
 require_relative "../simple_object_world/simple_body"
@@ -76,10 +77,10 @@ describe Torpedo do
   end
 end
 
-describe ImplWeapon do
+describe ImplWeaponry do
   
   before :each do
-    @impl = ImplWeapon.new 2
+    @impl = ImplWeaponry.new 2
     @torpedo1 = mock "GovTorpedo", :yield => 2
     @torpedo2 = mock "WeakTorpedo", :yield => 3
     @torpedo3 = mock "BigTorpedo", :yield => 4
@@ -94,10 +95,10 @@ describe ImplWeapon do
  
     it "destroy should fail if target is of correct type" do
       target = mock "Turkey", :kind_of? => false, :status => :normal
-      expect { @impl.destroy target }.to raise_error(RuntimeError, "Not a structure this weapon can target")    
+      expect { @impl.destroy target }.to raise_error(RuntimeError, "Not a structure this weaponry can target")    
     end
 
-    it "destroy should fail if incorrect weapon installed" do
+    it "destroy should fail if incorrect weaponry installed" do
       target = mock "SmallStructure", :kind_of? => true, :status => :normal
       expect { @impl.destroy target }.to raise_error(RuntimeError, "No torpedoes loaded")    
     end

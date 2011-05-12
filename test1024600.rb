@@ -14,6 +14,7 @@ require "simple_object_world/trader"
 require "simple_object_world/location_point"
 require "simple_object_world/location_link"
 require "simple_object_world/contact"
+require "simple_object_world/modification"
 require "interface/action_line"
 require "interface/system_message"
 require "interface/response_queue"
@@ -26,12 +27,13 @@ require "control_systems/operation"
 require "control_systems/system_ghost"
 require "control_systems/system_trade"
 require "control_systems/system_power"
-require "control_systems/system_weapon"
+require "control_systems/system_weaponry"
 require "control_systems/system_navigation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
 require "control_systems/system_myself"
 require "control_systems/system_library"
+require "control_systems/system_module"
 require "long_text"
 require "game_start"
 
@@ -65,9 +67,9 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :suggest, :myself, 1
   Operation.register_op :manifest, :trade, 1
   Operation.register_op :bay, :trade, 1
-  Operation.register_op :destroy, :weapon, 1
-  Operation.register_op :load, :weapon, 1
-
+  Operation.register_op :destroy, :weaponry, 1
+  Operation.register_op :load, :weaponry, 1
+  Operation.register_op :install, :modification, 1
  
    
   @rq = ResponseQueue.new
