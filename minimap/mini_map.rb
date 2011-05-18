@@ -5,24 +5,39 @@ class MiniMap
     @rootBody = rootBody
   end
   
-  def setLocationPoint locPoint
+  def set_location_point locPoint
     raise "Not a locationPoint" unless locPoint.kind_of?(LocationPoint)
     
     @locPoint = locPoint
   end
   
-  def topLevel
-    {:name => @rootBody.name, :image => "gifs/star_icon.gif" }
+  def top_level
+    {:name => @rootBody.name, :image => gif_map(@rootBody)}
   end
   
-  def currentLevel
-    {:name => @locPoint.body.name, :image => "gifs/planet_icon.gif" }
+  def current_level
+    {:name => @locPoint.body.name, :image => gif_map(@locPoint.body) }
   end
   
-  def optionLevel
-    [
-      {:name => @locPoint.body.owns[0].body.name, :image => "gifs/sat_icon.gif" },
-      {:name => @locPoint.body.owns[1].body.name, :image => "gifs/sat_icon.gif" }
-    ]
+  def option_level
+    lps = @locPoint.body.owns
+     
+    ret = []
+    
+    lps.each {|lp|
+      ret << {:name => lp.body.name, :image => gif_map(lp.body)}
+    }
+    
+    ret
+  end
+  
+  private
+  
+  def gif_map body
+    name =  body.class.name
+    
+    name.downcase!
+    
+    return "gifs/#{name}_icon.gif"
   end
 end

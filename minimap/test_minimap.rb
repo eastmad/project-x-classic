@@ -32,33 +32,66 @@ describe MiniMap do
     end  
   end
   
+  context "bad locpoint" do
+    it "should fail to load" do
+      expect {@mm.set_location_point "banana"}.to raise_error RuntimeError,"Not a locationPoint"
+    end
+  end
+  
   context "for a location of Earth orbit" do
     before (:each) do
-      @mm.setLocationPoint(@earth.orbitPoint)
+      @mm.set_location_point(@earth.orbitPoint)
     end
     
     it "should show Sol as top level object" do
-      mmhash = @mm.topLevel
+      mmhash = @mm.top_level
       
       mmhash[:name].should == "Sol"
       mmhash[:image].should == "gifs/star_icon.gif"
     end
     
     it "should show current object as Earth" do
-      mmhash = @mm.currentLevel
+      mmhash = @mm.current_level
       
       mmhash[:name].should == "Earth"
       mmhash[:image].should == "gifs/planet_icon.gif"
     end
     
     it "should show option objects as satellites" do
-      mmhasharray = @mm.optionLevel
+      mmhasharray = @mm.option_level
       
       mmhasharray.size.should == 2
       mmhasharray[0][:name].should == "Sputnik"
-      mmhasharray[0][:image].should == "gifs/sat_icon.gif"
+      mmhasharray[0][:image].should == "gifs/spacestation_icon.gif"
       mmhasharray[1][:name].should == "OrbitalMall"
-      mmhasharray[1][:image].should == "gifs/sat_icon.gif"
+      mmhasharray[1][:image].should == "gifs/spacestation_icon.gif"
+    end
+    
+  end
+  
+  context "for a location of Mars orbit" do
+    before (:each) do
+      @mm.set_location_point(@mars.orbitPoint)
+    end
+    
+    it "should show Sol as top level object" do
+      mmhash = @mm.top_level
+      
+      mmhash[:name].should == "Sol"
+      mmhash[:image].should == "gifs/star_icon.gif"
+    end
+    
+    it "should show current object as Earth" do
+      mmhash = @mm.current_level
+      
+      mmhash[:name].should == "Mars"
+      mmhash[:image].should == "gifs/planet_icon.gif"
+    end
+    
+    it "should show option objects as satellites" do
+      mmhasharray = @mm.option_level
+      
+      mmhasharray.size.should == 0
     end
     
   end
