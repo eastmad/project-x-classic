@@ -5,6 +5,10 @@ class SystemSecurity < ShipSystem
      @@rq.enq @@ship.release_docking_clamp()
      {:success => true}
   end
+
+  def self.to_s
+    "Security system"
+  end
   
   def self.cursor_str
       "security:"

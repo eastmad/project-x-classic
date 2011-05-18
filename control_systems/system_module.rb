@@ -19,7 +19,7 @@ class SystemModification < ShipSystem
   end
   
   def self.to_s
-    "modification system"
+    "Module management"
   end
  
   def self.cursor_str
@@ -28,10 +28,8 @@ class SystemModification < ShipSystem
   
   def self.status
     para1 = <<-END.gsub(/^ {4}/, '')
-      Modification status
       -#{@@ship.modification.mods.size} modules installed.
     END
-    @@rq.enq SystemsMessage.new(para1, SystemModification, :response)
   end
   
   private

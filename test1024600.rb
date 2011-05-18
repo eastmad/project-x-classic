@@ -54,8 +54,6 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :orbit, :navigation, 1
   Operation.register_op :plot, :navigation, 1
   Operation.register_op :engage, :power, 1
-  Operation.register_op :summarize, :myself, 1
-  Operation.register_op :help, :myself, 1
   Operation.register_op :status, :myself, 1
   Operation.register_op :read, :communication, 1
   Operation.register_op :accept, :trade, 1

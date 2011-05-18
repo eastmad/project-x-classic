@@ -97,7 +97,7 @@ class GameStart
 
       flow {
         para "\n\n- Type commands to control Project-x\n"
-        para "- Try 'summarize', 'status' or 'help' to find out more commands\n", :stroke => azure
+        para "- Try 'status' to find out more commands\n", :stroke => azure
         para "- Type space or tab to complete any command\n", :stroke => azure
         para "- Your vessel is in an old space station\n", :stroke => azure
         para "- The first command to try is probably 'launch'\n", :stroke => aquamarine

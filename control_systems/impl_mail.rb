@@ -1,5 +1,5 @@
 class ImplMail
-  attr_reader :mail
+  attr_reader :mails
    
   def initialize
     @mails = []

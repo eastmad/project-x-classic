@@ -15,18 +15,17 @@ class CelestialObject < SimpleBody
     first_time
   end
 
-   def owned_by? body
-      return false if @owning_body.nil?
-      return true if @owning_body == body 
+  def owned_by? body
+    return false if @owning_body.nil?
+    return true if @owning_body == body 
       
-      return @owning_body.owned_by? body 
-   end
+    return @owning_body.owned_by? body 
+  end
      
-   def to_s
-     @name
-   end
+  def to_s
+    @name
+  end
 end
-
 
 
 class Star < CelestialObject
@@ -63,7 +62,7 @@ class Star < CelestialObject
       
    def describe
      "#{@name} is a star within the galaxy"
-   end
+   end  
    
    def owns
       @orbitPoint.find_linked_location(:planet)
@@ -123,15 +122,15 @@ class Planet < CelestialObject
     para1
   end
    
-   def describe_owns 
-       ret = "No orbiting bodies"
-       satellites = owns.collect{|locPoint| locPoint.body}
-       cities = @atmospherePoint.find_linked_location(:city).collect{|cityPoint| cityPoint.body}
-       ret = "The orbiting satellites are: #{satellites.join(', ')}" unless satellites.empty? 
-       ret << "\n- City ports are: #{cities.join(', ')}" unless cities.empty?
-       ret << "\n(Futher information available for any city or satellite)"
-       ret
-   end
+  def describe_owns 
+    ret = "No orbiting bodies"
+    satellites = owns.collect{|locPoint| locPoint.body}
+    cities = @atmospherePoint.find_linked_location(:city).collect{|cityPoint| cityPoint.body}
+    ret = "The orbiting satellites are: #{satellites.join(', ')}" unless satellites.empty? 
+    ret << "\n  - City ports are: #{cities.join(', ')}" unless cities.empty?
+    ret << "\n  (Futher information available for any city or satellite)"
+    ret
+  end
 
    def status_word(status, band)
       if status == :rest

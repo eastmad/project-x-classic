@@ -20,16 +20,16 @@ class SystemLibrary < ShipSystem
   end
 
   def self.desc sgo
-    para1 = "#{sgo}\n\n"
-    para1 << sgo.describe
-    para1 << "\n- " << sgo.desc
-    para1 << "\n- " << sgo.describe_owns if sgo.respond_to? :describe_owns
+    para1  = "  #{sgo}\n\n"
+    para1 << "  #{sgo.describe}"
+    para1 << "\n  - " << sgo.desc
+    para1 << "\n  - " << sgo.describe_owns if sgo.respond_to? :describe_owns
     
     para1
   end
   
   def self.to_s
-     "library"
+     "Library system"
   end
   
   def self.cursor_str

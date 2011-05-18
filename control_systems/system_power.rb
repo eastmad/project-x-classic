@@ -162,17 +162,15 @@ class SystemPower < ShipSystem
   end
   
   def self.status
-    para1 = <<-END.gsub(/^ {4}/, '')
-      Propulsion system status      
-      -#{ShipData::THRUSTERS} online.
-      -#{ShipData::DRIVE} online.
-      -#{ShipData::JUMP} charged.
+    para1 = <<-END.gsub(/^ {4}/, '')    
+      - #{ShipData::THRUSTERS} online.
+      - #{ShipData::DRIVE} online.
+      - #{ShipData::JUMP} charged.
     END
-    @@rq.enq SystemsMessage.new(para1, SystemPower, :response)
   end
    
-  def to_s
-    "I am the power system"
+  def self.to_s
+    "Power system"
   end
   
   def self.cursor_str

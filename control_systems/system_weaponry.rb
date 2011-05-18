@@ -60,7 +60,7 @@ class SystemWeaponry < ShipSystem
   end 
    
   def self.to_s
-      "weaponry system online"
+      "Weaponry system"
   end
   
   def self.cursor_str
@@ -68,11 +68,9 @@ class SystemWeaponry < ShipSystem
   end
   
   def self.status
-    para1 = <<-END.gsub(/^ {4}/, '')
-      weaponry system status      
+    para1 = <<-END.gsub(/^ {4}/, '')      
       -#{@@ship.weaponry.torpedoes.size} torpedoes loaded.
     END
-    @@rq.enq SystemsMessage.new(para1, SystemWeaponry, :response)
   end
 
 end

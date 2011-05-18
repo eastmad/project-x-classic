@@ -7,7 +7,7 @@ require_relative "impl_weaponry"
 require_relative "impl_modification"
 
 class ShipData
-attr_reader :name, :locationPoint, :status, :headingPoint, :weaponry, :modification   
+attr_reader :name, :locationPoint, :status, :headingPoint, :icontact, :mail, :weaponry, :modification   
  
  
 THRUSTERS = "Plasma thrusters"
@@ -24,7 +24,7 @@ JUMP = "Rift generator"
     @trade = ImplTrade.new
     @help = ImplHelp.new
     @mail = ImplMail.new
-    @contact = ImplContact.new
+    @icontact = ImplContact.new
     @weaponry = ImplWeaponry.new 2
     @modification = ImplModification.new
   end
@@ -202,11 +202,11 @@ JUMP = "Rift generator"
    #check @meet.meet_me[name] for an entry
    mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
    
-   unless @contact.contacts.empty? or @contact.contacts[person.name].nil?
+   unless @icontact.contacts.empty? or @contact.contacts[person.name].nil?
      #take into account no interest
-     mes = "#{person} has already agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@contact.contacts[person.name][:consignment]}"
+     mes = "#{person} has already agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}"
    else
-     mes = "#{person} has agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@contact.contacts[person.name][:consignment]}" if @contact.check_cargo(person, @trade.cargo)
+     mes = "#{person} has agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}" if @contact.check_cargo(person, @trade.cargo)
    end
    
    SystemsMessage.new(mes, SystemCommunication, :response)

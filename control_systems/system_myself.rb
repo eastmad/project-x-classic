@@ -10,10 +10,21 @@ class SystemMyself < ShipSystem
     
       info "status for #{args}"
       sys = get_system_from_symbol(args.to_sym()) unless args.nil?
-      @@rq.enq SystemsMessage.new("Type 'status navigation' to get status report for that system", SystemMyself, :response) if args.nil?
-      sys = SystemNavigation if sys.nil?
-    
-      sys.status
+      if args.nil?
+        all_systems = poop(Operation.find_all_systems)
+        ret = "  #{@@ship.name} has the systems\n  #{all_systems}"
+        ret << "\n  (Type 'status navigation' to get status report for that system)"
+        @@rq.enq SystemsMessage.new(ret, SystemMyself, :report)
+      else
+        para1 = "  #{sys.to_s}"
+        para1 << "\n\n#{sys.status}"
+        all_commands = poop(Operation.find_sys_commands(args.to_sym())) 
+        para1 << "\n  #{args} recognises the following commands:\n #{all_commands}."
+        para1 << "\n #{help(sys)}"
+        @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)
+        sys = SystemNavigation if sys.nil?
+      end
+      
     
       {:success => true}
     rescue => ex
@@ -29,39 +40,33 @@ class SystemMyself < ShipSystem
     
     {:success => true}
   end 
-
-  def _summarize(args = nil)
-    
-    begin
-      if args.nil?
-        all_systems = Operation.find_all_systems.join(", ")
-        ret = "#{@@ship.name} has the systems #{all_systems}"
-        para1 = <<-END.gsub(/^ {10}/, '')
-          #{ret}.
-          
-          Type 'summarize navigation' to find all commands known to that system.
-        END
-      else
-         all_commands = Operation.find_sys_commands(args.to_sym()).join(", ") 
-         para1 = "#{args} recognises the following commands: #{all_commands}."
-      end
-      
-
-      resp_hash = {:success => true, :media => :summarize}
-      @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)
-    rescue RuntimeError => ex          
-      resp_hash = {:success => false}
-      @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
-    end      
-         
-    return resp_hash
+   
+  def self.to_s
+    "self aware system"
   end
   
-  def _help (args = nil)
+  private
+  
+  def poop array_of_names
+    out = "- "
+    i = 1
+    array_of_names.each { | name|
+      
+      out << "#{name}, "
+      if (i%3 == 0)
+        out << "\n  - "
+      end
+      i += 1
+    }
+    
+    return out
+  end
+  
+  def help (args = nil)
   
     args ||= :everything
  
-    para1 = <<-END.gsub(/^ {6}/, '')
+    para1 = <<-END.gsub(/^ {4}/, '')
       
       You are commanding the small spacecraft #{@@ship.name}. I will help you talk to the other onboard systems.
       
@@ -70,7 +75,7 @@ class SystemMyself < ShipSystem
       Try 'summarize' to find out about ship systems.
     END
    
-    para1 = <<-END.gsub(/^ {6}/, '') if args == "trade"      
+    para1 = <<-END.gsub(/^ {4}/, '') if args == SystemTrade      
       
       You can connect a buyer to a seller.
       When you are on a space station you can
@@ -81,7 +86,7 @@ class SystemMyself < ShipSystem
       Try 'give wafer cones' to give a consignment.
     END
 
-    para1 = <<-END.gsub(/^ {6}/, '') if args == "navigation"      
+    para1 = <<-END.gsub(/^ {4}/, '') if args == SystemNavigation      
       
       To dock with a space station or land on a
       planet approach from a stable orbit.
@@ -91,7 +96,7 @@ class SystemMyself < ShipSystem
       Try 'help power' for more.
     END
     
-    para1 = <<-END.gsub(/^ {6}/, '') if args == "power"
+    para1 = <<-END.gsub(/^ {4}/, '') if args == SystemPower
       
       From a stable orbit you may approach a
       planet or space station.
@@ -102,7 +107,7 @@ class SystemMyself < ShipSystem
       Try 'launch' to leave a planet.
     END
     
-    para1 = <<-END.gsub(/^ {6}/, '') if args == "communication"
+    para1 = <<-END.gsub(/^ {4}/, '') if args == SystemCommunication
       
       Read mail or check contacts on a city.
       
@@ -112,7 +117,7 @@ class SystemMyself < ShipSystem
       Try 'read mail'.
     END
 
-    para1 = <<-END.gsub(/^ {6}/, '') if args == "mail"
+    para1 = <<-END.gsub(/^ {4}/, '') if args == "mail"
       
       Read current mail, or earlier ones.
       
@@ -121,16 +126,8 @@ class SystemMyself < ShipSystem
       Try 'read next' to read next mail.
     END
     
-    @@rq.enq SystemsMessage.new(para1, "help with #{args}", :report)
-   
-    {:success => true}
+    para1
   end
-   
-  def self.to_s
-    "self aware system"
-  end
-  
-  private
   
   def method_missing (methId, *args)      
     word = methId.id2name

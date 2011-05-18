@@ -102,9 +102,19 @@ class SystemCommunication < ShipSystem
     {:direction => :prev}
   end
   
+  def self.status
+    a = @@ship
+    info "1"
+    b = a.icontact
+    info "2"
+    c = b.contacts
+    info "3"
+    para1 = "  - #{c.size} contacts known"
+    para1 << "  - #{@@ship.mail.mails.size} messages"
+  end
   
   def self.to_s
-      "communication system"
+      "Communication system"
   end
   
   def self.cursor_str

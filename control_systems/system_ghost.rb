@@ -6,7 +6,7 @@ class SystemGhost < ShipSystem
   end
   
   def self.welcome
-    para1 = <<-END.gsub(/^ {8}/, '')
+    para1 = <<-END.gsub(/^ {6}/, '')
         Brother,
         
         You do not know me. And I cannot 

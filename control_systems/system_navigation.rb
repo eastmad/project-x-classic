@@ -59,10 +59,7 @@ class SystemNavigation < ShipSystem
   end
   
   def self.status
-    @@rq.enq SystemsMessage.new("#{@@ship.name} is #{@@ship.describeLocation}", SystemNavigation, :info)
-    
-    if @@ship.locationPoint.body.visit
-    end
+    "#{@@ship.name} is #{@@ship.describeLocation}"
   end
   
   def self.cursor_str
