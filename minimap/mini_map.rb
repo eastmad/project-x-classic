@@ -21,6 +21,7 @@ class MiniMap
   
   def option_level
     lps = @locPoint.body.owns
+    lps = @locPoint.find_linked_location(:city) if @locPoint.band == :atmosphere
      
     ret = []
     

@@ -95,5 +95,34 @@ describe MiniMap do
     end
     
   end
+  
+  context "for a location of Earth atmos" do
+    before (:each) do
+      @mm.set_location_point(@earth.atmospherePoint)
+    end
+    
+    it "should show Sol as top level object" do
+      mmhash = @mm.top_level
+      
+      mmhash[:name].should == "Sol"
+      mmhash[:image].should == "gifs/star_icon.gif"
+    end
+    
+    it "should show current object as Earth" do
+      mmhash = @mm.current_level
+      
+      mmhash[:name].should == "Earth"
+      mmhash[:image].should == "gifs/planet_icon.gif"
+    end
+    
+    it "should show option objects as cities" do
+      mmhasharray = @mm.option_level
+      
+      mmhasharray.size.should == 1
+      mmhasharray[0][:name].should == "Houston"
+      mmhasharray[0][:image].should == "gifs/city_icon.gif"
+    end
+    
+  end
 
 end  
