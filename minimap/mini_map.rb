@@ -1,9 +1,5 @@
 class MiniMap
-  attr_reader :rootBody, :locPoint
-  def initialize rootBody
-    raise "Not a body" unless rootBody.kind_of?(CelestialObject)
-    @rootBody = rootBody
-  end
+  attr_reader :locPoint
   
   def set_location_point locPoint
     raise "Not a locationPoint" unless locPoint.kind_of?(LocationPoint)
@@ -12,7 +8,7 @@ class MiniMap
   end
   
   def top_level
-    {:name => @rootBody.name, :image => gif_map(@rootBody)}
+    {:name => @locPoint.body.owning_body.name, :image => gif_map(@locPoint.body.owning_body)}
   end
   
   def current_level

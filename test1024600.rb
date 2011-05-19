@@ -34,6 +34,7 @@ require "control_systems/system_security"
 require "control_systems/system_myself"
 require "control_systems/system_library"
 require "control_systems/system_module"
+require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
@@ -43,6 +44,8 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   stroke white
 
   @ship = GameStart.data
+  @minimap = MiniMap.new
+  @minimap.set_location_point(@ship.locationPoint)
   
   Operation.register_op :launch, :power, 1
   Operation.register_op :land, :power, 1
@@ -105,13 +108,13 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
 
     @iconstack = stack {
       flow {
-        image "gifs/star_icon.gif", :width => 60, :height => 64
-        para "Sol", :stroke => white
+        @mm_top_level_image = image @minimap.top_level[:image], :width => 60, :height => 64
+        @mm_top_level_para = para @minimap.top_level[:name], :stroke => white
       }
 
-      @planet_icon = flow {
-        image "gifs/planet_icon.gif", :width => 30, :height => 32, :left => 15
-        @planet_para = para "Earth", :stroke => white, :left => 50
+      flow {
+        @mm_current_level_image = image @minimap.current_level[:image], :width => 30, :height => 32, :left => 30
+        @mm_current_level_para = para @minimap.current_level[:name], :stroke => white, :left => 50
       }
 
       @heading_icon = flow {
@@ -266,9 +269,13 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
           end   
           @action_para.replace @ship.describeLocation, :stroke => white, :left => 50
           #either the current body is a planet, or the owning body.
-          local_body = @ship.locationPoint.body
-          local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name 
-          @planet_para.replace local_planet, :stroke => white, :left => 50
+          #local_body = @ship.locationPoint.body
+          #local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name
+          @minimap.set_location_point @ship.locationPoint
+          @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => 50
+          @mm_current_level_image.path =  @minimap.current_level[:image]
+          @mm_top_level_para.replace @minimap.top_level[:name],  :stroke => white
+          @mm_top_level_image.path = @minimap.top_level[:image]
           
           #read mail
           mail = SimpleBody.get_mail.shift
