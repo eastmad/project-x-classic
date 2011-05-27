@@ -44,7 +44,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   stroke white
 
   @ship = GameStart.data
-  @minimap = MiniMap.new
+  @minimap = MiniMap.new(10,30,50)
   @minimap.set_location_point(@ship.locationPoint)
   
   Operation.register_op :launch, :power, 1
@@ -107,26 +107,38 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     end
 
     @iconstack = stack {
+      
+      @action_icon = flow {
+        image "gifs/loc1_icon.gif", :width => 30, :height => 32, :left => @minimap.current_level[:left]
+        @action_para = para @ship.describeLocation, :stroke => white, :left => @minimap.current_level[:left] + 30
+      }
+      
       flow {
-        @mm_top_level_image = image @minimap.top_level[:image], :width => 60, :height => 64
-        @mm_top_level_para = para @minimap.top_level[:name], :stroke => white
+        @mm_top_level_image = image @minimap.top_level[:image], :width => 60, :height => 64, :left => @minimap.top_level[:left]
+        @mm_top_level_para = para @minimap.top_level[:name], :stroke => white, :left => @minimap.top_level[:left] + 30
       }
 
       flow {
-        @mm_current_level_image = image @minimap.current_level[:image], :width => 30, :height => 32, :left => 30
-        @mm_current_level_para = para @minimap.current_level[:name], :stroke => white, :left => 50
+        @mm_current_level_image = image @minimap.current_level[:image], :width => 30, :height => 32, :left => @minimap.current_level[:left]
+        @mm_current_level_para = para @minimap.current_level[:name], :stroke => white, :left => @minimap.current_level[:left] + 32
       }
+      
+      flow {
+          @mm_opt_level_image = image "gifs/blank_icon.gif", :width => 30, :height => 32, :left => 50
+          @mm_opt_level_para = para "", :stroke => white, :left => 80
+      }
+      
+      flow {
+          @mm_opt_level_image2 = image "gifs/blank_icon.gif", :width => 30, :height => 32, :left => 50
+          @mm_opt_level_para2 = para "", :stroke => white, :left => 80
+      }
+
 
       @heading_icon = flow {
         image "gifs/head_icon.gif", :width => 30, :height => 32, :left => 15
         @heading_para = para "orbit", :stroke => white, :left => 50
       }
       @heading_icon.hide
-
-      @action_icon = flow {
-        image "gifs/loc_icon.gif", :width => 30, :height => 32, :left => 15
-        @action_para = para @ship.describeLocation, :stroke => white, :left => 50
-      }
     }
 
     @iconstack.move(0,parent.height - 200)
@@ -271,11 +283,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
           #either the current body is a planet, or the owning body.
           #local_body = @ship.locationPoint.body
           #local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name
-          @minimap.set_location_point @ship.locationPoint
-          @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => 50
-          @mm_current_level_image.path =  @minimap.current_level[:image]
-          @mm_top_level_para.replace @minimap.top_level[:name],  :stroke => white
-          @mm_top_level_image.path = @minimap.top_level[:image]
+          draw_mini_map
           
           #read mail
           mail = SimpleBody.get_mail.shift
@@ -295,6 +303,33 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       end
     }
   }
+  
+  def draw_mini_map
+    @minimap.set_location_point @ship.locationPoint
+    @mm_top_level_para.replace @minimap.top_level[:name],  :stroke => white
+    @mm_top_level_image.path = @minimap.top_level[:image]
+    @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => 50
+    @mm_current_level_image.path =  @minimap.current_level[:image]
+    
+    opt_level = @minimap.option_level
+    
+    if (opt_level.size >= 1)
+      @mm_opt_level_para.replace opt_level[0][:name]
+      @mm_opt_level_image.path = opt_level[0][:image]
+    else
+      @mm_opt_level_para.replace ""
+      @mm_opt_level_image.path = "gifs/blank_icon.gif"
+    end
+    
+    if (opt_level.size >= 2)
+      @mm_opt_level_para2.replace opt_level[1][:name]
+      @mm_opt_level_image2.path = opt_level[1][:image]
+    else
+      @mm_opt_level_para2.replace ""
+      @mm_opt_level_image2.path = "gifs/blank_icon.gif"
+    end
+    
+  end
   
   def talk_screen txt_key
     @mainstack1.hide
