@@ -109,18 +109,18 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     @iconstack = stack {
       
       @action_icon = flow {
-        image "gifs/loc1_icon.gif", :width => 30, :height => 32, :left => @minimap.current_level[:left]
+        image "gifs/loc1_icon.gif", :width => 32, :height => 30, :left => @minimap.current_level[:left]
         @action_para = para @ship.describeLocation, :stroke => white, :left => @minimap.current_level[:left] + 30
       }
       
       flow {
-        @mm_top_level_image = image @minimap.top_level[:image], :width => 60, :height => 64, :left => @minimap.top_level[:left]
-        @mm_top_level_para = para @minimap.top_level[:name], :stroke => white, :left => @minimap.top_level[:left] + 30
+        @mm_top_level_image = image @minimap.top_level[:image], :width => @minimap.top_level[:size][:width], :height => @minimap.top_level[:size][:height], :left => @minimap.top_level[:left]
+        @mm_top_level_para = para @minimap.top_level[:name], :stroke => white, :left => @minimap.top_level[:left] + @minimap.top_level[:size][:width]
       }
 
       flow {
-        @mm_current_level_image = image @minimap.current_level[:image], :width => 30, :height => 32, :left => @minimap.current_level[:left]
-        @mm_current_level_para = para @minimap.current_level[:name], :stroke => white, :left => @minimap.current_level[:left] + 32
+        @mm_current_level_image = image @minimap.current_level[:image], :width => @minimap.current_level[:size][:width], :height => @minimap.current_level[:size][:height], :left => @minimap.current_level[:left]
+        @mm_current_level_para = para @minimap.current_level[:name], :stroke => white, :left => @minimap.current_level[:left] + @minimap.current_level[:size][:width]
       }
       
       flow {
@@ -306,11 +306,15 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   
   def draw_mini_map
     @minimap.set_location_point @ship.locationPoint
-    @mm_top_level_para.replace @minimap.top_level[:name],  :stroke => white
+    @mm_top_level_para.replace @minimap.top_level[:name], :stroke => white, :left => @minimap.top_level[:left] + @minimap.top_level[:size][:width]
     @mm_top_level_image.path = @minimap.top_level[:image]
-    @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => 50
-    @mm_current_level_image.path =  @minimap.current_level[:image]
-    
+    @mm_top_level_image.width = @minimap.top_level[:size][:width]
+    @mm_top_level_image.height = @minimap.top_level[:size][:height]
+    @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => @minimap.current_level[:left] + @minimap.current_level[:size][:width]
+    @mm_current_level_image.path =  @minimap.current_level[:image]#, :width => @minimap.current_level[:size][:width], :height => @minimap.top_level[:size][:height], :left => @minimap.top_level[:left]
+    @mm_current_level_image.width = @minimap.current_level[:size][:width]
+    @mm_current_level_image.height = @minimap.current_level[:size][:height]
+    info "current = #{@minimap.current_level[:name]} width=#{@minimap.current_level[:size][:width]}"
     opt_level = @minimap.option_level
     
     if (opt_level.size >= 1)

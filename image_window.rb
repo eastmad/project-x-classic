@@ -32,8 +32,9 @@ class ImageWindow
       instance_name = body.name.to_sym
       sgo_hash = @@sgo[klassname]
       image_id = sgo_hash[instance_name]
-      ret = sgo_hash[locPoint.band]
+      
       ret = image_id unless image_id.nil?
+      ret = sgo_hash[locPoint.band] unless sgo_hash[locPoint.band].nil?
       ret
     end
 
