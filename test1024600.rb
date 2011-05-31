@@ -58,6 +58,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :plot, :navigation, 1
   Operation.register_op :engage, :power, 1
   Operation.register_op :status, :myself, 1
+  Operation.register_op :help, :myself, 1
   Operation.register_op :read, :communication, 1
   Operation.register_op :accept, :trade, 1
   Operation.register_op :give, :trade, 1
@@ -75,6 +76,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
+  @ma = ActionLine.new
   
   GameStart.welcome
   
@@ -108,8 +110,8 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
 
     @iconstack = stack {
       
-      @action_icon = flow {
-        image "gifs/loc1_icon.gif", :width => 32, :height => 30, :left => @minimap.current_level[:left]
+       flow {
+        @action_icon = image "gifs/loc1_icon.gif", :width => 32, :height => 30, :left => @minimap.current_level[:left]
         @action_para = para @ship.describeLocation, :stroke => white, :left => @minimap.current_level[:left] + 30
       }
       
@@ -162,27 +164,32 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       @last_command = para "Waiting for command", :stroke => gray
     }  
 
-    stack(:width => 615, :height => 462){
+    stack(:width => 615, :height => 250){
       background rgb(20,20,40)
       border rgb(25,25,50) , :strokewidth => 1
       (0..7).each{|n| @ap[n].line_type = caption strong(""),""}
     }
     
+    stack(:width => 615, :height => 212){
+      background rgb(30,30,50)
+      border rgb(25,25,50) , :strokewidth => 1
+      @ma.line_type = caption strong(""),""
+    }
+    
+    
     every (1) {
       unless @rq.peek.nil?     
         message = @rq.deq
 
-        #if (message.flavour == :mail || message.flavour == :report)
-        #  (7.downto 1).each {|n| @ap[n].line_type.hide}
-        #else
-        #  @ap[0].set_line @old_top_message if (@ap[0].flavour == :mail || @ap[0].flavour == :report)
+        unless (message.flavour == :mail || message.flavour == :report)
           (7.downto 1).each do |n|
              @ap[n].line_type.show
              @ap[n].set_line @ap[n - 1]
           end
-        #  @old_top_message = message.dup
-        #end
-        @ap[0].set_line message        
+          @ap[0].set_line message
+        else
+          @ma.set_line message
+        end 
       end
     }
 
@@ -310,24 +317,29 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     @mm_top_level_image.path = @minimap.top_level[:image]
     @mm_top_level_image.width = @minimap.top_level[:size][:width]
     @mm_top_level_image.height = @minimap.top_level[:size][:height]
-    @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => @minimap.current_level[:left] + @minimap.current_level[:size][:width]
+    @mm_current_level_para.replace @minimap.current_level[:name], :stroke => white, :left => @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width] + @minimap.current_level[:left]
     @mm_current_level_image.path =  @minimap.current_level[:image]#, :width => @minimap.current_level[:size][:width], :height => @minimap.top_level[:size][:height], :left => @minimap.top_level[:left]
     @mm_current_level_image.width = @minimap.current_level[:size][:width]
     @mm_current_level_image.height = @minimap.current_level[:size][:height]
-    info "current = #{@minimap.current_level[:name]} width=#{@minimap.current_level[:size][:width]}"
+    @mm_current_level_image.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width]
+    @action_icon.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width] 
+    @action_para.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width]
+    
     opt_level = @minimap.option_level
     
-    if (opt_level.size >= 1)
-      @mm_opt_level_para.replace opt_level[0][:name]
+    unless opt_level.nil?
+      @mm_opt_level_para.replace opt_level[0][:name], :stroke => white, :left => @minimap.current_level[:left] + opt_level[0][:left] + @minimap.current_level[:size][:width] + opt_level[0][:size][:width]
       @mm_opt_level_image.path = opt_level[0][:image]
+      @mm_opt_level_image.left = @minimap.current_level[:left] + opt_level[0][:left] + @minimap.current_level[:size][:width]
     else
       @mm_opt_level_para.replace ""
       @mm_opt_level_image.path = "gifs/blank_icon.gif"
     end
     
-    if (opt_level.size >= 2)
-      @mm_opt_level_para2.replace opt_level[1][:name]
+    unless (opt_level.nil? or opt_level.size < 2)
+      @mm_opt_level_para2.replace opt_level[1][:name],  :stroke => white, :left => @minimap.current_level[:left] + opt_level[1][:left] + @minimap.current_level[:size][:width] + opt_level[1][:size][:width]
       @mm_opt_level_image2.path = opt_level[1][:image]
+      @mm_opt_level_image2.left = @minimap.current_level[:left] + opt_level[1][:left] + @minimap.current_level[:size][:width]
     else
       @mm_opt_level_para2.replace ""
       @mm_opt_level_image2.path = "gifs/blank_icon.gif"

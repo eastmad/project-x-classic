@@ -1,20 +1,22 @@
 require "control_systems/ship_system"
+require "control_systems/dictionary"
+require "control_systems/operation"
 require "control_systems/system_power"
 require "control_systems/system_weaponry"
 require "control_systems/system_navigation"
 require "control_systems/system_communication"
 require "control_systems/system_security"
-
 require "interface/action_line"
 require "interface/system_message"
 require "interface/response_queue"
 
-Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
+Shoes.app(:width => 500, :height => 400, :title => "ProjectX") {
 
    @rq = ResponseQueue.new   
    @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
+   @ma = ActionLine.new
    
-   stack (:width => 450) {
+   stack(:width => 450) {
       background lightblue
       flow {
          @ed = edit_line ">"
@@ -28,7 +30,8 @@ Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
             elsif (@ed.text.include? "undock")
                @rq.enq SystemsMessage.new("Releasing docking clamps.", SystemSecurity, :response)
             elsif (@ed.text.include? "fire")
-               @rq.enq SystemsMessage.new("Fire controls locked out when docked.", SystemWeaponry, :warn)   
+               @rq.enq SystemsMessage.new("Fire controls locked out when docked.", SystemWeaponry, :warn)
+               @rq.enq SystemsMessage.new("Description of firing\nand shit", SystemWeaponry, :report) 
             else
               @feedback.text = "Parser: I don't know #{@ed.text}" 
             end          
@@ -37,25 +40,26 @@ Shoes.app (:width => 500, :height => 300, :title => "ProjectX") {
       }
       @feedback = para
    }
-   stack(:width =>550, :height => 200) {            
-      @ap[0].line_type = inscription ""
-      @ap[1].line_type = inscription ""
-      @ap[2].line_type = inscription ""
-      @ap[3].line_type = inscription ""
-      @ap[4].line_type = inscription ""
+   stack(:width =>550, :height => 150) {            
+      (0..4).each{|n| @ap[n].line_type = caption strong(""),""}
+   }
+   stack(:width =>550, :height => 150) {            
+      @ma.line_type = caption strong("poo"),""
    }
    
    every (1) {
-      unless @rq.peek.nil?     
-         @ap[4].copy_line @ap[3]
-         @ap[3].copy_line @ap[2]
-         @ap[2].copy_line @ap[1]
-         @ap[1].copy_line @ap[0]
-         #@ap[0].line_type.text = ""
-         line = @rq.deq
-         @ap[0].line_type.text = line.make_string
-         @ap[0].response_type = line.flavour
-         @ap[0].set_stroke line.flavour   
+      unless @rq.peek.nil?
+         message = @rq.deq
+
+         unless (message.flavour == :mail || message.flavour == :report)
+            (4.downto 1).each do |n|
+                @ap[n].line_type.show
+                @ap[n].set_line @ap[n - 1]
+             end
+            @ap[0].set_line message
+         else
+            @ma.set_line message
+         end   
       end
    }
    

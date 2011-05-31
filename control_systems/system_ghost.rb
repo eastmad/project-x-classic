@@ -9,13 +9,11 @@ class SystemGhost < ShipSystem
     para1 = <<-END.gsub(/^ {6}/, '')
         Brother,
         
-        You do not know me. And I cannot 
-        tell you yet why you are here. 
-        You are in control of this small ship.
-        You must leave this solar system before I 
-        can contact you any again.
+        You do not know me. And I cannot tell you yet
+        why you are here. 
         
-        Fit your ship out and use the gate.
+        You are in control of this small ship.
+        Leave this solar system and I will contact you any again.
     END
     
     para1

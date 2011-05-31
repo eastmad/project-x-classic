@@ -5,6 +5,10 @@ class SystemMyself < ShipSystem
     "myself:"
   end
   
+  def _help
+    _status
+  end
+  
   def _status(args = nil)
     begin
     

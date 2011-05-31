@@ -22,7 +22,7 @@ class MiniMap
   end
   
   def option_level
-    return [{:name => "", :image => "gifs/blank_icon.gif", :size => {:width => 0,:height => 0}}] unless @locPoint.body.respond_to? :owns
+    return [{:name => "", :image => "gifs/blank_icon.gif", :size => {:width => 0,:height => 0}, :left => 0}] unless @locPoint.body.respond_to? :owns
     lps = @locPoint.body.owns
     lps = @locPoint.find_linked_location(:city) if @locPoint.band == :atmosphere
      

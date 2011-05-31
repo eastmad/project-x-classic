@@ -99,7 +99,7 @@ JUMP = "Rift generator"
   def orbit(planet)      
     raise SystemsMessage.new("#{@name} is in orbit around #{planet}", SystemNavigation, :info) if (@status == :sync and @locationPoint == planet.orbitPoint)
     raise SystemsMessage.new("#{@name} is stationary", SystemNavigation, :info) if (@status ==:dependent)
-    raise SystemsMessage.new("Cannot orbit #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
+    raise SystemsMessage.new("Cannot establish an orbit around #{planet}", SystemNavigation, :info) unless (planet.kind_of? Planet) 
     
     #location must be planet or there must be a link to orbit
     #state must be at rest

@@ -48,7 +48,7 @@ class SystemNavigation < ShipSystem
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Establish orbit after launching from station or planet.", SystemNavigation, :response_bad)
+      @@rq.enq SystemsMessage.new("Establish orbit before approaching a body.", SystemNavigation, :response_bad)
     end      
          
     return resp_hash  
