@@ -2,26 +2,30 @@ class ImplHelp
 
   def initialize
    @suggestions = [
-   {:txt => "You can leave a space station; try 'undock'", 
+   {:txt => "This is a trade station; enter 'accept' or 'give' to move consignments", 
+    :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.trades_page.nil?}},
+   {:txt => "This is a service station; enter 'load' torpedoes or 'install' components", 
+    :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.services_page.nil?}},
+   {:txt => "'undock' to leave a space station", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation}},
-   {:txt => "You need to be in a stable orbit to approach other bodies; try 'orbit Earth'", 
-    :chk => lambda {@body.kind_of? SpaceStation and @band == :outer}},
-   {:txt => "To find orbiting satellites, try 'describe Earth'", 
-    :chk => lambda {@band == :orbit}},  
-   {:txt => "You can enter the atmosphere from orbit; try 'approach Earth'", 
+   {:txt => "To enter a space station, 'dock'", 
+    :chk => lambda {@band == :outer and @body.kind_of? SpaceStation}},
+   {:txt => "Enter 'describe Earth' to find orbiting bodies", 
+    :chk => lambda {@band == :orbit}},
+   {:txt => "'describe Sol' to find orbiting planets", 
+    :chk => lambda {@band == :orbit}},
+   {:txt => "Enter 'approach' to go towards a planet or satellite", 
     :chk => lambda {@band == :orbit and @status == :sync}},
-   {:txt => "You can approach satellites from orbit; try 'approach TradeMall'", 
-    :chk => lambda {@band == :orbit and @status == :sync}},
-   {:txt => "You can land on a space port city; try 'land ProjectX'", 
+   {:txt => "You can 'land' on a space port city", 
     :chk => lambda {@band == :atmosphere and @body.kind_of? Planet}},
-   {:txt => "You can leave a space port; try 'launch'", 
+   {:txt => "'launch' to leave a space port", 
     :chk => lambda {@band == :surface and @body.kind_of? Planet}},
-   {:txt => "You can visit another planet; try 'plot course to Mars'", 
-    :chk => lambda {@band != :surface}},
-   {:txt => "To turn on the inter-planetery drive system; try 'engage drive'", 
-    :chk => lambda {@band != :outer}},
-   {:txt => "Read the traders channel; try 'browse trades'", 
-    :chk => lambda {@body.kind_of? SpaceStation}}
+   {:txt => "'plot course' to a planet before engaging drives", 
+    :chk => lambda {@band == :orbit}},
+   {:txt => "'engage' to turn on inter-planetery drive system", 
+    :chk => lambda {@band == :orbit}},
+   {:txt => "'browse' to read station information from the trade channel", 
+    :chk => lambda {@body.kind_of? SpaceStation and (!@body.trades_page.nil? or !@body.services_page.nil?)}}
    ]
   end 
 
@@ -29,12 +33,11 @@ class ImplHelp
     @band = loc.band
     @body = loc.body
     @status = status
-    suggestion_txt = "No further suggestions." 
-    use_suggestion = @suggestions.find { |suggestion| !(suggestion.key? :done) and suggestion[:chk].call }
-    if use_suggestion
-      use_suggestion[:done] = :true
-      suggestion_txt = use_suggestion[:txt]
-    end  
-    return suggestion_txt
+    use_suggestions = @suggestions.select { |suggestion| suggestion[:chk].call }
+    
+    suggestions_txt = []
+    use_suggestions.each {|suggestion| suggestions_txt <<  suggestion[:txt]}
+    info suggestions_txt
+    return suggestions_txt
   end
 end  

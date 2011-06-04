@@ -7,7 +7,7 @@ require_relative "impl_weaponry"
 require_relative "impl_modification"
 
 class ShipData
-attr_reader :name, :locationPoint, :status, :headingPoint, :icontact, :mail, :weaponry, :modification   
+attr_reader :name, :locationPoint, :status, :headingPoint, :icontact, :trade, :mail, :weaponry, :modification   
  
  
 THRUSTERS = "Plasma thrusters"
@@ -42,7 +42,7 @@ JUMP = "Rift generator"
   end
   
   def suggest
-     SystemsMessage.new(@help.suggest(@locationPoint, @status), SystemMyself, :respond)
+     @help.suggest(@locationPoint, @status)
   end
  
   def set_heading(planet)

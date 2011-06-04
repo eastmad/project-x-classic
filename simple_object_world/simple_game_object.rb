@@ -282,6 +282,9 @@ class SmallStructure < CelestialObject
 
     @centrePoint = LocationPoint.new(self, :centre)   
     ownerPoint.add_link([:satellite], @centrePoint)
+    
+    @centrePoint.add_link([:planet, :orbit], ownerPoint)
+    
     @status = :normal
     @damage_rating = toughness
     @death_listener = nil

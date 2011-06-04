@@ -9,6 +9,9 @@ class GameStart
   Dictionary.add_discovered_proper_noun(mars.name, mars)
   venus = sol.planetFactory("Venus", "Known for mining")
   Dictionary.add_discovered_proper_noun(venus.name, venus)
+  mercury = sol.planetFactory("Mercury", "Difficult to reach because of solar heat")
+  Dictionary.add_discovered_proper_noun(mercury.name, mercury)
+
   listeningPost = mars.structureFactory("Owl23", "Unknown structure", 2)
   
   Dictionary.add_discovered_proper_noun(listeningPost.name, listeningPost)

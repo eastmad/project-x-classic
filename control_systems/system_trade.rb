@@ -126,6 +126,15 @@ class SystemTrade < ShipSystem
     end
   end
   
+  def self.status
+    num = @@ship.trade.cargo.size
+    consignments = "#{num}"
+    consignments = "No" if num == 0 
+    para1 = <<-END.gsub(/^ {4}/, '')      
+      -#{consignments} consignments in cargo bays.
+    END
+  end
+
   def to_s
     "Trade"
   end

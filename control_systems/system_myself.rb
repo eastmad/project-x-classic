@@ -5,8 +5,8 @@ class SystemMyself < ShipSystem
     "myself:"
   end
   
-  def _help
-    _status
+  def _help(args = nil)
+    _status args
   end
   
   def _status(args = nil)
@@ -15,16 +15,19 @@ class SystemMyself < ShipSystem
       info "status for #{args}"
       sys = get_system_from_symbol(args.to_sym()) unless args.nil?
       if args.nil?
-        all_systems = poop(Operation.find_all_systems)
-        ret = "  #{@@ship.name} has the systems\n  #{all_systems}"
-        ret << "\n  (Type 'status navigation' to get status report for that system)"
+        ret = "  Status\n\n  #{SystemNavigation.status}"
+        sugs = @@ship.suggest
+        sugs.each {|sug| ret << "\n  -#{sug}"}
+        #all_systems = poop(Operation.find_all_systems)
+        #ret = "  #{@@ship.name} has the systems\n  #{all_systems}"
+        #ret << "\n  (Type 'status navigation' to get status report for that system)"
         @@rq.enq SystemsMessage.new(ret, SystemMyself, :report)
       else
         para1 = "  #{sys.to_s}"
-        para1 << "\n\n#{sys.status}"
+        para1 << "\n\n  #{sys.status}"
         all_commands = poop(Operation.find_sys_commands(args.to_sym())) 
         para1 << "\n  #{args} recognises the following commands:\n #{all_commands}."
-        para1 << "\n #{help(sys)}"
+        #para1 << "\n  #{help(sys)}"
         @@rq.enq SystemsMessage.new(para1, SystemMyself, :report)
         sys = SystemNavigation if sys.nil?
       end

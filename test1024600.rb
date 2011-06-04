@@ -110,10 +110,10 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
 
     @iconstack = stack {
       
-       flow {
-        @action_icon = image "gifs/loc1_icon.gif", :width => 32, :height => 30, :left => @minimap.current_level[:left]
-        @action_para = para @ship.describeLocation, :stroke => white, :left => @minimap.current_level[:left] + 30
-      }
+      #flow {
+      #  @action_icon = image "gifs/loc1_icon.gif", :width => 32, :height => 30, :left => @minimap.current_level[:left]
+      #  @action_para = para @ship.describeLocation, :stroke => white, :left => @minimap.current_level[:left] + 30
+      #}
       
       flow {
         @mm_top_level_image = image @minimap.top_level[:image], :width => @minimap.top_level[:size][:width], :height => @minimap.top_level[:size][:height], :left => @minimap.top_level[:left]
@@ -123,24 +123,26 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       flow {
         @mm_current_level_image = image @minimap.current_level[:image], :width => @minimap.current_level[:size][:width], :height => @minimap.current_level[:size][:height], :left => @minimap.current_level[:left]
         @mm_current_level_para = para @minimap.current_level[:name], :stroke => white, :left => @minimap.current_level[:left] + @minimap.current_level[:size][:width]
+        @action_icon = image "gifs/loc_icon.gif", :width => 36, :height => 24
+        @action_icon1 = image "gifs/loc1_icon.gif", :width => 36, :height => 24
+        @action_icon1.hide
       }
       
       flow {
-          @mm_opt_level_image = image "gifs/blank_icon.gif", :width => 30, :height => 32, :left => 50
-          @mm_opt_level_para = para "", :stroke => white, :left => 80
+        @mm_opt_level_image = image "gifs/blank_icon.gif", :width => 30, :height => 32, :left => 50
+        @mm_opt_level_para = para "", :stroke => white, :left => 80
       }
       
       flow {
-          @mm_opt_level_image2 = image "gifs/blank_icon.gif", :width => 30, :height => 32, :left => 50
-          @mm_opt_level_para2 = para "", :stroke => white, :left => 80
+        @mm_opt_level_image2 = image "gifs/blank_icon.gif", :width => 30, :height => 32, :left => 50
+        @mm_opt_level_para2 = para "", :stroke => white, :left => 80
       }
 
-
-      @heading_icon = flow {
-        image "gifs/head_icon.gif", :width => 30, :height => 32, :left => 15
-        @heading_para = para "orbit", :stroke => white, :left => 50
-      }
-      @heading_icon.hide
+      #@heading_icon = flow {
+      #  image "gifs/head_icon.gif", :width => 30, :height => 32, :left => 15
+      #  @heading_para = para "orbit", :stroke => white, :left => 50
+      #}
+      #@heading_icon.hide
     }
 
     @iconstack.move(0,parent.height - 200)
@@ -211,6 +213,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     @rq.enq SystemsMessage.new("Controller identity confirmed.", SystemSecurity, :info)
     @rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
     @rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
+    
     #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
 
     keypress { |k|
@@ -280,13 +283,13 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
             SystemNavigation.status
           end
 
-          if (!@ship.headingPoint.nil?)
-            @heading_para.replace @ship.headingPoint, :stroke => white, :left => 50
-            @heading_icon.show
-          else
-            @heading_icon.hide
-          end   
-          @action_para.replace @ship.describeLocation, :stroke => white, :left => 50
+          #if (!@ship.headingPoint.nil?)
+          #  @heading_para.replace @ship.headingPoint, :stroke => white, :left => 50
+          #  @heading_icon.show
+          #else
+          #  @heading_icon.hide
+          #end   
+          #@action_para.replace @ship.describeLocation, :stroke => white, :left => 50
           #either the current body is a planet, or the owning body.
           #local_body = @ship.locationPoint.body
           #local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name
@@ -322,8 +325,14 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     @mm_current_level_image.width = @minimap.current_level[:size][:width]
     @mm_current_level_image.height = @minimap.current_level[:size][:height]
     @mm_current_level_image.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width]
-    @action_icon.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width] 
-    @action_para.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width]
+    if @ship.status == :dependent
+      @action_icon.show
+      @action_icon1.hide
+    else  
+      @action_icon.hide
+      @action_icon1.show
+    end  
+    #@action_para.left = @minimap.current_level[:left] + @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width]
     
     opt_level = @minimap.option_level
     

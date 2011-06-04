@@ -14,9 +14,9 @@ class SystemPower < ShipSystem
       if first_time
         para1 = SystemLibrary.desc @@ship.locationPoint.body
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
-      else
-        SystemNavigation.status
-      end  
+      end
+        
+      SystemNavigation.status  
         
       resp_hash = {:success => true, :media => :travel}
     rescue RuntimeError => ex 
@@ -41,9 +41,17 @@ class SystemPower < ShipSystem
         sgo ||= @@ship.locationPoint.body
         @@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)
         @@rq.enq @@ship.land sgo         
-      end                    
-             
-      #SystemNavigation.status
+      end
+      
+      first_time = @@ship.locationPoint.body.visit
+      
+      if first_time
+        para1 = SystemLibrary.desc @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+      end  
+        
+      @@rq.enq SystemsMessage.new("Landed at #{@@ship.locationPoint.body.name}", SystemPower, :info)  
+      
       resp_hash = {:success => true, :media => :land}
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
@@ -144,6 +152,13 @@ class SystemPower < ShipSystem
       raise SystemsMessage.new("Cannot locate target", SystemNavigation, :info) if sgo.nil?
       
       @@rq.enq @@ship.approach sgo   
+        
+      first_time = @@ship.locationPoint.body.visit
+      
+      if first_time
+        para1 = SystemLibrary.desc @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+      end
         
       SystemNavigation.status
         

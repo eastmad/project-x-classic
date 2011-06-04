@@ -68,8 +68,11 @@ class SystemWeaponry < ShipSystem
   end
   
   def self.status
+    num = @@ship.weaponry.torpedoes.size
+    torp_loaded = "#{num}"
+    torp_loaded = "No" if num == 0 
     para1 = <<-END.gsub(/^ {4}/, '')      
-      -#{@@ship.weaponry.torpedoes.size} torpedoes loaded.
+      -#{torp_loaded} torpedoes loaded.
     END
   end
 
