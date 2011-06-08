@@ -129,12 +129,16 @@ JUMP = "Rift generator"
     end   
   end
   
-  def bay bay_number
-     @trade.bay(bay_number) if bay_number > 0 and bay_number <= 6
-  end
-  
-  def manifest
-    @trade.manifest
+  def bay bay_number = 0
+    raise SystemsMessage.new("Cargo bays empty", SystemTrade, :response) if @trade.cargo.empty?
+    if (bay_number >= 1) and (bay_number <= @trade.max_bays)
+      resp = @trade.bay(bay_number)
+      raise SystemsMessage.new("Cargo bay #{bay_number} is empty", SystemTrade, :response) if resp.empty? 
+    else
+      resp = @trade.manifest
+    end
+    
+    resp
   end
   
   def accept(item)

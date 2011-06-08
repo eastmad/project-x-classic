@@ -86,6 +86,8 @@ class GameStart
   
   ship.push_mail(SystemGhost.welcome, "ghost")
   
+  ship.trade.cargo << Consignment.new(wafercones,trader2)
+  
   ship
  end
  

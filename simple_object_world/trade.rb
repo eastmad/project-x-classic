@@ -59,10 +59,10 @@ class Item
   
   def notes
     para1 = ""
-    para1 << "\n* #{@@details[:controlled]}" if conditions.include? :controlled
-    para1 << "\n* #{@@details[:illegal]}" if conditions.include? :illegal
-    para1 << "\n* #{@@details[:foodstuff]}" if conditions.include? :foodstuff
-    para1 << "\n* #{@@details[:alien]}" if conditions.include? :alien
+    para1 << "\n  - #{@@details[:controlled]}" if conditions.include? :controlled
+    para1 << "\n  - #{@@details[:illegal]}" if conditions.include? :illegal
+    para1 << "\n  - #{@@details[:foodstuff]}" if conditions.include? :foodstuff
+    para1 << "\n  - #{@@details[:alien]}" if conditions.include? :alien
     
     para1
   end

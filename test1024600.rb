@@ -219,6 +219,8 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     keypress { |k|
       key_resp = KeystrokeReader.key_in(k,@dr.req_str)
       @dr.req_str = key_resp[:str]
+      #res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
+      #@dr.req_str = res[:word]
       
       @state = key_resp[:state]
       

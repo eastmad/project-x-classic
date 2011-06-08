@@ -1,16 +1,17 @@
 class ImplTrade
-  attr_accessor :cargo 
+  attr_accessor :cargo, :max_bays 
    
-  def initialize
-    @cargo = [] 
+  def initialize max = 6
+    @cargo = []
+    @max_bays = max
   end
   
   def manifest
     
-    para1 = ""
+    para1 = "  Cargo bay manifest\n\n"
     ind = 1;
     @cargo.each do |con|
-      para1 << "Bay #{ind}: #{con.to_s}\n"
+      para1 << "  bay #{ind}: #{con.to_s}\n"
       ind += 1
     end
   
@@ -23,9 +24,9 @@ class ImplTrade
     con = @cargo[ind]
     return "" if con.nil?
             
-    para1 = "#{con.to_s}\n"
-    para1 << "#{con.item.desc}\n"
-    para1 << "#{con.item.notes}\n"
+    para1 = "  #{con.item.name} (bay #{n})\n\n"
+    para1 << "  #{con.item.desc}\n"
+    para1 << "  #{con.item.notes}\n"
     
     para1
   end
