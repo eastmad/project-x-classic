@@ -80,6 +80,19 @@ class Dictionary
      return res   
    end
    
+   def self.all_matching_words(str, filter, context)              
+     res = []
+     str = str.downcase
+     @@Words.each do |k|
+       if (k[:word].to_s.downcase.match("^#{str}") and filter.include?(k[:grammar]) and 
+           (context.nil? or k[:sys].nil? or k[:sys] == context)) 
+         res << k[:word]
+       end
+     end
+      
+     return res   
+   end
+   
    def self.complete_me(str, filter, context)
      res = nil
      following = nil

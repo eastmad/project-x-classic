@@ -216,13 +216,27 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     
     #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
 
+    resps = []
+    pos = 0
     keypress { |k|
       key_resp = KeystrokeReader.key_in(k,@dr.req_str)
       @dr.req_str = key_resp[:str]
-      #res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
-      #@dr.req_str = res[:word]
       
       @state = key_resp[:state]
+      
+      if (key_resp[:state] == :next)
+        pos += 1
+        pos = 0 if pos >= resps.size
+        @dr.req_str = resps[pos].to_s if resps.size > pos
+      elsif (key_resp[:state] == :last)
+        pos -= 1
+        pos = resps.size - 1 if pos < 0
+        @dr.req_str = resps[pos].to_s if resps.size > 0
+      elsif (key_resp[:state] == :typing)
+        resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
+        @dr.req_str = resps.first.to_s if resps.size > 0
+        pos = 0
+      end       
       
       @dr.replace_req @arr
 

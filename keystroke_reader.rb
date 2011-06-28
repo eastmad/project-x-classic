@@ -4,14 +4,18 @@ class KeystrokeReader
       state = :empty
       
       if (k == :backspace)
-         if (str.length == 0)
+         #if (str.length == 0)
             state = :delete
-         else
-            str.chop!
-            state = :typing
-         end           
+         #else
+         #   str.chop!
+         #   state = :typing
+         # end           
       elsif (k == ' ' || k == :tab)
-         state = :complete_me         
+         state = :complete_me
+      elsif (k == :up || k == :right)
+         state = :next
+      elsif (k == :down || k == :left)
+         state = :last   
       elsif (k == "\n" or k == :enter)
          state = :done   
       elsif (k == :f10 || k == :escape)
