@@ -35,7 +35,7 @@ require "control_systems/system_library"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 550, :height => 300, :title => "ProjectX") {
+Shoes.app(:width => 620, :height => 300, :title => "ProjectX") {
   
   background rgb(20, 42, 42)
   stroke white

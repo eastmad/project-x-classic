@@ -38,7 +38,7 @@ require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
+Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
   
   background rgb(20, 42, 42)
   stroke white
@@ -162,6 +162,15 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
         caption "> ", :stroke => white
         @arr[0] = caption "_", :stroke => white
         (1..6).each{|n| @arr[n] = caption " ", :stroke => white}
+
+        @arrow_key = image "gifs/arrow-key.jpg", :width => 16, :height => 16, :right => 150
+        @space_key = image "gifs/space-key.jpg", :width => 50, :height => 16, :right => 90
+        @alpha_key = image "gifs/a-key.jpg", :width => 16, :height => 16, :right => 60
+        @return_key = image "gifs/return-key.jpg", :width => 22, :height => 16, :right => 30
+        
+        @space_key.hide
+        @arrow_key.hide
+        @return_key.hide
       }
       @last_command = para "Waiting for command", :stroke => gray
     }  
@@ -236,6 +245,11 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
         resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
         @dr.req_str = resps.first.to_s if resps.size > 0
         pos = 0
+        
+        @alpha_key.hide
+        @arrow_key.show
+        @space_key.show
+        @return_key.show
       end       
       
       @dr.replace_req @arr
@@ -253,6 +267,11 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
         needs_reset = @dr.remove_req @arr            
         @dr.replace_req @arr
         @gr.reset_grammar if needs_reset
+        
+        @alpha_key.show
+	@arrow_key.hide
+        @space_key.hide
+        @return_key.hide
       end
 
       if (@state == :complete_me)
@@ -276,7 +295,12 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
           end
         end                           
         @dr.add_req               
-        @dr.replace_req @arr    
+        @dr.replace_req @arr  
+        
+        @alpha_key.show
+        @arrow_key.hide
+        @space_key.hide
+        @return_key.hide
       end
 
       if (@state == :done)                 
@@ -403,6 +427,11 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
    @dr.clear @arr            
    @state = :empty
    @gr.reset_grammar()
+           
+   @alpha_key.show
+   @arrow_key.hide
+   @space_key.hide
+   @return_key.hide
   end   
   
 }
