@@ -38,7 +38,7 @@ require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
+Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   
   background rgb(20, 42, 42)
   stroke white
@@ -162,17 +162,19 @@ Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
         caption "> ", :stroke => white
         @arr[0] = caption "_", :stroke => white
         (1..6).each{|n| @arr[n] = caption " ", :stroke => white}
-
-        @arrow_key = image "gifs/arrow-key.jpg", :width => 16, :height => 16, :right => 150
-        @space_key = image "gifs/space-key.jpg", :width => 50, :height => 16, :right => 90
-        @alpha_key = image "gifs/a-key.jpg", :width => 16, :height => 16, :right => 60
-        @return_key = image "gifs/return-key.jpg", :width => 22, :height => 16, :right => 30
-        
-        @space_key.hide
-        @arrow_key.hide
-        @return_key.hide
       }
-      @last_command = para "Waiting for command", :stroke => gray
+      flow {
+        @last_command = para "Waiting for command", :stroke => gray
+        
+        @key_space = image "gifs/space-key.jpg", :width => 150, :height => 24, :right => 120
+        @key_alpha = image "gifs/a-key.jpg", :width => 24, :height => 24, :right => 90
+        @key_arrow = image "gifs/arrow-key.jpg", :width => 24, :height => 24, :right => 60
+        @key_return = image "gifs/return-key.jpg", :width => 36, :height => 24, :right => 20
+        
+        @key_space.hide
+        @key_arrow.hide
+        @key_return.hide
+      }  
     }  
 
     stack(:width => 615, :height => 250){
@@ -237,19 +239,19 @@ Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
         pos += 1
         pos = 0 if pos >= resps.size
         @dr.req_str = resps[pos].to_s if resps.size > pos
+        key_hints :complete 
+      
       elsif (key_resp[:state] == :last)
         pos -= 1
         pos = resps.size - 1 if pos < 0
         @dr.req_str = resps[pos].to_s if resps.size > 0
+        key_hints :complete 
+      
       elsif (key_resp[:state] == :typing)
         resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
         @dr.req_str = resps.first.to_s if resps.size > 0
         pos = 0
-        
-        @alpha_key.hide
-        @arrow_key.show
-        @space_key.show
-        @return_key.show
+        key_hints :complete
       end       
       
       @dr.replace_req @arr
@@ -267,11 +269,6 @@ Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
         needs_reset = @dr.remove_req @arr            
         @dr.replace_req @arr
         @gr.reset_grammar if needs_reset
-        
-        @alpha_key.show
-	@arrow_key.hide
-        @space_key.hide
-        @return_key.hide
       end
 
       if (@state == :complete_me)
@@ -295,12 +292,9 @@ Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
           end
         end                           
         @dr.add_req               
-        @dr.replace_req @arr  
-        
-        @alpha_key.show
-        @arrow_key.hide
-        @space_key.hide
-        @return_key.hide
+        @dr.replace_req @arr
+        key_hints :word 
+      
       end
 
       if (@state == :done)                 
@@ -423,16 +417,45 @@ Shoes.app(:width => 946, :height => 545, :title => "ProjectX") {
     exit()
   end
 
+  def key_hints kh
+    if kh == :start
+      @key_space.hide
+      @key_arrow.hide
+      @key_return.hide
+      @key_alpha.show
+    elsif kh == :complete
+      @key_space.show
+      @key_arrow.show
+      @key_return.show
+      @key_alpha.hide
+    elsif kh == :word
+      @key_space.hide
+      @key_arrow.hide
+      @key_return.show
+      @key_alpha.show
+    end
+  end
+
   def reset     
-   @dr.clear @arr            
-   @state = :empty
-   @gr.reset_grammar()
-           
-   @alpha_key.show
-   @arrow_key.hide
-   @space_key.hide
-   @return_key.hide
+    @dr.clear @arr            
+    @state = :empty
+    @gr.reset_grammar()
+    key_hints :start 
   end   
   
 }
+
+#def key_hints kh
+#		if kh == :start
+#			@key_space.hide
+#			@key_arrow.hide
+#			@key_return.hide
+#			@key_alpha.show
+#		elsif kh == :complete
+#			@key_space.show
+#			@key_arrow.show
+#			@key_return.show
+#			@key_alpha.hide
+#		end
+#	end
 
