@@ -9,7 +9,7 @@ class KeystrokeReader
          #else
          #   str.chop!
          #   state = :typing
-         # end           
+         # end
       elsif (k == ' ' || k == :tab)
          state = :complete_me
       elsif (k == :up || k == :right)

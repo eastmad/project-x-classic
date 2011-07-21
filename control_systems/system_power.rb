@@ -33,16 +33,25 @@ class SystemPower < ShipSystem
     begin
       raise SystemsMessage.new("#{@@ship.name} is not within a planet's atmosphere", SystemPower, :info) unless @@ship.locationPoint.band == :atmosphere
       
-      @obj = nil if args == @obj    
+      @obj = nil if args == @obj
+      
+      sgo = nil
       unless args.nil?
         sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
         
         raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo        
-        sgo ||= @@ship.locationPoint.body
-        @@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)
-        @@rq.enq @@ship.land sgo         
+        
+        #sgo ||= @@ship.locationPoint.body
+        #@@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)
+        #@@rq.enq @@ship.land sgo         
       end
+      sgo = nil unless sgo.kind_of? City
       
+      city_point = @@ship.locationPoint.body.available_city(sgo)
+      raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_point.nil?
+      
+      @@rq.enq @@ship.land city_point         
+ 
       first_time = @@ship.locationPoint.body.visit
       
       if first_time

@@ -100,6 +100,21 @@ class Planet < CelestialObject
        @orbitPoint.find_linked_location(:satellite)
    end
    
+   def available_city(city = nil)   
+      city_points = @atmospherePoint.find_linked_location :city
+      return nil if city_points.empty? 
+ 
+      #if a city specified check it is available to land at
+      #take first for now
+      target_point = city_points.first
+      city_points.each do | cp |
+         target_point = cp if cp.body == city
+      end
+   
+      return target_point
+   end
+   
+   
    def stationFactory(name, desc)
       SpaceStation.new(name, desc, @orbitPoint)
    end

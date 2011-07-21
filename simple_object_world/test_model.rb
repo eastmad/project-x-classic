@@ -1,11 +1,11 @@
 #model tests
 
-require "trust_holder"
-require "simple_body"
-require "simple_game_object"
-require "location_point"
-require "location_link"
-require "../control_systems/system_test_helper"
+require_relative "trust_holder"
+require_relative "simple_body"
+require_relative "simple_game_object"
+require_relative "location_point"
+require_relative "location_link"
+require_relative "../control_systems/system_test_helper"
 
 include TestHelper
 

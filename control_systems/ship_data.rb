@@ -241,22 +241,22 @@ JUMP = "Rift generator"
     SystemsMessage.new("You met #{person}", SystemCommunication, :response)
   end
              
- def land(city)
+ def land(city_point)
    
    #location must be city     
-   city_points = @locationPoint.find_linked_location :city
-   raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
+   #city_points = @locationPoint.find_linked_location :city
+   #raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
  
    #if a city specified check it is available to land at
    #take first for now
-   target_point = city_points.first
-   city_points.each do | lp |
-      target_point = lp if lp.body == city
-   end
+   #target_point = city_points.first
+   #city_points.each do | lp |
+   #   target_point = lp if lp.body == city
+   #end
    
    if (@status == :rest)
      @status = :dependent
-     @locationPoint = target_point
+     @locationPoint = city_point
      first_time = @locationPoint.body.visit
      
      if first_time
@@ -268,10 +268,10 @@ JUMP = "Rift generator"
  
        return SystemsMessage.new(para1, SystemLibrary, :report)
      else 
-       return SystemsMessage.new("Landed at #{target_point.body.name}", SystemPower, :info)
+       return SystemsMessage.new("Landed at #{city_point.body.name}", SystemPower, :info)
      end
    else
-     raise SystemsMessage.new("Cannot land on #{target_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
+     raise SystemsMessage.new("Cannot land on #{city_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
    end   
  end
  

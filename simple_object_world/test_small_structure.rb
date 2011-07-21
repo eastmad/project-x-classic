@@ -2,8 +2,8 @@ require_relative "trust_holder"
 require_relative "trustee"
 require_relative "simple_body"
 require_relative "simple_game_object"
-require "location_point"
-require "location_link"
+require_relative "location_point"
+require_relative "location_link"
 
 
 describe SmallStructure do

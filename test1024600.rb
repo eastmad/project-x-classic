@@ -34,6 +34,7 @@ require "control_systems/system_security"
 require "control_systems/system_myself"
 require "control_systems/system_library"
 require "control_systems/system_module"
+require "input_state"
 require "minimap/mini_map"
 require "long_text"
 require "game_start"
@@ -46,6 +47,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   @ship = GameStart.data
   @minimap = MiniMap.new(10,30,50)
   @minimap.set_location_point(@ship.locationPoint)
+  @key_input_state = InputState.new
   
   Operation.register_op :launch, :power, 1
   Operation.register_op :land, :power, 1
@@ -230,48 +232,52 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     resps = []
     pos = 0
     keypress { |k|
-      key_resp = KeystrokeReader.key_in(k,@dr.req_str)
-      @dr.req_str = key_resp[:str]
+      next unless @key_input_state.accept k
+      #key_resp = KeystrokeReader.key_in(k,@dr.req_str)
+      #@dr.req_str = key_resp[:str]
+      @key = @key_input_state.key
+      @state = @key_input_state.state
+      key_hints @state
       
-      @state = key_resp[:state]
-      
-      if (key_resp[:state] == :next)
+      if (@key == :down)
         pos += 1
         pos = 0 if pos >= resps.size
         @dr.req_str = resps[pos].to_s if resps.size > pos
-        key_hints :complete 
-      
-      elsif (key_resp[:state] == :last)
+      elsif (@key == :up)
         pos -= 1
         pos = resps.size - 1 if pos < 0
         @dr.req_str = resps[pos].to_s if resps.size > 0
-        key_hints :complete 
-      
-      elsif (key_resp[:state] == :typing)
-        resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
+      elsif (@key == :alpha)
+        if @dr.req_str.empty?
+          @dr.req_str = k
+          resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
+        else
+          resps = Dictionary.filter_with_letter(resps, k)
+        end  
         @dr.req_str = resps.first.to_s if resps.size > 0
         pos = 0
-        key_hints :complete
-      end       
-      
-      @dr.replace_req @arr
+      end           
 
-      if (@state == :exit)
+      if (@key == :exit)
         goodbye()
       end
       
-      if (@state == :talk_test)
+      if (@key == :talk_test)
         talk_screen :war
       end
 
-      if (@state == :delete)
+      if (@key == :delete)
         @gr.undo_grammar
         needs_reset = @dr.remove_req @arr            
-        @dr.replace_req @arr
+        #@dr.replace_req @arr
         @gr.reset_grammar if needs_reset
+        
+        @key_input_state = InputState.new if @dr.req_str.empty?
+        key_hints @key_input_state.state
       end
+      
 
-      if (@state == :complete_me)
+      if (@key == :space)
         res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
         if (res == nil)
           @rq.enq SystemsMessage.new("#{@dr.req_str} is not in #{@gr.context} dictionary", SystemMyself, :warn)
@@ -291,13 +297,13 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
             @gr.set_grammar(following[:grammar])
           end
         end                           
-        @dr.add_req               
-        @dr.replace_req @arr
-        key_hints :word 
-      
+        @dr.add_req                     
       end
+      
+      @dr.replace_req @arr
 
-      if (@state == :done)                 
+
+      if (@key == :return)                 
         begin
           if @dr.fullCommand.size > 1
             info "Full command = #{@dr.fullCommand}"
@@ -417,22 +423,22 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     exit()
   end
 
-  def key_hints kh
-    if kh == :start
+  def key_hints state
+    if state == :start
       @key_space.hide
       @key_arrow.hide
       @key_return.hide
       @key_alpha.show
-    elsif kh == :complete
-      @key_space.show
-      @key_arrow.show
-      @key_return.show
-      @key_alpha.hide
-    elsif kh == :word
+    elsif state == :next
       @key_space.hide
       @key_arrow.hide
       @key_return.show
       @key_alpha.show
+    elsif state == :word
+      @key_space.show
+      @key_arrow.show
+      @key_return.show
+      @key_alpha.hide
     end
   end
 

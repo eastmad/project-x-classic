@@ -22,7 +22,6 @@ class Dictionary
             {:word => :meet, :grammar => :verb, :sys => :communication},
             {:word => :mail, :grammar => :noun, :sys => :communication},
             {:word => :describe, :grammar => :verb, :sys => :library},
-            {:word => :suggest, :grammar => :verb, :sys => :myself},
             {:word => :status, :grammar => :verb, :sys => :myself},
             {:word => :help, :grammar => :verb, :sys => :myself}, 
             {:word => :release, :grammar => :verb, :sys => :security},
@@ -91,6 +90,18 @@ class Dictionary
      end
       
      return res   
+   end
+   
+   def self.filter_with_letter(words, letter)
+      res = []
+      words.each do |word|
+         if word.to_s.include? letter
+            res << word
+         end
+      end
+      
+      return res if res.size > 0
+      words
    end
    
    def self.complete_me(str, filter, context)
