@@ -16,7 +16,7 @@ class SystemPower < ShipSystem
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
       end
         
-      SystemNavigation.status  
+      @@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
         
       resp_hash = {:success => true, :media => :travel}
     rescue RuntimeError => ex 
@@ -40,10 +40,6 @@ class SystemPower < ShipSystem
         sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
         
         raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo        
-        
-        #sgo ||= @@ship.locationPoint.body
-        #@@rq.enq SystemsMessage.new("#{@@ship.name} granted permission to land at #{sgo.name}", SystemCommunication, :info)
-        #@@rq.enq @@ship.land sgo         
       end
       sgo = nil unless sgo.kind_of? City
       
@@ -118,7 +114,14 @@ class SystemPower < ShipSystem
         
         @@rq.enq @@ship.up
 
-        SystemNavigation.status
+        first_time = @@ship.locationPoint.body.visit
+      
+        if first_time
+          para1 = SystemLibrary.desc @@ship.locationPoint.body
+          @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+        end
+
+        @@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
         
         resp_hash = {:success => true, :media => :travel}
       rescue RuntimeError => ex 
@@ -169,7 +172,7 @@ class SystemPower < ShipSystem
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
       end
         
-      SystemNavigation.status
+      @@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
         
       resp_hash = {:success => true, :media => :atmosphere}
     rescue RuntimeError => ex          

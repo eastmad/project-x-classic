@@ -1,5 +1,6 @@
 class Dictionary
-   @@Words = [ 
+   @@Words = [
+            {:word => :status, :grammar => :verb, :sys => :myself},
             {:word => :approach, :grammar => :verb, :sys => :power},
             {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :launch, :grammar => :verb, :sys => :power},
@@ -22,7 +23,7 @@ class Dictionary
             {:word => :meet, :grammar => :verb, :sys => :communication},
             {:word => :mail, :grammar => :noun, :sys => :communication},
             {:word => :describe, :grammar => :verb, :sys => :library},
-            {:word => :status, :grammar => :verb, :sys => :myself},
+            
             {:word => :help, :grammar => :verb, :sys => :myself}, 
             {:word => :release, :grammar => :verb, :sys => :security},
             {:word => :gate, :grammar => :noun, :sys => :navigation},

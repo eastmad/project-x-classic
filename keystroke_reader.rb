@@ -1,6 +1,5 @@
 class KeystrokeReader
    def self.key_in(k, str)      
-      
       state = :empty
       
       if (k == :backspace)

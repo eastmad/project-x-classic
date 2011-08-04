@@ -233,8 +233,6 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     pos = 0
     keypress { |k|
       next unless @key_input_state.accept k
-      #key_resp = KeystrokeReader.key_in(k,@dr.req_str)
-      #@dr.req_str = key_resp[:str]
       @key = @key_input_state.key
       @state = @key_input_state.state
       key_hints @state

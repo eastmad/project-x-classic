@@ -50,7 +50,7 @@ class InputState
   
   def accept key_code
     @change = false
-    if ('a' .. 'z').include? key_code
+    if ('A' .. 'z').include? key_code
       return false if @sm.alpha_key.nil?
       @sm = @sm.alpha_key
       @change = true

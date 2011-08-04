@@ -105,7 +105,7 @@ class GameStart
         para "- Try 'status' to find out more commands\n", :stroke => azure
         para "- Type space or tab to complete any command\n", :stroke => azure
         para "- Your vessel is in an old space station\n", :stroke => azure
-        para "- The first command to try is probably 'launch'\n", :stroke => aquamarine
+        para "- The first command to try is probably 'undock'\n", :stroke => aquamarine
 
       }
       keypress { | k| 
