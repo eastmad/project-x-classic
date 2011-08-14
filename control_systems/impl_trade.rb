@@ -1,5 +1,7 @@
 class ImplTrade
-  attr_accessor :cargo, :max_bays 
+  attr_accessor :cargo, :max_bays
+  
+  Bay_colour_map = {"red" => 0, "orange" => 1, "yellow" => 2, "green" => 3, "blue" => 4, "indigo" => 5, "violet" => 6}
    
   def initialize max = 6
     @cargo = []
@@ -9,22 +11,23 @@ class ImplTrade
   def manifest
     
     para1 = "  Cargo bay manifest\n\n"
-    ind = 1;
-    @cargo.each do |con|
-      para1 << "  bay #{ind}: #{con.to_s}\n"
+    ind = 0;
+    Bay_colour_map.each do |key, value|
+      con = @cargo[value]
+      para1 << "  #{key} bay: #{con.to_s}\n" unless con.nil?
       ind += 1
     end
   
     para1
   end
   
-  def bay n
+  def bay colour
     
-    ind = n - 1
+    ind = Bay_colour_map[colour]
     con = @cargo[ind]
     return "" if con.nil?
             
-    para1 = "  #{con.item.name} (bay #{n})\n\n"
+    para1 = "  #{con.item.name} (bay #{colour})\n\n"
     para1 << "  #{con.item.desc}\n"
     para1 << "  #{con.item.notes}\n"
     

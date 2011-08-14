@@ -18,7 +18,7 @@ class GameStart
 
   sputnik = earth.stationFactory("Sputnik", "One of the oldest space stations")
   Dictionary.add_discovered_proper_noun(sputnik.name, sputnik)
-  mall = earth.stationFactory("OrbitalMall", "A Modern trading space stations")
+  mall = earth.stationFactory("OrbitalMall", "A Modern trading space station")
   Dictionary.add_discovered_proper_noun(mall.name, mall)
   servicestation = venus.stationFactory("ServiceShop", "A service station")
   Dictionary.add_discovered_proper_noun(servicestation.name, servicestation)
@@ -72,7 +72,7 @@ class GameStart
   freemars = Organisation.new("Free Mars", "Independence for Mars!", :secret)
   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
  If you want to know more about what's happening to Mars, talk to our contact on Earth.")
-  pers = houston.contactFactory(:m, "Pers", "Nordstrum", "Alien artifact trader", freemars, 1)
+  pers = houston.contactFactory(:m, "Prof.", "Nordstrum", "Alien artifact trader", freemars, 1)
   pers.add_details(:interest => :alien, :talk => :war)
 
   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)

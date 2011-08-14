@@ -18,8 +18,7 @@ class Dictionary
             {:word => :read, :grammar => :verb, :sys => :communication},
             {:word => :browse, :grammar => :verb, :sys => :trade},
             {:word => :contact, :grammar => :verb, :sys => :communication},
-            {:word => :contacts, :grammar => :noun, :sys => :communication},
-            {:word => :view, :grammar => :verb, :sys => :communication, :following => :contacts},
+            {:word => :people, :grammar => :verb, :sys => :communication},
             {:word => :meet, :grammar => :verb, :sys => :communication},
             {:word => :mail, :grammar => :noun, :sys => :communication},
             {:word => :describe, :grammar => :verb, :sys => :library},
@@ -39,13 +38,13 @@ class Dictionary
             {:word => :drive, :grammar => :noun, :sys => :power},
             {:word => :traders, :grammar => :noun, :sys => :trade},
             {:word => :manifest, :grammar => :verb, :sys => :trade},
+            {:word => :cargo, :grammar => :verb, :sys => :trade},
             {:word => :bay, :grammar => :verb, :sys => :trade},
             {:word => :trade, :grammar => :noun, :sys => :trade},
             {:word => :consignment, :grammar => :noun, :sys => :trade},
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},
-            {:word => :of, :grammar => :preposition},
             {:word => :in, :grammar => :preposition},
             {:word => :to, :grammar => :preposition},
             {:word => :from, :grammar => :preposition},
@@ -58,7 +57,15 @@ class Dictionary
             {:word => :enemy, :grammar => :adjective},
             {:word => :friendly, :grammar => :adjective},
             {:word => :first, :grammar => :adjective},
-            {:word => :last, :grammar => :adjective},         
+            {:word => :last, :grammar => :adjective},
+            
+            {:word => :red, :grammar => :adjective},
+            {:word => :orange, :grammar => :adjective},
+            {:word => :yellow, :grammar => :adjective},
+            {:word => :green, :grammar => :adjective},
+            {:word => :blue, :grammar => :adjective},
+            {:word => :indigo, :grammar => :adjective},
+            {:word => :violet, :grammar => :adjective},
             
             {:word => :Industries, :grammar => :proper_noun, :sys => :trade},
             {:word => :Intergalactic, :grammar => :proper_noun, :sys => :trade},
@@ -82,12 +89,20 @@ class Dictionary
    
    def self.all_matching_words(str, filter, context)              
      res = []
-     str = str.downcase
      @@Words.each do |k|
+       if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar]) and 
+           (context.nil? or k[:sys].nil? or k[:sys] == context)) 
+         res << k[:word]
+       end
+     end
+     if res.empty?
+      str = str.downcase
+      @@Words.each do |k|
        if (k[:word].to_s.downcase.match("^#{str}") and filter.include?(k[:grammar]) and 
            (context.nil? or k[:sys].nil? or k[:sys] == context)) 
          res << k[:word]
        end
+      end
      end
       
      return res   

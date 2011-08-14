@@ -66,11 +66,12 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :give, :trade, 1
   Operation.register_op :browse, :trade, 1
   Operation.register_op :contact, :communication, 1
-  Operation.register_op :view, :communication, 1
+  Operation.register_op :people, :communication, 1
   Operation.register_op :meet, :communication, 1 
   Operation.register_op :suggest, :myself, 1
   Operation.register_op :manifest, :trade, 1
   Operation.register_op :bay, :trade, 1
+  Operation.register_op :cargo, :trade, 1
   Operation.register_op :destroy, :weaponry, 1
   Operation.register_op :load, :weaponry, 1
   Operation.register_op :install, :modification, 1
@@ -375,12 +376,20 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     opt_level = @minimap.option_level
     
     unless opt_level.nil?
+      info "path = #{opt_level[0][:image]}"
       @mm_opt_level_para.replace opt_level[0][:name], :stroke => white, :left => @minimap.current_level[:left] + opt_level[0][:left] + @minimap.current_level[:size][:width] + opt_level[0][:size][:width]
       @mm_opt_level_image.path = opt_level[0][:image]
+      
+      @mm_opt_level_image.width = opt_level[0][:size][:width] if opt_level[0][:size][:width] > 0
+      @mm_opt_level_image.height = opt_level[0][:size][:height] if opt_level[0][:size][:height] > 0
+
       @mm_opt_level_image.left = @minimap.current_level[:left] + opt_level[0][:left] + @minimap.current_level[:size][:width]
     else
       @mm_opt_level_para.replace ""
       @mm_opt_level_image.path = "gifs/blank_icon.gif"
+      @mm_opt_level_image.width = 16
+      @mm_opt_level_image.height = 16
+      info "set width = 16"
     end
     
     unless (opt_level.nil? or opt_level.size < 2)

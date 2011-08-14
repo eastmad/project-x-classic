@@ -74,19 +74,18 @@ end
 
 class Consignment
   attr_reader :item, :origin_trader
-  attr_accessor :amount
+  @@unit_map = {:box => "Box of"}
   
   def initialize(item, origin_trader)
     @origin_trader = origin_trader
     @item = item
-    @amount =  1
   end
   
   def to_s
     if @item.item_type == :unique
       "A #{@item.name}"
     else  
-      "#{@amount} units of #{@item.name} (origin: #{@origin_trader})"
+      "Box of #{@item.name} (origin: #{@origin_trader})"
     end
   end
 end

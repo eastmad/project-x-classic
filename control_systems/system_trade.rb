@@ -7,10 +7,7 @@ class SystemTrade < ShipSystem
 
   def _bay(arg = nil)
     begin
-      num = 0
-      num = arg.to_i unless arg.nil?
-      
-      para1 = @@ship.bay(num)
+      para1 = @@ship.bay(arg)
       @@rq.enq SystemsMessage.new(para1, "Cargo bay manifest", :report)
 
       {:success => true, :media => :trade}
@@ -21,7 +18,11 @@ class SystemTrade < ShipSystem
   end
 
   def _manifest(arg = nil)
-    _bay arg
+    _bay nil
+  end
+  
+  def _cargo(arg = nil)
+    _bay nil
   end
   
   def _browse(arg = nil)

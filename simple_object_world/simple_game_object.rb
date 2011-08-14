@@ -219,7 +219,7 @@ class SpaceStation < CelestialObject
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     garages = @centrePoint.find_linked_location(:garage).collect{|traderPoint| traderPoint.body}
 
-    ret = "The trading companies are #{traders.join(', ')}" unless traders.empty?
+    ret = "The trading companies include #{traders.join(', ')}" unless traders.empty?
     ret = "Ship services by #{garages.join(', ')}" unless garages.empty?
     ret
   end

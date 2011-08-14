@@ -129,11 +129,12 @@ JUMP = "Rift generator"
     end   
   end
   
-  def bay bay_number = 0
+  def bay bay = "red"
+    info "bay = #{bay}"
     raise SystemsMessage.new("Cargo bays empty", SystemTrade, :response) if @trade.cargo.empty?
-    if (bay_number >= 1) and (bay_number <= @trade.max_bays)
-      resp = @trade.bay(bay_number)
-      raise SystemsMessage.new("Cargo bay #{bay_number} is empty", SystemTrade, :response) if resp.empty? 
+    if (ImplTrade::Bay_colour_map.keys.include? bay)
+      resp = @trade.bay(bay)
+      raise SystemsMessage.new("Cargo bay #{bay} is empty", SystemTrade, :response_bad) if resp.empty? 
     else
       resp = @trade.manifest
     end
