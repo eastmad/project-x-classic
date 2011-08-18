@@ -1,6 +1,6 @@
 class GrammarTree
    @@grammars = [
-      {:name => :start_grammar,:grammar => :nil,      :branches => [:verb] },
+      {:name => :start_grammar,:grammar => :nil,      :branches => [:verb,:short] },
       {:name => :verb1,       :grammar => :verb,      :branches => [:noun, :proper_noun, :adjective, :item]},
       {:name => :adjective1,  :grammar => :adjective, :branches => [:noun, :proper_noun]}, 
       {:name => :proper_noun1,:grammar => :proper_noun,:branches=> [:preposition, :end_grammar]},
@@ -9,6 +9,7 @@ class GrammarTree
       {:name => :adjective2,  :grammar => :adjective, :branches  => [:noun, :proper_noun]}, 
       {:name => :proper_noun2, :grammar => :proper_noun, :branches =>[:end_grammar]},
       {:name => :noun2,        :grammar => :noun, :branches =>[:end_grammar]},
+      {:name => :short1,        :grammar => :short, :branches =>[:end_grammar]}
               ]
    
    

@@ -211,7 +211,7 @@ JUMP = "Rift generator"
      #take into account no interest
      mes = "#{person} has already agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}"
    else
-     mes = "#{person} has agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}" if @contact.check_cargo(person, @trade.cargo)
+     mes = "#{person} has agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}" if @icontact.check_cargo(person, @trade.cargo)
    end
    
    SystemsMessage.new(mes, SystemCommunication, :response)

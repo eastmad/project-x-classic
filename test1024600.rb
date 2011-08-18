@@ -48,6 +48,12 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   @minimap = MiniMap.new(10,30,50)
   @minimap.set_location_point(@ship.locationPoint)
   @key_input_state = InputState.new
+
+  Operation.register_op :manifest, :trade, 1
+  Operation.register_op :bay, :trade, 1
+  Operation.register_op :cargo, :trade, 1
+  Operation.register_op :people, :communication, 1
+  Operation.register_op :trades, :trade, 1
   
   Operation.register_op :launch, :power, 1
   Operation.register_op :land, :power, 1
@@ -64,14 +70,9 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :read, :communication, 1
   Operation.register_op :accept, :trade, 1
   Operation.register_op :give, :trade, 1
-  Operation.register_op :browse, :trade, 1
   Operation.register_op :contact, :communication, 1
-  Operation.register_op :people, :communication, 1
   Operation.register_op :meet, :communication, 1 
   Operation.register_op :suggest, :myself, 1
-  Operation.register_op :manifest, :trade, 1
-  Operation.register_op :bay, :trade, 1
-  Operation.register_op :cargo, :trade, 1
   Operation.register_op :destroy, :weaponry, 1
   Operation.register_op :load, :weaponry, 1
   Operation.register_op :install, :modification, 1
@@ -241,19 +242,24 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       if (@key == :down)
         pos += 1
         pos = 0 if pos >= resps.size
-        @dr.req_str = resps[pos].to_s if resps.size > pos
+        @dr.req_str = resps[pos][:word].to_s if resps.size > pos
+        @dr.req_grammar = resps[pos][:grammar]
       elsif (@key == :up)
         pos -= 1
         pos = resps.size - 1 if pos < 0
-        @dr.req_str = resps[pos].to_s if resps.size > 0
+        @dr.req_str = resps[pos][:word].to_s if resps.size > 0
+        @dr.req_grammar = resps[pos][:grammar]
       elsif (@key == :alpha)
         if @dr.req_str.empty?
           @dr.req_str = k
           resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
         else
           resps = Dictionary.filter_with_letter(resps, k)
+        end
+        if resps.size > 0
+          @dr.req_str = resps.first[:word].to_s 
+          @dr.req_grammar = resps.first[:grammar]
         end  
-        @dr.req_str = resps.first.to_s if resps.size > 0
         pos = 0
       end           
 

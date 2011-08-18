@@ -4,7 +4,7 @@ class SystemCommunication < ShipSystem
       "comms:"
   end
   
-  def _view(args = nil)
+  def _people(args = nil)
     
     sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
     
@@ -40,7 +40,7 @@ class SystemCommunication < ShipSystem
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Type 'view contacts' for known contacts.", SystemCommunication, :info)
+      @@rq.enq SystemsMessage.new("Type 'people' for known contacts.", SystemCommunication, :info)
       {:success => false}
     end  
   end

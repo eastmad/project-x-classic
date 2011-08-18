@@ -62,6 +62,8 @@ class DisplayResponse
          paras[i].replace "#{@complete_words[i][:word]} "                       
          if (@complete_words[i][:grammar] == :none)
             paras[i].stroke = rgb(200,50,50)
+         elsif (@complete_words[i][:grammar] == :short)
+            paras[i].stroke = rgb(255,200,150)            
          elsif (@complete_words[i][:grammar] == :proper_noun)
             paras[i].stroke = rgb(150,255,150)
          elsif (@complete_words[i][:grammar] == :item)
@@ -72,6 +74,19 @@ class DisplayResponse
          i += 1         
       end
       paras[i].replace "#{@req_str}_"
-      paras[i].stroke = rgb(255,255,255)
+      #paras[i].stroke = rgb(255,255,255)
+
+
+      if (@req_grammar == :none)
+            paras[i].stroke = rgb(200,50,50)
+         elsif (@req_grammar == :short)
+            paras[i].stroke = rgb(255,200,150)            
+         elsif (@req_grammar == :proper_noun)
+            paras[i].stroke = rgb(150,255,150)
+         elsif (@req_grammar == :item)
+            paras[i].stroke = rgb(150,150,255)   
+         else
+            paras[i].stroke = rgb(255,255,100)
+         end
    end
 end

@@ -1,9 +1,17 @@
 class Dictionary
    @@Words = [
-            {:word => :status, :grammar => :verb, :sys => :myself},
+            {:word => :status, :grammar => :short, :sys => :myself},
+            {:word => :manifest, :grammar => :short, :sys => :trade},
+            {:word => :cargo, :grammar => :short, :sys => :trade},
+            {:word => :people, :grammar => :short, :sys => :communication},
+            {:word => :planets, :grammar => :short, :sys => :navigation},
+            {:word => :companies, :grammar => :short, :sys => :trade},
+            {:word => :bay, :grammar => :verb, :sys => :trade},
+            {:word => :trades, :grammar => :short, :sys => :trade},
+            
             {:word => :approach, :grammar => :verb, :sys => :power},
-            {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :launch, :grammar => :verb, :sys => :power},
+            {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :destroy, :grammar => :verb, :sys => :weaponry},
             {:word => :load, :grammar => :verb, :sys => :weaponry},
             {:word => :install, :grammar => :verb, :sys => :modification},                        
@@ -16,9 +24,7 @@ class Dictionary
             {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
             {:word => :send, :grammar => :verb, :sys => :communication},
             {:word => :read, :grammar => :verb, :sys => :communication},
-            {:word => :browse, :grammar => :verb, :sys => :trade},
             {:word => :contact, :grammar => :verb, :sys => :communication},
-            {:word => :people, :grammar => :verb, :sys => :communication},
             {:word => :meet, :grammar => :verb, :sys => :communication},
             {:word => :mail, :grammar => :noun, :sys => :communication},
             {:word => :describe, :grammar => :verb, :sys => :library},
@@ -29,18 +35,12 @@ class Dictionary
             {:word => :probe, :grammar => :noun, :sys => :navigation},
             {:word => :course, :grammar => :noun, :sys => :navigation},
             {:word => :cannon, :grammar => :noun, :sys => :weaponry},
-            {:word => :planet, :grammar => :noun, :sys => :navigation},
             {:word => :torpedo, :grammar => :noun, :sys => :weaponry},
             {:word => :shield, :grammar => :noun, :sys => :modification},
             {:word => :jump, :grammar => :noun, :sys => :modification},
             {:word => :message, :grammar => :noun, :sys => :communication},
             {:word => :vessel, :grammar => :noun, :sys => :weaponry},
             {:word => :drive, :grammar => :noun, :sys => :power},
-            {:word => :traders, :grammar => :noun, :sys => :trade},
-            {:word => :manifest, :grammar => :verb, :sys => :trade},
-            {:word => :cargo, :grammar => :verb, :sys => :trade},
-            {:word => :bay, :grammar => :verb, :sys => :trade},
-            {:word => :trade, :grammar => :noun, :sys => :trade},
             {:word => :consignment, :grammar => :noun, :sys => :trade},
             
             {:word => :for, :grammar => :preposition},
@@ -92,26 +92,25 @@ class Dictionary
      @@Words.each do |k|
        if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar]) and 
            (context.nil? or k[:sys].nil? or k[:sys] == context)) 
-         res << k[:word]
+         res << k
        end
      end
-     if res.empty?
+     
       str = str.downcase
       @@Words.each do |k|
        if (k[:word].to_s.downcase.match("^#{str}") and filter.include?(k[:grammar]) and 
            (context.nil? or k[:sys].nil? or k[:sys] == context)) 
-         res << k[:word]
+         res << k
        end
       end
-     end
-      
+           
      return res   
    end
    
    def self.filter_with_letter(words, letter)
       res = []
       words.each do |word|
-         if word.to_s.include? letter
+         if word[:word].to_s.include? letter
             res << word
          end
       end

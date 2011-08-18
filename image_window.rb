@@ -18,12 +18,13 @@ class ImageWindow
    :crates =>["gifs/crates.jpg"],
    }
    
+   #prefer the last selection (ordered hash)
    @@sgo = {
-      :Planet => {:atmosphere => :atmosphere, :Earth => :terre, :Mars => :mars, :Venus => :venus},
+      :Planet => {:Earth => :terre, :Mars => :mars, :Venus => :venus, :atmosphere => :atmosphere},
       :Star => {:outer => :solar_system},
       :SpaceStation=> {:surface => :stationdocked, :outer => :station, :centre => :stationdocked},
       :SmallStructure => {:centre => :satellite},
-      :City => {:centre => :city, :Houston => :city, :Nicosia => :ruinedcity}
+      :City => {:centre => :city, :Nicosia => :ruinedcity}
    }
 
    def self.find_id locPoint
@@ -33,8 +34,12 @@ class ImageWindow
       sgo_hash = @@sgo[klassname]
       image_id = sgo_hash[instance_name]
       
-      ret = image_id unless image_id.nil?
-      ret = sgo_hash[locPoint.band] unless sgo_hash[locPoint.band].nil?
+      ret = 0      
+      sgo_hash.each do |key, value|
+         ret = value if key == instance_name
+         ret = value if key == locPoint.band
+      end
+ 
       ret
     end
 

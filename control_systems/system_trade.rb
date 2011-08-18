@@ -8,6 +8,7 @@ class SystemTrade < ShipSystem
   def _bay(arg = nil)
     begin
       para1 = @@ship.bay(arg)
+      para1 << "\n (Type 'bay red' to see details of that cargo)"
       @@rq.enq SystemsMessage.new(para1, "Cargo bay manifest", :report)
 
       {:success => true, :media => :trade}
@@ -25,7 +26,7 @@ class SystemTrade < ShipSystem
     _bay nil
   end
   
-  def _browse(arg = nil)
+  def _trades(arg = nil)
     begin    
       station = @@ship.locationPoint.body
       raise SystemsMessage.new("A trade channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      

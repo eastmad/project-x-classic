@@ -14,7 +14,7 @@ class ImplHelp
     :chk => lambda {@band == :outer and @body.kind_of? SpaceStation}},
    {:txt => "'describe Earth' to find orbiting bodies", 
     :chk => lambda {@band == :orbit}},
-   {:txt => "'describe Sol' to find orbiting planets", 
+   {:txt => "'planets' to find orbiting planets", 
     :chk => lambda {@band == :orbit}},
    {:txt => "'approach' to go towards a planet or satellite", 
     :chk => lambda {@band == :orbit and @status == :sync}},
