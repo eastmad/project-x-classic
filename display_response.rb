@@ -2,6 +2,7 @@ class DisplayResponse
   
    attr_accessor :req_str
    attr_accessor :req_grammar
+   attr_accessor :script_command
    
    Maxwords = 6     
    
@@ -34,6 +35,7 @@ class DisplayResponse
    end
    
    def fullCommand
+      return @script_command if !@script_command.nil?
       fc = ""
       i = 0
       while(i < @current_word) do         

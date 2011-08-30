@@ -70,6 +70,8 @@ class InputState
       @sm = @sm.delete_key
       @change = true
       @key = :delete
+    elsif key_code == :f1
+      @key = :f1  
     elsif (key_code == :up || key_code == :left)
       return false if @sm.arrow_key.nil?
       @change = false

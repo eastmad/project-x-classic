@@ -39,13 +39,10 @@ class MiniMap
   
   def size_map body
     if body.kind_of? Star
-      info "star"
       return {:width => 60, :height =>64}
     elsif body.kind_of? SmallStructure
-      info "small=#{body}"
       return {:width => 15, :height =>16}
     else
-      info "body = #{body}"
       return {:width => 30, :height => 32}
     end
   end

@@ -283,7 +283,7 @@ class SpaceStation < CelestialObject
   end
   
   def welcome
-    "The space station #{@name} welcomes your visit. Browse channel open."
+    "The space station #{@name} welcomes your visit. Trade channel open."
   end
 end
 

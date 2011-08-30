@@ -36,7 +36,7 @@ class City < SimpleBody
   end
   
   def describe_owns 
-    "\n(Type 'view contacts' to see who you know in a city)"
+    "\n(Type 'people' to see who you know in a city)"
   end
    
   def describe_contacts

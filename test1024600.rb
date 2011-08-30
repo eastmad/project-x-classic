@@ -1,5 +1,4 @@
 require "local_config"
-require "keystroke_reader"
 require "display_response"
 require "image_window"
 require "media_manager"
@@ -53,6 +52,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   Operation.register_op :bay, :trade, 1
   Operation.register_op :cargo, :trade, 1
   Operation.register_op :people, :communication, 1
+  Operation.register_op :planets, :library, 1
   Operation.register_op :trades, :trade, 1
   
   Operation.register_op :launch, :power, 1
@@ -307,7 +307,6 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       
       @dr.replace_req @arr
 
-
       if (@key == :return)                 
         begin
           if @dr.fullCommand.size > 1
@@ -354,6 +353,54 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
         end
 
         @last_command.text = @dr.fullCommand  if @dr.fullCommand.size > 1
+        reset
+      end
+      
+      if (@key == :f1)                 
+        begin
+            command = read_script
+            @dr.script_command = command
+            info "script command = #{command}"
+
+            resp_hash = ShipSystem.command_parser(command, @rq)
+                     
+            if (resp_hash[:success])
+              media_lp = @ship.locationPoint
+              media_lp = resp_hash[:sgo].centrePoint unless resp_hash[:sgo].nil?
+              MediaManager.show_media(@im_win,resp_hash[:media],media_lp) unless resp_hash[:media].nil?
+            else 
+              SoundPlay.play_sound(5)
+            end
+            
+            talk_screen resp_hash[:talk] unless resp_hash[:talk].nil?
+         
+          #if (!@ship.headingPoint.nil?)
+          #  @heading_para.replace @ship.headingPoint, :stroke => white, :left => 50
+          #  @heading_icon.show
+          #else
+          #  @heading_icon.hide
+          #end   
+          #@action_para.replace @ship.describeLocation, :stroke => white, :left => 50
+          #either the current body is a planet, or the owning body.
+          #local_body = @ship.locationPoint.body
+          #local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name
+          draw_mini_map
+          
+          #read mail
+          mail = SimpleBody.get_mail.shift
+          @ship.push_mail(mail.txt, mail.from) unless mail.nil?
+          
+          if @ship.has_new_mail?
+            new_mail = @ship.read_mail(:position => :new, :consume => false)
+            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response) if @rq.peek.flavour != :report
+          end            
+           
+        rescue => ex
+           @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
+        end
+
+        @last_command.text = @dr.fullCommand  if @dr.fullCommand.size > 1
+        @dr.script_command = nil
         reset
       end
     }
@@ -436,6 +483,20 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
     exit()
   end
 
+  def read_script
+    if @loaded_script_file == nil
+      loaded_script_name = File.join(File.dirname(__FILE__),"default_game.script")
+      info "loading script #{loaded_script_name}"
+      @loaded_script_file = File.new(loaded_script_name)
+    end
+    
+    line = @loaded_script_file.gets()
+    line = "End of script" if line.nil?
+    info "line > #{line}"
+    
+    line
+  end
+
   def key_hints state
     if state == :start
       @key_space.hide
@@ -464,17 +525,5 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
   
 }
 
-#def key_hints kh
-#		if kh == :start
-#			@key_space.hide
-#			@key_arrow.hide
-#			@key_return.hide
-#			@key_alpha.show
-#		elsif kh == :complete
-#			@key_space.show
-#			@key_arrow.show
-#			@key_return.show
-#			@key_alpha.hide
-#		end
-#	end
+
 

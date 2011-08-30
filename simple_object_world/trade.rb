@@ -24,7 +24,6 @@ class Trade
   def give (consignment)
     raise "Only a sink trade can be fulfilled" unless @trade_type == :sink
     raise "Trade already fulfilled" if @status == :fulfilled
-    raise "Empty consignment" if consignment.amount <= 0
     raise "Wrong item" unless consignment.item == @item 
 
     @status = :fulfilled

@@ -191,8 +191,13 @@ JUMP = "Rift generator"
  
     raise SystemsMessage.new("You have no consignment of #{item}", SystemTrade, :info) if consignment.nil?   
     
-    trade_sink.give(consignment)
+    begin
+      trade_sink.give(consignment)
+    rescue => ex
+      raise SystemsMessage.new(ex.to_s, SystemTrade, :info)
+    end  
     @trade.cargo.delete consignment
+      
  
     SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
   end
@@ -207,7 +212,7 @@ JUMP = "Rift generator"
    #check @meet.meet_me[name] for an entry
    mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
    
-   unless @icontact.contacts.empty? or @contact.contacts[person.name].nil?
+   unless @icontact.contacts.empty? or @icontact.contacts[person.name].nil?
      #take into account no interest
      mes = "#{person} has already agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}"
    else
@@ -223,19 +228,19 @@ JUMP = "Rift generator"
   
     #check @meet.meet_me[name] for an entry
     
-    unless @contact.contacts.empty? or @contact.contacts[person.name].nil?
-      consignment = @contact.contacts[person.name][:consignment]
-      unless @contact.contacts[person.name][:met]
+    unless @icontact.contacts.empty? or @icontact.contacts[person.name].nil?
+      consignment = @icontact.contacts[person.name][:consignment]
+      unless @icontact.contacts[person.name][:met]
         @trade.cargo.delete consignment
         #automatic increase of trust
         person.org.trust(1)
       end  
-      @contact.contacts[person.name][:met] = true
+      @icontact.contacts[person.name][:met] = true
     else
       info "Can't meet #{person}"
       #take into account no interest
       mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
-      mes =  "#{person} has not agreed to meet you. Contact #{person.him_or_her} first." unless @contact.contacts[person.name]
+      mes =  "#{person} has not agreed to meet you. Contact #{person.him_or_her} first." unless @icontact.contacts[person.name]
       raise SystemsMessage.new(mes, SystemCommunication, :response_bad) 
     end
     

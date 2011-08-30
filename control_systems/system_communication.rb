@@ -59,7 +59,7 @@ class SystemCommunication < ShipSystem
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Type 'view contacts' for known contacts.", SystemCommunication, :info)
+      @@rq.enq SystemsMessage.new("Type 'people' for known contacts.", SystemCommunication, :info)
       {:success => false}
     end  
 

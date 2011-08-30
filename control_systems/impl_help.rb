@@ -26,7 +26,7 @@ class ImplHelp
     :chk => lambda {@band == :surface and @body.kind_of? Planet}},
    {:txt => "'plot course' to a planet, then 'engage' drives", 
     :chk => lambda {@band == :orbit}},
-     {:txt => "'browse' to read station information from the trade channel", 
+     {:txt => "'trades' to read station information from the trade channel", 
     :chk => lambda {@body.kind_of? SpaceStation and (!@body.trades_page.nil? or !@body.services_page.nil?)}}
    ]
   end 
