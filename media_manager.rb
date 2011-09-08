@@ -18,6 +18,7 @@ class MediaManager
       
       exit = package_hash[:exit_anim]
       exit = ImageWindow.find_id locationPoint if exit.nil?
+      #exit = locationPoint.body.image unless locationPoint.body.image.nil?
 
       im_win.set_animation(package_hash[:entry_anim],exit)
    end

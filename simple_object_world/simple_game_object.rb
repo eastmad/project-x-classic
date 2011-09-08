@@ -44,8 +44,8 @@ class Star < CelestialObject
       
    end
    
-   def planetFactory(name, desc)
-      Planet.new(name, desc, @orbitPoint)
+   def planetFactory(name, desc, image = nil)
+      Planet.new(name, desc, image, @orbitPoint)
    end
    
    def status_word(status, band)
@@ -77,11 +77,12 @@ end
 
 class Planet < CelestialObject
 
-   attr_reader :orbitPoint, :atmospherePoint
+   attr_reader :orbitPoint, :atmospherePoint, :image
    
-   def initialize(name, desc, ownerPoint)      
+   def initialize(name, desc, image, ownerPoint)      
       super(name, desc, ownerPoint.body)
       
+      @image = image
       @centrePoint = LocationPoint.new(self, :centre)
       @atmospherePoint = LocationPoint.new(self, :atmosphere)
       @orbitPoint = LocationPoint.new(self, :orbit)                 
@@ -123,8 +124,8 @@ class Planet < CelestialObject
       SmallStructure.new(name, desc, @orbitPoint, toughness)
    end
    
-   def cityFactory(name, desc)
-      City.new(name, desc, @atmospherePoint, @orbitPoint)
+   def cityFactory(name, desc, image = nil)
+      City.new(name, desc, image, @atmospherePoint, @orbitPoint)
    end
   
    

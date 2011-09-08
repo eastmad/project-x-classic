@@ -1,10 +1,11 @@
 class City < SimpleBody
   include TrustHolder
-  attr_reader :centrePoint
+  attr_reader :centrePoint, :image
   attr_accessor :links
   
-  def initialize(name, desc, ownerPoint, exitPoint)      
+  def initialize(name, desc, image, ownerPoint, exitPoint)      
     super(name, desc, ownerPoint.body)
+    @image = image
     @links = []
     @contacts = []
     @visit_triggers = []

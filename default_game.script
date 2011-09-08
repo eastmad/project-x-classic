@@ -11,9 +11,11 @@ bay red
 plot course to Mars
 engage
 approach Mars
+describe Owl23
 land ProjectX at Nicosia
 people
 planets
+launch
 plot course to Venus
 engage
 approach UnionServices
@@ -22,6 +24,7 @@ give wafer cones
 read
 launch
 plot course to Earth
+engage
 approach OrbitalMall
 dock
 accept Horus Eye
@@ -31,3 +34,4 @@ approach Earth
 land
 contact Nordstrum
 meet Nordstrum
+describe Owl23

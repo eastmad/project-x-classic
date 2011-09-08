@@ -10,8 +10,10 @@ class ImageWindow
    :mars => ["gifs/mars-planet-water-nasa.jpg"],
    :venus => ["gifs/venus.jpg"],
    :city => ["gifs/cityport.jpg"],
+   :planet => ["gifs/planet.jpg"],
    :ruinedcity => ["gifs/ruinedcity22.jpg"],
-   :atmosphere => ["gifs/atmosphere.jpg"],
+   :earth_atmosphere => ["gifs/atmosphere.jpg"],
+   :atmosphere => ["gifs/Mars-Atmosphere.jpg"],
    :stationdocked =>["gifs/station-closeup.jpg"],
    :satellite =>["gifs/satellite.jpg"],
    :crates =>["gifs/crates.jpg"],
@@ -19,27 +21,38 @@ class ImageWindow
    
    #prefer the last selection (ordered hash)
    @@sgo = {
-      :Planet => {:Earth => :terre, :Mars => :mars, :Venus => :venus, :atmosphere => :atmosphere},
+      :Planet => {:orbit => :planet, :atmosphere => :atmosphere},
       :Star => {:outer => :solar_system},
       :SpaceStation=> {:surface => :stationdocked, :outer => :station, :centre => :stationdocked},
       :SmallStructure => {:centre => :satellite},
-      :City => {:centre => :city, :Nicosia => :ruinedcity}
+      :City => {:centre => :city}
    }
+   
+   @@named = {}
+  
+   def self.to_file name
+      "gifs/#{name}.jpg"
+   end
+
+   def self.register name, hash
+      @@named.merge!({name.to_sym => hash})                                    
+   end
 
    def self.find_id locPoint
       body = locPoint.body
       klassname = body.class.name.to_sym
-      instance_name = body.name.to_sym
       sgo_hash = @@sgo[klassname]
-      image_id = sgo_hash[instance_name]
+      sgo_hash[locPoint.band]
       
-      ret = 0      
-      sgo_hash.each do |key, value|
-         ret = value if key == instance_name
-         ret = value if key == locPoint.band
-      end
- 
-      ret
+      if @@named[body.name.to_sym]
+         val = @@named[body.name.to_sym][locPoint.band]
+         @@anims.merge!({val.to_sym => ["gifs/#{val}.jpg"]})
+info @@anims
+info "val = #{val}"
+         return val.to_sym unless val.nil?
+      end   
+      
+      sgo_hash[locPoint.band]
     end
 
    def initialize(anim_id)
@@ -54,7 +67,7 @@ class ImageWindow
      if (!@exit_anim_id.nil? and @frames_run >= @frame_max)
       set_animation(@exit_anim_id)
      end
-     @ims[frame_num%@frame_max]       
+     @ims[frame_num%@frame_max]
    end
    
    def first_image
@@ -64,6 +77,7 @@ class ImageWindow
    def set_animation(anim_id, exit_anim_id = nil)
       @ims = @@anims[anim_id]
       @frame_max = @ims.size
+info "exit anim = #{exit_anim_id}"      
       @exit_anim_id = exit_anim_id
       @frames_run = 0
    end
