@@ -109,7 +109,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
       image @im_win.first_image()      
     } 
     animate (4) do | frame |                     
-      @imstack.clear { image @im_win.animate_image(frame)}                     
+      @imstack.clear {image @im_win.animate_image(frame)}                     
     end
 
     @iconstack = stack {

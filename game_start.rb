@@ -3,14 +3,18 @@ class GameStart
  def self.data
   sol = Star.new("Sol", "Your home planet's sun")
   Dictionary.add_discovered_proper_noun(sol.name, sol)
-  earth = sol.planetFactory("Earth","Your home planet",{:orbit => "terre_noir", :atmosphere => "earth_atmosphere"})
+  earth = sol.planetFactory("Earth","Your home planet")
   ImageWindow.register("Earth",{:orbit => "terre_noir", :atmosphere => "earth_atmosphere"})
   Dictionary.add_discovered_proper_noun(earth.name, earth)
-  mars = sol.planetFactory("Mars", "Known as the red planet",{:orbit => "mars-planet-water-nasa"})
+  mars = sol.planetFactory("Mars", "Known as the red planet")
+  ImageWindow.register("Mars",{:orbit => "mars-planet-water-nasa"})
   Dictionary.add_discovered_proper_noun(mars.name, mars)
-  venus = sol.planetFactory("Venus", "Known for mining",{:orbit => "venus"})
+  venus = sol.planetFactory("Venus", "Known for mining")
+  ImageWindow.register("Venus",{:orbit => "venus"})
   Dictionary.add_discovered_proper_noun(venus.name, venus)
-  mercury = sol.planetFactory("Mercury", "Difficult to reach because of solar heat",{:orbit => "mercury"})
+  mercury = sol.planetFactory("Mercury", "Difficult to reach because of solar heat")
+  ImageWindow.register("Mercury",{:orbit => "mercury"})
+  
   Dictionary.add_discovered_proper_noun(mercury.name, mercury)
 
   listeningPost = mars.structureFactory("Owl23", "Unknown structure", 2)
@@ -30,8 +34,12 @@ class GameStart
   Dictionary.add_discovered_proper_noun(houston.name, houston)
   marsport = mars.cityFactory("Dundarach", "Only space port for Mars, sometimes referred to as Marsport")
   Dictionary.add_discovered_proper_noun(marsport.name, marsport)
-  nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.",{:centre => "ruinedcity"})
+  nicosia = mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
+  ImageWindow.register("Nicosia",{:centre => "ruinedcity22"})
   Dictionary.add_discovered_proper_noun(nicosia.name, nicosia)
+  venutia = venus.cityFactory("Venutia", "Disused space port for Venus")
+  Dictionary.add_discovered_proper_noun(venutia.name, venutia)
+  
   
   trader = mall.traderFactory("Buffet", :Industries, "Trading in ice cream components")
   trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment")

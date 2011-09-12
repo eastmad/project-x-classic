@@ -43,16 +43,19 @@ class ImageWindow
       klassname = body.class.name.to_sym
       sgo_hash = @@sgo[klassname]
       sgo_hash[locPoint.band]
-      
+
       if @@named[body.name.to_sym]
-         val = @@named[body.name.to_sym][locPoint.band]
-         @@anims.merge!({val.to_sym => ["gifs/#{val}.jpg"]})
-info @@anims
-info "val = #{val}"
-         return val.to_sym unless val.nil?
+         val = @@named[body.name.to_sym][locPoint.band.to_sym]
+
+         unless val.nil?
+            @@anims.merge!({val.to_sym => ["gifs/#{val}.jpg"]})
+            info @@anims
+            info "val = #{val}"
+            return val.to_sym unless val.nil?
+         end   
       end   
-      
-      sgo_hash[locPoint.band]
+
+      sgo_hash[locPoint.band.to_sym]
     end
 
    def initialize(anim_id)
@@ -77,7 +80,7 @@ info "val = #{val}"
    def set_animation(anim_id, exit_anim_id = nil)
       @ims = @@anims[anim_id]
       @frame_max = @ims.size
-info "exit anim = #{exit_anim_id}"      
+info "anim_id = #{anim_id}, exit anim = #{exit_anim_id}"      
       @exit_anim_id = exit_anim_id
       @frames_run = 0
    end

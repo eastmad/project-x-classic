@@ -13,11 +13,13 @@ class MediaManager
    
    def self.show_media(im_win, pack_id, locationPoint)
       package_hash = @@media_package[pack_id]
-      SoundPlay.play_sound(package_hash[:sound])
+      SoundPlay.play_sound(package_hash[:sound])      
       
-      
+info "exit calc"      
       exit = package_hash[:exit_anim]
+info "packa exit = #{exit}"      
       exit = ImageWindow.find_id locationPoint if exit.nil?
+info "image exit = #{exit}"      
       #exit = locationPoint.body.image unless locationPoint.body.image.nil?
 
       im_win.set_animation(package_hash[:entry_anim],exit)
