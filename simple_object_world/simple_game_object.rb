@@ -215,12 +215,14 @@ class SpaceStation < CelestialObject
   end
 
   def describe_owns 
-    ret = "No trading or ship services companies"
+    ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     garages = @centrePoint.find_linked_location(:garage).collect{|traderPoint| traderPoint.body}
 
-    ret = "The trading companies include #{traders.join(', ')}" unless traders.empty?
-    ret = "Ship services by #{garages.join(', ')}" unless garages.empty?
+    ret += "The trading companies include #{traders.join(', ')}" unless traders.empty?
+    ret += " " unless traders.empty?
+    ret += "Ship services from #{garages.join(', ')}" unless garages.empty?
+    ret = "No trading or ship service companies" if ret.empty?
     ret
   end
   
@@ -254,7 +256,7 @@ class SpaceStation < CelestialObject
     garages.each do | garage | 
       #ret << "#{trader.to_s}\n"
       num += 1
-      garage.services.each { |service| ret << "-#{service.type} (#{garage.name} #{garage.index_name})\n"}
+      garage.services.each { |service| ret << "-#{service.name} (#{garage.name} #{garage.index_name})\n"}
     end
     
     ret = nil if num == 0  
@@ -283,7 +285,7 @@ class SpaceStation < CelestialObject
   end
   
   def welcome
-    "The space station #{@name} welcomes your visit. Trade channel open."
+    "The space station #{@name} welcomes your visit. Trades/Services channel open."
   end
 end
 

@@ -9,6 +9,7 @@ class MediaManager
       :describe => {:entry_anim => :solar_system, :exit_anim => :solar_system, :sound => 2},
       :atmosphere => {:entry_anim => :stars, :sound => 3},
       :trade => {:entry_anim => :crates, :exit_anim => :crates, :sound => 2},
+      :service => {:entry_anim => :torpedo, :exit_anim => :torpedo, :sound => 2},
    }
    
    def self.show_media(im_win, pack_id, locationPoint)

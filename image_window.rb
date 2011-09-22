@@ -17,6 +17,7 @@ class ImageWindow
    :stationdocked =>["gifs/station-closeup.jpg"],
    :satellite =>["gifs/satellite.jpg"],
    :crates =>["gifs/crates.jpg"],
+   :torpedo =>["gifs/torpedo.jpg"],
    }
    
    #prefer the last selection (ordered hash)

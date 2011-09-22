@@ -18,6 +18,37 @@ class SystemModification < ShipSystem
     return resp_hash 
   end
   
+  def _services(arg = nil)
+    begin    
+      station = @@ship.locationPoint.body
+      raise SystemsMessage.new("A trades/services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      
+      subj = arg || :services      
+
+      if (sgo = ShipSystem.find_sgo_from_name(arg))
+        para1 = sgo.describe
+        para1 << "\n#{sgo.desc}"
+      elsif (subj == :garage)
+        para1 = station.services_page  
+      elsif (subj == :services)
+        str1 = station.services_page
+        para1 = str1
+      end  
+ 
+      if para1.nil?
+        @@rq.enq SystemsMessage.new("There is no service activity", SystemTrade, :info)
+      else  
+        @@rq.enq SystemsMessage.new(para1, SystemModification, :report)
+      end
+      {:success => true, :media => :service}
+    rescue RuntimeError
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
+      {:success => false}
+    end
+  end
+
+  
   def self.to_s
     "Module management"
   end

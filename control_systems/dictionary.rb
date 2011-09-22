@@ -1,5 +1,6 @@
 class Dictionary
-   @@Words = [
+    
+    @@Words = [
             {:word => :status, :grammar => :short, :sys => :myself},
             {:word => :help, :grammar => :short, :sys => :myself},
             {:word => :manifest, :grammar => :short, :sys => :trade},
@@ -9,12 +10,13 @@ class Dictionary
             {:word => :companies, :grammar => :short, :sys => :trade},
             {:word => :bay, :grammar => :verb, :sys => :trade},
             {:word => :trades, :grammar => :short, :sys => :trade},
+            {:word => :services, :grammar => :short, :sys => :modification},
             
             {:word => :approach, :grammar => :verb, :sys => :power},
             {:word => :launch, :grammar => :verb, :sys => :power},
             {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :destroy, :grammar => :verb, :sys => :weaponry},
-            {:word => :load, :grammar => :verb, :sys => :weaponry},
+            {:word => :load, :grammar => :verb, :sys => :modification},
             {:word => :install, :grammar => :verb, :sys => :modification},                        
             {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
             {:word => :orbit, :grammar => :verb, :sys => :navigation},
@@ -73,7 +75,9 @@ class Dictionary
             {:word => :Trading, :grammar => :proper_noun, :sys => :trade},
       ]   
       
-   @@shipname = "ship"    
+   @@shipname = "ship"
+
+   def self.all_words; @@Words; end   
       
    def self.matching_word(str)              
      res = nil

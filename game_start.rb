@@ -25,9 +25,7 @@ class GameStart
   Dictionary.add_discovered_proper_noun(sputnik.name, sputnik)
   mall = earth.stationFactory("OrbitalMall", "A Modern trading space station")
   Dictionary.add_discovered_proper_noun(mall.name, mall)
-  servicestation = venus.stationFactory("ServiceShop", "A service station")
-  Dictionary.add_discovered_proper_noun(servicestation.name, servicestation)
-  unionstation = venus.stationFactory("UnionServices", "Union run service station")
+  unionstation = venus.stationFactory("UnionHall", "Union run trade and service station")
   Dictionary.add_discovered_proper_noun(unionstation.name, unionstation)
   
   houston =  earth.cityFactory("Houston", "Main space port for Earth, based in old continental America")
@@ -43,7 +41,7 @@ class GameStart
   
   trader = mall.traderFactory("Buffet", :Industries, "Trading in ice cream components")
   trader2 = mall.traderFactory("Amstrad", :Intergalactic, "Trading in faulty computing equipment")
-  garage = servicestation.garageFactory("Minestar", :Garages, "Service garage")
+  garage = unionstation.garageFactory("Minestar", :Garages, "Service garage")
   tuckshop = unionstation.traderFactory("Union", :Trading, "Miner's Union run station")
   #garage = sputnik.garageFactory("Minestar", :Garages, "Service garage")
   item = Item.new("blackberries", "A juicy forest fruit", :commodity, [:foodstuff])

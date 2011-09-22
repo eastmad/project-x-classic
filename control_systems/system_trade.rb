@@ -29,7 +29,7 @@ class SystemTrade < ShipSystem
   def _trades(arg = nil)
     begin    
       station = @@ship.locationPoint.body
-      raise SystemsMessage.new("A trade channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      raise SystemsMessage.new("A trades/services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
       subj = arg || :trades      
 
@@ -38,17 +38,9 @@ class SystemTrade < ShipSystem
         para1 << "\n#{sgo.desc}"
       elsif (subj == :trader)
         para1 = station.traders_page
-      elsif (subj == :garage)
-        para1 = station.services_page  
       elsif (subj == :trades)
         str1 = station.trades_page
-        str2 = station.services_page
         para1 = str1
-        unless str1.nil?          
-          para1 = para1 + str2 unless str2.nil?
-        else
-          para1 = str2
-        end        
       end  
  
       if para1.nil?
