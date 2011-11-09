@@ -65,7 +65,7 @@ JUMP = "Rift generator"
     #location must be planet in system
     info "heading body #{@headingPoint.body}"
     info "location owner body #{@locationPoint.body.root_body}"
-    raise SystemsMessage.new("Cannot head for a planet not in this system", SystemNavigation, :info) unless (@headingPoint.body.owned_by? @locationPoint.body.root_body)
+    raise SystemsMessage.new("Cannot head for a planet not in this system", SystemNavigation, :info) unless (@headingPoint.body.owned_by? @locationPoint.body.local_star)
           
     @locationPoint = @headingPoint
     @headingPoint = nil

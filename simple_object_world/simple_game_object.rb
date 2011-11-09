@@ -27,11 +27,52 @@ class CelestialObject < SimpleBody
   end
 end
 
+class Galaxy < CelestialObject
+   def initialize(name, desc, owner = nil)      
+      super(name, desc, owner)
+      
+      @centrePoint = LocationPoint.new(self, :centre)
+      @orbitPoint = LocationPoint.new(self, :orbit)
+      @outerPoint = LocationPoint.new(self, :outer)      
+      
+      @orbitPoint.add_link([:up], @outerPoint)
+      
+   end
+   
+   def starFactory(name, desc)
+      Star.new(name, desc, @orbitPoint)
+   end
+   
+   def status_word(status, band)
+      if status == :rest
+         sw = "within"
+      elsif status == :sync
+         sw = "orbiting"
+      elsif status == :dependent
+         sw = "ash on"
+      end
+      
+      sw
+   end
+      
+   def describe
+     "#{@name} is a galaxy within the universe"
+   end  
+   
+   def owns
+      @orbitPoint.find_linked_location(:star)
+   end
+   
+   def describe_owns 
+      stars = owns.collect{|locPoint| locPoint.body}
+      "The mapped stars are #{stars.join(', ')}"
+   end
+end
 
 class Star < CelestialObject
     
-   def initialize(name, desc, owner = nil)      
-      super(name, desc, owner)
+   def initialize(name, desc, ownerPoint)      
+      super(name, desc, ownerPoint.body)
       
       @centrePoint = LocationPoint.new(self, :centre)
       lp2 = LocationPoint.new(self, :photosphere)
@@ -41,6 +82,8 @@ class Star < CelestialObject
       @centrePoint.add_link([:up],lp2)
       lp2.add_link([:up],@orbitPoint)
       @orbitPoint.add_link([:up], @outerPoint)
+      
+      ownerPoint.add_link([:star], @orbitPoint) 
       
    end
    

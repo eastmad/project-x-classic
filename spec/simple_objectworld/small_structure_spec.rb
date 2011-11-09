@@ -1,10 +1,4 @@
-require_relative "trust_holder"
-require_relative "trustee"
-require_relative "simple_body"
-require_relative "simple_game_object"
-require_relative "location_point"
-require_relative "location_link"
-
+require_relative "../spec_helper.rb"
 
 describe SmallStructure do
   before(:each) do

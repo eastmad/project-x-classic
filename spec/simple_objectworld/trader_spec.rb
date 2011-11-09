@@ -1,11 +1,5 @@
-require_relative "trust_holder"
-require_relative "trustee"
-require_relative "location_point"
-require_relative "simple_body"
-require_relative "contact"
-require_relative "trader"
-require_relative "trade"
-require_relative "../control_systems/system_test_helper"
+require_relative "../spec_helper.rb"
+
 include TestHelper
 
 describe Trader do

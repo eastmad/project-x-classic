@@ -6,7 +6,7 @@ class SystemLibrary < ShipSystem
     begin
       sgo = ShipSystem.find_sgo_from_name(arg)
        
-      sgo = @@ship.locationPoint.body.root_body if (arg.nil?)
+      sgo = @@ship.locationPoint.body.local_star if (arg.nil?)
       
       para1 = SystemLibrary.desc sgo
       
@@ -20,6 +20,21 @@ class SystemLibrary < ShipSystem
   end
   
   def _planets(arg = nil)
+    begin
+      sgo = @@ship.locationPoint.body.local_star
+info "local star = #{sgo}"      
+      para1 = SystemLibrary.desc sgo
+      
+      @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+      {:success => true, :media => :describe, :sgo => sgo}
+    rescue RuntimeError => ex
+      resp_hash = {:success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("No information available", SystemLibrary, :response_bad)
+    end
+  end
+  
+  def _stars(arg = nil)
     begin
       sgo = @@ship.locationPoint.body.root_body
       

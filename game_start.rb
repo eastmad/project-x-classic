@@ -1,7 +1,9 @@
 class GameStart
 
  def self.data
-  sol = Star.new("Sol", "Your home planet's sun")
+  galaxy = Galaxy.new("MilkyWay", "The limit of exploration")
+  Dictionary.add_discovered_proper_noun(galaxy.name, galaxy)
+  sol = galaxy.starFactory("Sol", "Your home planet's sun")
   Dictionary.add_discovered_proper_noun(sol.name, sol)
   earth = sol.planetFactory("Earth","Your home planet")
   ImageWindow.register("Earth",{:orbit => "terre_noir", :atmosphere => "earth_atmosphere"})

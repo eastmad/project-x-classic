@@ -1,13 +1,5 @@
-require "./location_link"
-require "./location_point"
-require "./trustee.rb"
-require "./trust_holder.rb"
-require "./simple_body.rb"
-require "./city"
-require "./contact.rb"
-require "./trader.rb"
-require "./simple_game_object.rb"
-require "../control_systems/system_test_helper"
+require_relative "../spec_helper.rb"
+
 include TestHelper
 
 

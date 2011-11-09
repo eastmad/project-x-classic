@@ -19,6 +19,16 @@ class SimpleBody
     body
   end
   
+  #can die here, in theory, so beware
+  def local_star
+    body = self
+    until body.kind_of? Star
+       body = body.owning_body
+    end
+    
+    body
+  end
+  
   def push_message txt, from
     @@outgoing_mail << Mail.new(txt, from) 
   end

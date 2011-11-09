@@ -7,6 +7,7 @@ class Dictionary
             {:word => :cargo, :grammar => :short, :sys => :trade},
             {:word => :people, :grammar => :short, :sys => :communication},
             {:word => :planets, :grammar => :short, :sys => :library},
+            {:word => :stars, :grammar => :short, :sys => :library},
             {:word => :companies, :grammar => :short, :sys => :trade},
             {:word => :bay, :grammar => :verb, :sys => :trade},
             {:word => :trades, :grammar => :short, :sys => :trade},

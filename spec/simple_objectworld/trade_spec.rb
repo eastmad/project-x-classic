@@ -1,10 +1,5 @@
-require "./trade.rb"
-require "./simple_body.rb"
-require "./trust_holder.rb"
-require "./trustee.rb"
-require "./trader.rb"
-require "./simple_game_object.rb"
-require "../control_systems/system_test_helper"
+require_relative "../spec_helper.rb"
+
 include TestHelper
 
 class TraderMock < Trader

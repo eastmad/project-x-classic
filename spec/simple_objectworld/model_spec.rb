@@ -1,11 +1,5 @@
 #model tests
-
-require_relative "trust_holder"
-require_relative "simple_body"
-require_relative "simple_game_object"
-require_relative "location_point"
-require_relative "location_link"
-require_relative "../control_systems/system_test_helper"
+require_relative "../spec_helper.rb"
 
 include TestHelper
 

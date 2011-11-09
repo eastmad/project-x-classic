@@ -1,9 +1,4 @@
-require_relative "../simple_object_world/modification"
-require_relative "impl_modification"
-require_relative "../simple_object_world/trust_holder"
-require_relative "../simple_object_world/trustee"
-require_relative "../simple_object_world/simple_body"
-require_relative "../simple_object_world/simple_game_object"
+require_relative "../spec_helper.rb"
 
 describe Modification do
   

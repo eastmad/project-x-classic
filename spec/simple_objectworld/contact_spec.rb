@@ -1,15 +1,5 @@
-require_relative "location_link"
-require_relative "location_point"
-require_relative "trust_holder"
-require_relative "trustee"
-require_relative "simple_body"
-require_relative "contact"
-require_relative "trader"
-require_relative "../control_systems/dictionary"
-require_relative "trust_holder"
-require_relative "city"
-require_relative "simple_game_object"
-require_relative "../control_systems/system_test_helper"
+require_relative "../spec_helper.rb"
+
 include TestHelper
 
 

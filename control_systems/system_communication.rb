@@ -9,7 +9,7 @@ class SystemCommunication < ShipSystem
     sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
     
     #default to contacts in current city
-    sgo = @@ship.locationPoint.body.root_body if sgo.nil? 
+    sgo = @@ship.locationPoint.body if sgo.nil? 
     para1 = ""
     if sgo.kind_of? City or sgo.kind_of? Planet  
       para1 = sgo.describe_contacts
