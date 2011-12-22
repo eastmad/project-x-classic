@@ -38,7 +38,7 @@ require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
+Shoes.app(:width => 990, :height => 535, :title => "Project X") {
   
   background rgb(20, 42, 42)
   stroke white
@@ -235,6 +235,7 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
 
     resps = []
     pos = 0
+    word_building = ""
     keypress { |k|
       next unless @key_input_state.accept k
       @key = @key_input_state.key
@@ -246,17 +247,21 @@ Shoes.app(:width => 938, :height => 535, :title => "ProjectX") {
         pos = 0 if pos >= resps.size
         @dr.req_str = resps[pos][:word].to_s if resps.size > pos
         @dr.req_grammar = resps[pos][:grammar]
+        word_building = ""
       elsif (@key == :up)
         pos -= 1
         pos = resps.size - 1 if pos < 0
         @dr.req_str = resps[pos][:word].to_s if resps.size > 0
         @dr.req_grammar = resps[pos][:grammar]
+        word_building = ""
       elsif (@key == :alpha)
         if @dr.req_str.empty?
           @dr.req_str = k
+          word_building = k
           resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
         else
-          resps = Dictionary.filter_with_letter(resps, k)
+          word_building += k
+          resps = Dictionary.filter_with_substring(resps, word_building)
         end
         if resps.size > 0
           @dr.req_str = resps.first[:word].to_s 

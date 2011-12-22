@@ -33,12 +33,14 @@ class SystemMyself < ShipSystem
       end
       
     
-      {:success => true}
+      resp_hash = {:success => true}
     rescue => ex
       info "whoops #{ex}"
       @@rq.enq SystemsMessage.new("Not a system on this ship.", SystemMyself, :response_bad)
-      {:success => false}
+      resp_hash = {:success => false}
     end
+    
+    resp_hash
   end
   
 

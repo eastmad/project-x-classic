@@ -112,10 +112,11 @@ class Dictionary
      return res   
    end
    
-   def self.filter_with_letter(words, letter)
+   def self.filter_with_substring(words, sub)
       res = []
       words.each do |word|
-         if word[:word].to_s.include? letter
+      info "Does #{word} start with #{sub}?"
+         if word[:word].to_s.start_with? sub
             res << word
          end
       end

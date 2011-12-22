@@ -46,7 +46,7 @@ JUMP = "Rift generator"
   end
  
   def set_heading(planet)
-     raise "Cannot set course to #{planet}" unless (planet.kind_of? Planet) 
+     raise SystemsMessage.new("#{planet} is not a planet",SystemNavigation, :info) unless (planet.kind_of? Planet) 
      #planet must be in system
      raise SystemsMessage.new("Cannot head for a planet not in this system", SystemNavigation, :info) unless (@locationPoint.body.owned_by? planet.owning_body)
          

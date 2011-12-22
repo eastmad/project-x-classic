@@ -48,12 +48,14 @@ class SystemTrade < ShipSystem
       else  
         @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
       end
-      {:success => true, :media => :trade}
+      resp_hash = {:success => true, :media => :trade}
     rescue RuntimeError
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
-      {:success => false}
+      resp_hash = {:success => false}
     end
+    
+    resp_hash
   end
 
   def _trader(args = nil)
@@ -87,12 +89,14 @@ class SystemTrade < ShipSystem
       @@rq.enq @@ship.accept(item)
       @@rq.enq SystemsMessage.new("Accepted consignment of #{@obj}", SystemTrade, :response)
       
-      {:success => true, :media => :trade}
+      resp_hash = {:success => true, :media => :trade}
     rescue => ex
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("Cannot accept.", SystemTrade, :response_bad)
-      {:success => false}
+      resp_hash = {:success => false}
     end
+    
+    resp_hash
   end
   
   def _give(args = nil)
@@ -101,12 +105,14 @@ class SystemTrade < ShipSystem
 
      @@rq.enq @@ship.give(item)
      @@rq.enq SystemsMessage.new("Fulfilled request for #{@obj}", SystemTrade, :response)
-     {:success => true, :media => :trade}
+     resp_hash = {:success => true, :media => :trade}
     rescue => ex
      @@rq.enq ex
      @@rq.enq SystemsMessage.new("Cannot fulfill.", SystemTrade, :response_bad)
-     {:success => false}
+     resp_hash = {:success => false}
     end
+    
+    resp_hash
   end
   
   def self.status
