@@ -31,7 +31,6 @@ class SystemPower < ShipSystem
   def _land(args=nil)   
     
     begin
-      raise SystemsMessage.new("#{@@ship.name} is not within a planet's atmosphere", SystemPower, :info) unless @@ship.locationPoint.band == :atmosphere
       
       @obj = nil if args == @obj
       
@@ -39,9 +38,16 @@ class SystemPower < ShipSystem
       unless args.nil?
         sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
         
-        raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo        
+        raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo
+        raise SystemsMessage.new("You can only land on a planet", SystemPower, :info) unless (sgo.kind_of? Planet or sgo.kind_of? City)        
       end
-      sgo = nil unless sgo.kind_of? City
+      sgo = nil unless (sgo.kind_of? City or sgo.kind_of? Planet)
+      
+      lps = (@@ship.locationPoint.find_linked_location :land)
+      if lps.empty?
+         info "can't land - call approach to #{sgo}" 
+         @@rq.enq @@ship.approach sgo
+      end
       
       city_point = @@ship.locationPoint.body.available_city(sgo)
       raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_point.nil?
@@ -88,9 +94,17 @@ class SystemPower < ShipSystem
     begin
       sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?     
       
+      locationPoint = @@ship.locationPoint
       if sgo.nil?
-        sgo = @@ship.locationPoint.body
+        sgo = locationPoint.body
       end  
+      
+      lps = (locationPoint.find_linked_location :dock)
+      if lps.empty?
+      	info "can't dock - call approach" 
+      	@@rq.enq @@ship.approach sgo
+      end
+      
       
       @@rq.enq @@ship.dock sgo
       @@rq.enq @@ship.lock_docking_clamp()

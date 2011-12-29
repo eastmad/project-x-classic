@@ -75,7 +75,7 @@ JUMP = "Rift generator"
   
   def approach(local_body)
     inside = @locationPoint.body == local_body
-    
+    info "in approach #{local_body}"
     if (@status != :sync) 
       raise SystemsMessage.new("I can't fire directional thrusters unless we are in a stable orbit.", SystemPower, :info)
     end    
@@ -85,8 +85,11 @@ JUMP = "Rift generator"
     raise SystemsMessage.new("Cannot approach #{local_body} safely with thrusters", SystemNavigation, :info) if (lps.empty? and inside)
     
     
-    lp = lps.find {| lp | lp.body == local_body}
-     
+    lp = lps.find {| lp | info "lps = #{lp.body}";lp.body == local_body}
+    
+    
+    info "exit approach #{lp}"
+    
     unless lp.nil? 
      @locationPoint = lp
      @status = :rest

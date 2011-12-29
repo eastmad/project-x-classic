@@ -1,0 +1,31 @@
+{
+	"MilkyWay":
+	{
+		"desc":"Only one", 
+		"stars":
+		{
+			"Sol":
+			{
+				"desc":"our sun", 
+				"planets":
+				{
+					"Earth":
+					{
+						"desc":"original planet",
+						"satellites":
+						{
+							"OrbitalMall":"Blah",
+							"Sputnik":"old"
+						},	
+						"cities":				
+						{
+							"Houston":"Bleh"
+						}
+					}
+				}
+			}	
+		}
+	}
+}
+		
+	
