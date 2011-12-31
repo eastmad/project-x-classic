@@ -1,0 +1,12 @@
+{
+	"Venus Mining Union":
+	{
+		"desc":"Keeping the red flag flying!", 
+		"privacy":"public"
+	},	
+	"Free Mars":
+	{
+		"desc":"Independence for Mars!", 
+		"privacy":"secret"
+	}	
+}

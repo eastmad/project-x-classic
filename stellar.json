@@ -6,22 +6,101 @@
 		{
 			"Sol":
 			{
-				"desc":"our sun", 
+				"desc":"Your home planet's sun", 
 				"planets":
-				{
+				{		  				
 					"Earth":
 					{
-						"desc":"original planet",
+						"desc":"Your home planet",
 						"satellites":
 						{
-							"OrbitalMall":"Blah",
-							"Sputnik":"old"
+							"OrbitalMall":
+							{
+								"desc":"A Modern trading space station",
+								"traders":
+								{
+									"Buffet":
+									{
+										"desc":"Trading in ice cream components",
+										"end_name":"Industries"
+									},
+									
+									"Amstrad":
+									{ 
+										"desc":"Trading in faulty computing equipment",
+										"end_name":"Intergalactic" 
+									}	
+								}
+							},
+							"Sputnik":
+							{
+								"desc":"One of the oldest space stations"
+							}	
 						},	
 						"cities":				
 						{
-							"Houston":"Bleh"
+							"Houston":"Main space port for Earth, based in old continental America"
 						}
+					},
+					"Mars":
+					{
+						"desc": "Known as the red planet",
+						"satellites":
+						{
+						},	
+						"cities":		
+						{
+							"Dundarach": "Only space port for Mars, sometimes referred to as Marsport",
+							"Nicosia": "Now deserted city, location of the first Mars independence revolt."
+						},
+						"structures":
+						{
+							"Owl23":
+							{
+								"desc":"Unknown structure",
+								"alt_desc":"Earth military control listening post",
+								"toughness":2
+								
+							}	
+						}
+					},
+					"Venus":
+					{
+						"desc":"Known for mining",
+						"satellites":
+						{												
+							"UnionHall":
+							{
+								"desc":"Union run trade and service station",
+								"garages":
+								{
+									"Minestar":
+									{
+										"desc":"Service garage",
+										"end_name":"Garages"
+									}	
+								},
+								"traders":
+								{
+									"Union":
+									{
+										"desc":"Miner's Union run station",
+										"end_name":"Trading"
+									}	
+								}
+								
+							}	
+						},
+						"cities":		
+						{
+							"Venutia": "Disused space port for Venus"
+						}
+					},
+					"Mercury":
+					{
+						"desc":"Difficult to reach because of solar heat"
 					}
+					
 				}
 			}	
 		}
