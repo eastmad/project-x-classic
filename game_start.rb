@@ -123,5 +123,13 @@ class GameStart
     end
   end
  end 
-
+ 
+ def loadGalaxy 
+ end
+ 
+ def loadOrgs
+ end
+ 
+ def loadItems
+ end
 end

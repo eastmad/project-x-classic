@@ -47,7 +47,7 @@ class Item
     @name = name
     @desc = desc
     @item_type = item_type
-    @conditions =  conditions.dup
+    @conditions =  conditions.dup unless conditions.nil?
   end
   
   def describe

@@ -76,15 +76,15 @@
 								{
 									"Minestar":
 									{
-										"desc":"Service garage",
+										"desc":"Mining Union service garage",
 										"end_name":"Garages"
 									}	
 								},
 								"traders":
 								{
-									"Union":
+									"Tradestar":
 									{
-										"desc":"Miner's Union run station",
+										"desc":"Mining Union run trading",
 										"end_name":"Trading"
 									}	
 								}

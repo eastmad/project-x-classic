@@ -1,0 +1,31 @@
+{
+	"blackberries":
+	{
+		"desc":"A juicy forest fruit", 
+		"commonality":"commodity",
+		"tags":["foodstuff"]
+	},	
+	"choclate chips":
+	{
+		"desc":"Confectionery additions",
+		"commonality":"commodity", 
+		"tags":["foodstuff"]
+	},	
+  	"wafer cones":
+  	{
+  		"desc":"Confectionery containers",
+  		"commonality":"commodity",
+  		"tags":["foodstuff"]
+  	},
+  	"titanium alloy":
+  	{
+  		"desc":"Pure deep mined titanium", 
+  		"commnality":"rare"
+  	},	
+   	"horus eye":
+   	{ 
+   		"desc":"Alien artifact, possibly of Martian origin", 
+   		"commonality":"unique",
+   		"tags":["controlled", "alien"]
+ 	}
+}
