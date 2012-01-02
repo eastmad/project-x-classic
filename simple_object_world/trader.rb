@@ -3,8 +3,8 @@ class Trader < SimpleBody
   include TrustHolder
   include Trustee
   
-  def initialize(name, index, desc, ownerPoint)      
-    super(name, desc, ownerPoint.body) 
+  def initialize(name, index, desc, ownerPoint, id = nil )      
+    super(name, desc, ownerPoint.body, id) 
     @index_name = index
     ownerPoint.add_link([:trader], LocationPoint.new(self, :centre)) 
     @trades = []
@@ -87,8 +87,8 @@ class Garage < SimpleBody
   include TrustHolder
   include Trustee
   
-  def initialize(name, index, desc, ownerPoint)      
-    super(name, desc, ownerPoint.body) 
+  def initialize(name, index, desc, ownerPoint, id = nil)      
+    super(name, desc, ownerPoint.body, id) 
     @index_name = index
     ownerPoint.add_link([:garage], LocationPoint.new(self, :centre))
     @services = []

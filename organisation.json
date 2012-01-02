@@ -2,11 +2,13 @@
 	"Venus Mining Union":
 	{
 		"desc":"Keeping the red flag flying!", 
+		"id":"vmu",
 		"privacy":"public"
 	},	
 	"Free Mars":
 	{
-		"desc":"Independence for Mars!", 
+		"desc":"Independence for Mars!",
+		"id":"fm",
 		"privacy":"secret"
 	}	
 }

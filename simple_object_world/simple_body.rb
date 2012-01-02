@@ -1,13 +1,15 @@
 class SimpleBody
 
-  attr_reader :name, :desc, :owning_body, :boundary_point
+  attr_reader :name, :desc, :owning_body, :boundary_point, :id
   @@outgoing_mail = []
+  @@simple_body_ref = {}
   
-  def initialize name, desc = "Unknown origin", owner = nil
+  def initialize name, desc = "Unknown origin", owner = nil, id = nil
     @name = name
     @desc = desc
     @owning_body = owner
     @visited = false
+    @@simple_body_ref.merge!({id.to_sym => self}) unless id.nil?
   end
   
   def root_body
@@ -35,6 +37,10 @@ class SimpleBody
  
   def self.get_mail
     @@outgoing_mail
+  end
+  
+  def self.find key
+    @@simple_body_ref[key]
   end
   
   def to_s

@@ -1,3 +1,4 @@
+require "json"
 require "local_config"
 require "display_response"
 require "image_window"
@@ -43,7 +44,7 @@ Shoes.app(:width => 990, :height => 535, :title => "Project X") {
   background rgb(20, 42, 42)
   stroke white
 
-  @ship = GameStart.data
+  @ship = GameStart.data2
   @minimap = MiniMap.new(10,30,50)
   @minimap.set_location_point(@ship.locationPoint)
   @key_input_state = InputState.new

@@ -16,24 +16,28 @@
 						{
 							"OrbitalMall":
 							{
+								"id":"mall",
 								"desc":"A Modern trading space station",
 								"traders":
 								{
 									"Buffet":
 									{
 										"desc":"Trading in ice cream components",
+										"id":"biz1",
 										"end_name":"Industries"
 									},
 									
 									"Amstrad":
 									{ 
 										"desc":"Trading in faulty computing equipment",
+										"id":"biz2",
 										"end_name":"Intergalactic" 
 									}	
 								}
 							},
 							"Sputnik":
 							{
+								"id":"sputnik",
 								"desc":"One of the oldest space stations"
 							}	
 						},	
@@ -58,6 +62,7 @@
 							"Owl23":
 							{
 								"desc":"Unknown structure",
+								"id":"lp",
 								"alt_desc":"Earth military control listening post",
 								"toughness":2
 								
@@ -77,6 +82,7 @@
 									"Minestar":
 									{
 										"desc":"Mining Union service garage",
+										"id":"vengar",
 										"end_name":"Garages"
 									}	
 								},
@@ -85,6 +91,7 @@
 									"Tradestar":
 									{
 										"desc":"Mining Union run trading",
+										"id":"ventrad",
 										"end_name":"Trading"
 									}	
 								}

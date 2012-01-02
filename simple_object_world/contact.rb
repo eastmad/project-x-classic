@@ -31,11 +31,14 @@ class Organisation
   include Trustee
   attr_reader :name, :desc, :visibility
   
-  def initialize(name, desc, visibility)
+  @@org_ref = {}
+  
+  def initialize(name, desc, visibility, id)
     @name = name
     @desc = desc
     @visibility = visibility
     @messages = {}
+    @@org_ref.merge!({id.to_sym => self})
   end
   
   def add_message id, message
@@ -44,6 +47,10 @@ class Organisation
   
   def get_message id
     @messages[id.to_sym]
+  end
+  
+  def self.find key
+    @@org_ref[key]
   end
   
   def to_s

@@ -1,5 +1,61 @@
 class GameStart
 
+
+ def self.data2
+   loadGalaxy
+   ImageWindow.register("Earth",{:orbit => "terre_noir", :atmosphere => "earth_atmosphere"})
+   ImageWindow.register("Mars",{:orbit => "mars-planet-water-nasa"})
+   ImageWindow.register("Venus",{:orbit => "venus"})
+   ImageWindow.register("Mercury",{:orbit => "mercury"})
+   loadItems
+   loadOrgs
+   
+   wafercones = Item.find :wc
+   trader = Trader.find :biz1
+   trader2 = Trader.find :biz2
+   trader3 = Trader.find(:ventrad)
+   garage = Garage.find(:vengar)
+   freemars = Organisation.find :fm
+   houston = City.find(:Houston)
+   listeningPost = SmallStructure.find(:lp)
+   nicosia = City.find(:Nicosia)
+   
+   trader.add_sink_trade(Item.find :bb)
+   trader.add_sink_trade(Item.find :cc)
+   trader2.add_source_trade(wafercones)
+   
+   trader3.set_owning_org(Organisation.find :vmu)
+   trader3.add_sink_trade(wafercones)
+   trader3.add_source_trade(Item.find(:tit),1)
+      
+   garage.set_owning_org(Organisation.find :vmu)
+   garage.add_service_module(GovTorpedo)
+   garage.add_service_module(HeatShieldModule,1)
+   
+   
+   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
+    If you want to know more about what's happening to Mars, talk to our contact on Earth.")
+          
+   pers = houston.contactFactory(:m, "Prof.", "Nordstrum", "Alien artifact trader", freemars, 1)
+   pers.add_details(:interest => :alien, :talk => :war)
+   
+   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
+   listeningPost.add_death_listener(freemars)
+     
+   
+   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
+   
+   ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)
+   Dictionary.add_discovered_proper_noun(ship.name, nil) #should be an sgo
+   ShipSystem.christen(ship)
+     
+   ship.push_mail(SystemGhost.welcome, "ghost")
+     
+   ship.trade.cargo << Consignment.new(wafercones,trader2)
+     
+   ship
+ end
+ 
  def self.data
   galaxy = Galaxy.new("MilkyWay", "The limit of exploration")
   Dictionary.add_discovered_proper_noun(galaxy.name, galaxy)
@@ -124,12 +180,137 @@ class GameStart
   end
  end 
  
- def loadGalaxy 
- end
+   def self.loadGalaxy 
+      mygalaxy = nil
+      mysol = nil
+      myplanet = nil
+      myorg = nil
+      mysat = nil
+      mygarage = nil
+      mytrader = nil
+      desc = nil
+      id = nil
+      File.open("stellar.json") do |file|
+         galaxies = JSON::load(file)
+         galaxies.each do |galaxy_name, galaxy|
+            galaxy.each do |content_type, stars |
+               if content_type == "desc"
+                  mygalaxy = Galaxy.new(galaxy_name, stars)
+                  Dictionary.add_discovered_proper_noun(mygalaxy.name, mygalaxy)
+               else
+                  stars.each do |star_name, star |
+                     star.each do |content_type, planets |
+                        if content_type == "desc"
+                           mysol = mygalaxy.starFactory(star_name, planets)
+                           Dictionary.add_discovered_proper_noun(mysol.name, mysol)
+                        else
+                           planets.each do |planet_name, planet |
+                              planet.each do |content_type, sat_or_cit |
+                                 if content_type == "desc"
+                                    myplanet = mysol.planetFactory(planet_name, sat_or_cit)
+                                    Dictionary.add_discovered_proper_noun(myplanet.name, myplanet)
+                                 elsif content_type == "cities"
+                                    sat_or_cit.each do |city_name, city_desc |
+                                       mycity = myplanet.cityFactory(city_name, city_desc)
+                                       Dictionary.add_discovered_proper_noun(mycity.name, mycity)
+                                    end
+                                 elsif content_type == "satellites"
+                                    sat_or_cit.each do |sat_name, sat |
+                                       sid = nil
+                                       sat.each do |content_type, business |
+                                          end_name = nil
+                                          if content_type == "id"
+                                             sid = business
+                                          elsif content_type == "desc"
+                                             mysat = myplanet.stationFactory(sat_name, business, sid)
+                                             Dictionary.add_discovered_proper_noun(mysat.name, mysat)
+                                          elsif content_type == "traders"
+                                             business.each do |trader_name, trader|
+                                                trader.each do |content_type, content|
+                                                   desc = content if content_type == "desc"
+                                                   id = content if content_type == "id"
+                                                   end_name = content.to_sym if content_type == "end_name"
+                                                end   
+                                                mytrader = mysat.traderFactory(trader_name, end_name, desc, id)
+                                                Dictionary.add_double_discovered_proper_noun(mytrader.name, mytrader.index_name, mytrader)
+                                             end
+                                          elsif content_type == "garages"
+                                             business.each do |garage_name, garage|
+                                                garage.each do |content_type, content|
+                                                   desc = content if content_type == "desc"
+                                                   id = content if content_type == "id"
+                                                   end_name = content.to_sym if content_type == "end_name"
+                                                end   
+                                                mygarage = mysat.garageFactory(garage_name, end_name, desc, id)   
+                                                Dictionary.add_double_discovered_proper_noun(mygarage.name, mygarage.index_name, mygarage)
+                                             end
+                                          end
+                                       end
+
+                                    end   
+                                 elsif content_type == "structures"
+                                    sat_or_cit.each do |struc_name, structure |  
+                                       desc = nil
+                                       toughness = nil
+                                       sid = nil
+                                       structure.each do |content_type, content|
+                                          desc = content if content_type == "desc"
+                                          alt_desc = content if content_type == "alt_desc"
+                                          sid = content if content_type == "id"
+                                          toughness = content if content_type == "toughness" 
+                                       end
+                                       mystruct = myplanet.structureFactory(struc_name, desc, toughness, sid)
+                                       Dictionary.add_discovered_proper_noun(mystruct.name, mystruct)
+                                    end
+                                 end
+                              end
+                           end   
+                        end
+                     end   
+                  end
+               end      
+            end
+         end
+      end
+   end
  
- def loadOrgs
- end
+   def self.loadOrgs
+      File.open("organisation.json") do |file|
+          orgs = JSON::load(file)
+          orgs.each do |org_name, org|
+            desc = nil
+            privacy = nil
+            id = nil
+            org.each do |content_type, content|
+               desc = content if content_type == "desc"
+               id = content if content_type == "id"
+               privacy = content.to_sym if content_type == "privacy"
+            end
+            myorg = Organisation.new(org_name,desc,privacy,id)
+            info "#{myorg.name} - #{myorg.desc}"
+          end  
+      end
+   end
  
- def loadItems
- end
+   def self.loadItems   
+      myitem = nil
+      File.open("item.json") do |file|
+          items = JSON::load(file)
+          items.each do |item_name, item|
+            desc = nil
+            commonality = nil
+            tags = nil
+            id = nil
+            item.each do |content_type, content|
+               desc = content if content_type == "desc"
+               id = content if content_type == "id"
+               commonality = content.to_sym if content_type == "commonality"
+               tags = content if content_type == "tags"
+            end
+            myitem = Item.new(item_name,desc,commonality,tags,id)
+            Dictionary.add_discovered_item(myitem.name, myitem)
+            info "#{myitem.name} - #{myitem.desc}"
+          end  
+      end
+   end
 end

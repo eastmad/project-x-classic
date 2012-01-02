@@ -2,8 +2,8 @@ class CelestialObject < SimpleBody
    attr_reader :centrePoint, :orbitPoint, :outerPoint, :surfacePoint
    attr_accessor :links
    
-   def initialize(name, desc = "Nondescript", owning = nil)      
-      super(name, desc, owning)
+   def initialize(name, desc = "Nondescript", owning = nil, id = nil)      
+      super(name, desc, owning, id)
       @links = []
    end
    
@@ -158,12 +158,12 @@ class Planet < CelestialObject
    end
    
    
-   def stationFactory(name, desc)
-      SpaceStation.new(name, desc, @orbitPoint)
+   def stationFactory(name, desc, id = nil)
+      SpaceStation.new(name, desc, @orbitPoint, id)
    end
    
-   def structureFactory(name, desc, toughness)
-      SmallStructure.new(name, desc, @orbitPoint, toughness)
+   def structureFactory(name, desc, toughness, id = nil)
+      SmallStructure.new(name, desc, @orbitPoint, toughness, id)
    end
    
    def cityFactory(name, desc)
@@ -214,8 +214,8 @@ end
 
 class SpaceStation < CelestialObject
 
-  def initialize(name, desc, ownerPoint)      
-    super(name, desc, ownerPoint.body)
+  def initialize(name, desc, ownerPoint, id = nil)      
+    super(name, desc, ownerPoint.body, id)
 
     @centrePoint = LocationPoint.new(self, :centre)   
     @surfacePoint = LocationPoint.new(self, :surface)
@@ -245,12 +245,12 @@ class SpaceStation < CelestialObject
     :planet
   end
 
-  def traderFactory(name, index,  desc)
-    Trader.new(name, index, desc, @centrePoint)
+  def traderFactory(name, index,  desc, id)
+    Trader.new(name, index, desc, @centrePoint, id)
   end
   
-  def garageFactory(name, index,  desc)
-    Garage.new(name, index, desc, @centrePoint)
+  def garageFactory(name, index,  desc, id)
+    Garage.new(name, index, desc, @centrePoint, id)
   end
   
   def describe
@@ -337,8 +337,8 @@ class SmallStructure < CelestialObject
   attr_reader :damage_rating
   attr_accessor :status
   
-  def initialize(name, desc, ownerPoint, toughness)      
-    super(name, desc, ownerPoint.body)
+  def initialize(name, desc, ownerPoint, toughness, id)      
+    super(name, desc, ownerPoint.body, id)
 
     @centrePoint = LocationPoint.new(self, :centre)   
     ownerPoint.add_link([:satellite], @centrePoint)

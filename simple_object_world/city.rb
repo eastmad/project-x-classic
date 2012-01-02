@@ -4,7 +4,7 @@ class City < SimpleBody
   attr_accessor :links
   
   def initialize(name, desc, ownerPoint, exitPoint)      
-    super(name, desc, ownerPoint.body)
+    super(name, desc, ownerPoint.body, name.to_sym)
  
     @links = []
     @contacts = []

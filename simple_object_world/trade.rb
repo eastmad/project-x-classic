@@ -11,6 +11,7 @@ class Trade
     @item = item
     @trade_type = trade_type
     @origin_trader = origin_trader
+    
   end
   
   def to_s
@@ -36,6 +37,8 @@ end
 class Item
   attr_reader :name, :desc, :item_type,:conditions
   
+  @@item_ref = {}
+  
   @@details = {
     :alien => "alien artifact or technology",
     :foodstuff => "foodstuff",
@@ -43,11 +46,12 @@ class Item
     :controlled => "controlled goods"
     }
   
-  def initialize(name, desc, item_type, conditions = [])
+  def initialize(name, desc, item_type, conditions = [], id = nil)
     @name = name
     @desc = desc
     @item_type = item_type
     @conditions =  conditions.dup unless conditions.nil?
+    @@item_ref.merge!({id.to_sym => self}) unless id.nil?
   end
   
   def describe
@@ -64,6 +68,10 @@ class Item
     para1 << "  - #{@@details[:alien]}" if conditions.include? :alien
     
     para1
+  end
+  
+  def self.find key
+     @@item_ref[key]
   end
   
   def to_s
