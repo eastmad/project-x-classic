@@ -115,7 +115,6 @@ class Dictionary
    def self.filter_with_substring(words, sub)
       res = []
       words.each do |word|
-      info "Does #{word} start with #{sub}?"
          if word[:word].to_s.start_with? sub
             res << word
          end

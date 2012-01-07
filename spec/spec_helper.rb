@@ -5,6 +5,7 @@ $:<< File.join(PROJECT_ROOT, "simple_object_world")
 $:<< File.join(PROJECT_ROOT, "control_systems")
 
 require_relative "../control_systems/impl_trade"
+require_relative "../control_systems/impl_contact"
 require_relative "../control_systems/impl_weaponry"
 require_relative "../control_systems/dictionary"
 require_relative "../control_systems/system_test_helper"

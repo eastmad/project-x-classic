@@ -24,6 +24,28 @@ class Contact < SimpleBody
   def him_or_her
     (@gender == :m)? "him" : "her"
   end
+
+  def not_interested_string
+    "#{self} doesn't want to meet you. You may not have anything #{self.he_or_she} wants."
+  end
+  
+  def already_agreed_meet_string
+    res = "#{self} has already agreed to meet you." 
+    res += "#{self.he_or_she.capitalize} is interested in #{Item.detail[@details[:interest]]}." if  @details.has_key? :interest
+    
+    res
+  end
+  
+  def already_met_string
+    "#{self} has already met with you." 
+  end
+  
+  def agreed_meet_string
+    res = "#{self} has agreed to meet you."
+    res += "#{self.he_or_she.capitalize} is interested in #{Item.detail[@details[:interest]]}." if  @details.has_key? :interest
+    
+    res
+  end
   
 end
 

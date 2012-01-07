@@ -22,7 +22,7 @@ class ImplHelp
     :chk => lambda {@band == :atmosphere and @body.kind_of? Planet}},
    {:txt => "'launch' to leave a space port", 
     :chk => lambda {@band == :surface and @body.kind_of? Planet}},
-   {:txt => "'people' to list your contacts", 
+   {:txt => "'people' to list your local contacts", 
     :chk => lambda {@band == :surface and @body.kind_of? Planet}},
    {:txt => "'plot course' to a planet, then 'engage' drives", 
     :chk => lambda {@band == :orbit}},

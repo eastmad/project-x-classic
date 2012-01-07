@@ -35,12 +35,12 @@ class Trade
 end
 
 class Item
-  attr_reader :name, :desc, :item_type,:conditions
+  attr_reader :name, :desc, :item_type, :conditions
   
   @@item_ref = {}
   
   @@details = {
-    :alien => "alien artifact or technology",
+    :alien => "alien technology or artifacts",
     :foodstuff => "foodstuff",
     :illegal => "illegal goods",
     :controlled => "controlled goods"
@@ -68,6 +68,10 @@ class Item
     para1 << "  - #{@@details[:alien]}" if conditions.include? :alien
     
     para1
+  end
+  
+  def self.detail key
+     @@details[key]
   end
   
   def self.find key

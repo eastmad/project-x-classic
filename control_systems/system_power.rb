@@ -177,6 +177,13 @@ class SystemPower < ShipSystem
       sgo = ShipSystem.find_sgo_from_name(arg)
       raise SystemsMessage.new("Cannot locate target", SystemNavigation, :info) if sgo.nil?
       
+      if (@@ship.status != :sync) 
+      	info "can't approach - call orbit on the main location"
+      	orbit_planet = sgo
+      	orbit_planet = orbit_planet.owning_body unless orbit_planet.kind_of? Planet
+      	@@rq.enq @@ship.orbit orbit_planet # orbit_planet
+      end
+      
       @@rq.enq @@ship.approach sgo   
         
       first_time = @@ship.locationPoint.body.visit

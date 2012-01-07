@@ -13,13 +13,10 @@ class SystemCommunication < ShipSystem
     para1 = ""
     if sgo.kind_of? City or sgo.kind_of? Planet  
       para1 = sgo.describe_contacts
-    else
-      planets = sgo.owns.collect{|locPoint| locPoint.body}
-      planets.each {|planet| para1 << planet.describe_contacts}
     end
     
     if para1.empty?
-      @@rq.enq SystemsMessage.new("No known contacts", SystemCommunication, :info)
+      @@rq.enq SystemsMessage.new("No known local contacts", SystemCommunication, :info)
     else
       para1 << "\n\nType 'contact person' to arrange a meeting"
       @@rq.enq SystemsMessage.new("Contacts\n\n#{para1}", SystemCommunication, :report)
@@ -40,7 +37,7 @@ class SystemCommunication < ShipSystem
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Type 'people' for known contacts.", SystemCommunication, :info)
+      @@rq.enq SystemsMessage.new("Type 'people' for known local contacts.", SystemCommunication, :info)
       {:success => false}
     end  
   end

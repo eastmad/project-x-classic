@@ -75,10 +75,7 @@ JUMP = "Rift generator"
   
   def approach(local_body)
     inside = @locationPoint.body == local_body
-    info "in approach #{local_body}"
-    if (@status != :sync) 
-      raise SystemsMessage.new("I can't fire directional thrusters unless we are in a stable orbit.", SystemPower, :info)
-    end    
+    info "in approach #{local_body}"    
  
     lps = (@locationPoint.find_linked_location :satellite) + (@locationPoint.find_linked_location :approach)
     raise SystemsMessage.new("#{local_body} not in range of thrusters", SystemNavigation, :info) if (lps.empty? and !inside)
@@ -205,49 +202,54 @@ JUMP = "Rift generator"
     SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
   end
   
- def contact(person)
-   city =  @locationPoint.body
- 
-   raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless city.kind_of? City
-   raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact    
-   raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
+  def contact(person)
+    city =  @locationPoint.body
+  
+    raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless city.kind_of? City
+    raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact    
+    raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
+     
+    #check @meet.meet_me[name] for an entry
+    mes = person.not_interested_string
     
-   #check @meet.meet_me[name] for an entry
-   mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
-   
-   unless @icontact.contacts.empty? or @icontact.contacts[person.name].nil?
-     #take into account no interest
-     mes = "#{person} has already agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}"
-   else
-     mes = "#{person} has agreed to meet you. #{person.he_or_she.capitalize} is interested in #{@icontact.contacts[person.name][:consignment]}" if @icontact.check_cargo(person, @trade.cargo)
-   end
-   
-   SystemsMessage.new(mes, SystemCommunication, :response)
- end
+    if @icontact.contacted? person
+      mes = person.already_agreed_meet_string
+    else
+      if @icontact.interested? person, @trade.cargo
+        mes = person.agreed_meet_string
+        @icontact.contact_made(person)
+      end
+    end
+  
+    SystemsMessage.new(mes, SystemCommunication, :response)
+  end
  
   def meet(person)
-    raise SystemsMessage.new("You can only meet contacts in a city.", SystemCommunication, :response_bad) unless @locationPoint.body.kind_of? City
-    raise SystemsMessage.new("You can only meet a person.", SystemCommunication, :response_bad) unless person.kind_of? Contact
-  
-    #check @meet.meet_me[name] for an entry
+    city =  @locationPoint.body
     
-    unless @icontact.contacts.empty? or @icontact.contacts[person.name].nil?
-      consignment = @icontact.contacts[person.name][:consignment]
-      unless @icontact.contacts[person.name][:met]
-        @trade.cargo.delete consignment
-        #automatic increase of trust
-        person.org.trust(1)
-      end  
-      @icontact.contacts[person.name][:met] = true
+    raise SystemsMessage.new("You can only meet contacts in a city.", SystemCommunication, :info) unless city.kind_of? City
+    raise SystemsMessage.new("You can only meet a person.", SystemCommunication, :info) unless person.kind_of? Contact
+    raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
+    
+    if @icontact.contacted? person
+      if @icontact.interested? person, @trade.cargo   
+        unless @icontact.met? person
+          @trade.cargo.delete @icontact.find_interesting_consignment person, @trade.cargo
+          #automatic increase of trust
+          person.org.trust(1)
+          @icontact.contact_met person
+          mes = "You met #{person}"
+        else
+          mes = person.already_met_string
+        end
+      else
+        mes = person.not_interested_string
+      end
     else
-      info "Can't meet #{person}"
-      #take into account no interest
-      mes = "#{person} doesn't want to meet you. You may not have anything #{person.he_or_she} wants."
-      mes =  "#{person} has not agreed to meet you. Contact #{person.him_or_her} first." unless @icontact.contacts[person.name]
-      raise SystemsMessage.new(mes, SystemCommunication, :response_bad) 
+      mes = "Contact #{person} first. It's only polite."
     end
     
-    SystemsMessage.new("You met #{person}", SystemCommunication, :response)
+    SystemsMessage.new(mes, SystemCommunication, :info)
   end
              
  def land(city_point)

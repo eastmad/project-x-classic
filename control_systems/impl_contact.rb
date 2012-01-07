@@ -1,28 +1,48 @@
 class ImplContact
-  attr_reader :contacts
-  
   def initialize
-    @contacts = {}
+    @known_contacts = []
+    @met_contacts = []
   end
-    
-  #check for the first consignment that matches interest
-  #most likely should check for a unique, then rare.
-  def check_cargo contact, cargo
-    interests = contact.details[:interest]
-    
-    return true if interests.nil?
-    
+ 
+  def any_contacts?
+    !@known_contacts.nil? 
+  end
+  
+  def contacted?(contact)
+    @known_contacts.include?(contact)		
+  end
+  
+  def contact_made(contact)
+    @known_contacts << contact 		
+  end
+  
+  def contact_met(contact)
+    @met_contacts << contact 		
+  end
+  
+  def met?(contact)
+    @met_contacts.include?(contact)		
+  end
+  
+  def interested?(contact, cargo)
+    interest = contact.details[:interest]
+    return true if interest.nil?
+      
     cargo.each do | consignment |
-      if consignment.item.conditions.include? interests
-        contact_hash = @contacts[contact.name] unless @contacts.empty?
-        contact_hash = {} if contact_hash.nil?
-        contact_hash[:consignment] = consignment
-        @contacts[contact.name] = contact_hash
-        return true
-      end  
+       return true if consignment.item.conditions.include? interest
     end
     
-    false
+    false 
   end
   
+  def find_interesting_consignment(contact, cargo)
+    interest = contact.details[:interest]
+    return true if interest.nil?
+      
+    cargo.each do | consignment |
+       return consignment if consignment.item.conditions.include? interest
+    end
+    
+    nil 
+  end
 end

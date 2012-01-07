@@ -16,28 +16,35 @@ class GameStart
    trader3 = Trader.find(:ventrad)
    garage = Garage.find(:vengar)
    freemars = Organisation.find :fm
+   vmu = Organisation.find :vmu
    houston = City.find(:Houston)
    listeningPost = SmallStructure.find(:lp)
    nicosia = City.find(:Nicosia)
+   venutia = City.find(:Venutia)
+   dun = City.find(:Dundarach)
    
    trader.add_sink_trade(Item.find :bb)
    trader.add_sink_trade(Item.find :cc)
    trader2.add_source_trade(wafercones)
    
-   trader3.set_owning_org(Organisation.find :vmu)
+   trader3.set_owning_org(vmu)
    trader3.add_sink_trade(wafercones)
    trader3.add_source_trade(Item.find(:tit),1)
       
-   garage.set_owning_org(Organisation.find :vmu)
+   garage.set_owning_org(vmu)
    garage.add_service_module(GovTorpedo)
    garage.add_service_module(HeatShieldModule,1)
    
    
    freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
     If you want to know more about what's happening to Mars, talk to our contact on Earth.")
+    
           
    pers = houston.contactFactory(:m, "Prof.", "Nordstrum", "Alien artifact trader", freemars, 1)
    pers.add_details(:interest => :alien, :talk => :war)
+   pers = venutia.contactFactory(:f, "Miss.", "Singh", "Miners Union rep", vmu, 0)
+   pers.add_details(:talk => :mining_standards)
+   dun.contactFactory(:f, "Mardi", "Gras", "Miners Union rep", vmu, 0)
    
    listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
