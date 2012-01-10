@@ -28,7 +28,7 @@ class Trade
     raise "Wrong item" unless consignment.item == @item 
 
     @status = :fulfilled
-    
+    info "raise trust for consignment owner and receiving trader"
     consignment.origin_trader.owning_org.trust(1)
     @origin_trader.owning_org.trust(1)    
   end

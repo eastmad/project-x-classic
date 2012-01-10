@@ -77,7 +77,7 @@ Shoes.app(:width => 990, :height => 535, :title => "Project X") {
   Operation.register_op :meet, :communication, 1 
   Operation.register_op :suggest, :myself, 1
   Operation.register_op :destroy, :weaponry, 1
-  Operation.register_op :load, :modification, 1
+  Operation.register_op :load, :weaponry, 1
   Operation.register_op :install, :modification, 1
  
    

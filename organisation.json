@@ -10,5 +10,11 @@
 		"desc":"Independence for Mars!",
 		"id":"fm",
 		"privacy":"secret"
-	}	
+	},
+	"Mars Torism":
+	{
+		"desc":"Enjoy Mars!",
+		"id":"mt",
+		"privacy":"public"
+	}
 }

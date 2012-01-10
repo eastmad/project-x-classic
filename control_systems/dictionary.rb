@@ -17,7 +17,7 @@ class Dictionary
             {:word => :launch, :grammar => :verb, :sys => :power},
             {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :destroy, :grammar => :verb, :sys => :weaponry},
-            {:word => :load, :grammar => :verb, :sys => :modification},
+            {:word => :load, :grammar => :verb, :sys => :weaponry},
             {:word => :install, :grammar => :verb, :sys => :modification},                        
             {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
             {:word => :orbit, :grammar => :verb, :sys => :navigation},
