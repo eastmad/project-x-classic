@@ -13,7 +13,7 @@ class SystemGhost < ShipSystem
         why you are here. 
         
         You are in control of this small ship.
-        Leave this solar system and I will contact you any again.
+        Leave this solar system and I will contact you again.
     END
     
     para1

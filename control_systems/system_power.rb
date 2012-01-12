@@ -185,7 +185,7 @@ class SystemPower < ShipSystem
       end
       
       @@rq.enq @@ship.approach sgo   
-        
+info "on approach"        
       first_time = @@ship.locationPoint.body.visit
       
       if first_time

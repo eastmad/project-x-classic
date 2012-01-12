@@ -8,8 +8,11 @@ class CelestialObject < SimpleBody
    end
    
   def visit
+info "have we visited #{name}? churnin trust list responds #{respond_to? :check_trust_list}"     
+    check_trust_list if (respond_to? :check_trust_list) 
+     
     first_time = !@visited
-
+info "first_time? = #{first_time}"
     @visited = true
     
     first_time
@@ -399,10 +402,12 @@ class SmallStructure < CelestialObject
   
   private
   
-  def horizon trust, desc, org
-    if trust <= org.trust_score  
-      @desc = desc
+  def horizon trust, desc, org     
+    if trust <= org.trust_score
+info "trust list horizons - add desc and visited is no"       
+      @desc = "#{desc} >>UPDATED<<"
       info "#{desc} altered description"
+      @visited = false # so we notice the new description
       return true
     end
    

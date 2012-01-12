@@ -37,7 +37,7 @@ class ImplContact
   
   def find_interesting_consignment(contact, cargo)
     interest = contact.details[:interest]
-    return true if interest.nil?
+    return nil if interest.nil?
       
     cargo.each do | consignment |
        return consignment if consignment.item.conditions.include? interest

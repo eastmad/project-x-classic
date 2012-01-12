@@ -1,7 +1,7 @@
 module TrustHolder
   attr_reader :trust_list
    
-  private
+  protected
   
   def add_to_trust_list(trust, obj, trustee = nil)   
     @trust_list = [] if @trust_list.nil?
@@ -10,6 +10,7 @@ module TrustHolder
   end
   
   def check_trust_list
+info "consider trust list"    
     @trust_list = [] if @trust_list.nil?
 
     @trust_list.each do | t |

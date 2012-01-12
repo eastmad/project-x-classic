@@ -31,7 +31,7 @@ class Contact < SimpleBody
   
   def already_agreed_meet_string
     res = "#{self} has already agreed to meet you." 
-    res += "#{self.he_or_she.capitalize} is interested in #{Item.detail[@details[:interest]]}." if  @details.has_key? :interest
+    res += interseted_in_string
     
     res
   end
@@ -42,9 +42,14 @@ class Contact < SimpleBody
   
   def agreed_meet_string
     res = "#{self} has agreed to meet you."
-    res += "#{self.he_or_she.capitalize} is interested in #{Item.detail[@details[:interest]]}." if  @details.has_key? :interest
-    
+    res += interseted_in_string
     res
+  end
+  
+  private
+  
+  def interseted_in_string
+    "#{self.he_or_she.capitalize} is interested in #{Item.detail(@details[:interest])}." if  @details.has_key? :interest
   end
   
 end

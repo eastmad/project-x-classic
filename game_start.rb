@@ -7,6 +7,7 @@ class GameStart
    ImageWindow.register("Mars",{:orbit => "mars-planet-water-nasa"})
    ImageWindow.register("Venus",{:orbit => "venus"})
    ImageWindow.register("Mercury",{:orbit => "mercury"})
+   ImageWindow.register("Nicosia",{:centre => "ruinedcity22"})
    loadItems
    loadOrgs
    
@@ -41,7 +42,6 @@ class GameStart
    
    freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
     If you want to know more about what's happening to Mars, talk to our contact on Earth.")
-    
           
    pers = houston.contactFactory(:m, "Prof.", "Nordstrum", "Alien artifact trader", freemars, 1)
    pers.add_details(:interest => :alien, :talk => :war)
@@ -49,10 +49,9 @@ class GameStart
    pers.add_details(:talk => :mining_standards)
    dun.contactFactory(:f, "Mardi", "Gras", "Mars tourism rep", mt, 1)
    
-   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
+   listeningPost.add_updated_desc(1, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
      
-   
    nicosia.add_visit_trigger(freemars, 1, :visit_mars)
    
    ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)
@@ -60,9 +59,7 @@ class GameStart
    ShipSystem.christen(ship)
      
    ship.push_mail(SystemGhost.welcome, "ghost")
-     
-   ship.trade.cargo << Consignment.new(wafercones,trader2)
-     
+   
    ship
  end
  
@@ -315,7 +312,8 @@ class GameStart
                desc = content if content_type == "desc"
                id = content if content_type == "id"
                commonality = content.to_sym if content_type == "commonality"
-               tags = content if content_type == "tags"
+               tags_as_string = content if content_type == "tags"
+               tags = tags_as_string.collect{|tag| tag.to_sym} unless tags_as_string.nil?
             end
             myitem = Item.new(item_name,desc,commonality,tags,id)
             Dictionary.add_discovered_item(myitem.name, myitem)

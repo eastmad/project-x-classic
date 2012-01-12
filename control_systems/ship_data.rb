@@ -81,9 +81,7 @@ JUMP = "Rift generator"
     raise SystemsMessage.new("#{local_body} not in range of thrusters", SystemNavigation, :info) if (lps.empty? and !inside)
     raise SystemsMessage.new("Cannot approach #{local_body} safely with thrusters", SystemNavigation, :info) if (lps.empty? and inside)
     
-    
     lp = lps.find {| lp | info "lps = #{lp.body}";lp.body == local_body}
-    
     
     info "exit approach #{lp}"
     
@@ -204,18 +202,18 @@ JUMP = "Rift generator"
   
   def contact(person)
     city =  @locationPoint.body
-  
+
     raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless city.kind_of? City
     raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact    
     raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
-     
+
     #check @meet.meet_me[name] for an entry
     mes = person.not_interested_string
-    
+
     if @icontact.contacted? person
       mes = person.already_agreed_meet_string
-    else
-      if @icontact.interested? person, @trade.cargo
+    else    
+      if @icontact.interested?(person, @trade.cargo)
         mes = person.agreed_meet_string
         @icontact.contact_made(person)
       end
@@ -268,19 +266,20 @@ JUMP = "Rift generator"
    if (@status == :rest)
      @status = :dependent
      @locationPoint = city_point
-     first_time = @locationPoint.body.visit
      
-     if first_time
-       city = @locationPoint.body
-       para1 = "#{city}\n\n"
-       para1 << city.describe
-       para1 << "\n- " << city.desc
-       para1 << "\n- " << city.describe_owns 
+     #first_time = @locationPoint.body.visit
+     #
+     #if first_time
+     #  city = @locationPoint.body
+     #  para1 = "#{city}\n\n"
+     #  para1 << city.describe
+     #  para1 << "\n- " << city.desc
+     #  para1 << "\n- " << city.describe_owns 
  
-       return SystemsMessage.new(para1, SystemLibrary, :report)
-     else 
-       return SystemsMessage.new("Landed at #{city_point.body.name}", SystemPower, :info)
-     end
+      # return SystemsMessage.new(para1, SystemLibrary, :report)
+     #else 
+     #  return SystemsMessage.new("Landed at #{city_point.body.name}", SystemPower, :info)
+     #end
    else
      raise SystemsMessage.new("Cannot land on #{city_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
    end   
