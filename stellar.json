@@ -105,7 +105,33 @@
 					},
 					"Mercury":
 					{
-						"desc":"Difficult to reach because of solar heat"
+						"desc":"Difficult to reach because of solar heat",
+						"satellites":
+						{												
+							"MarinerCenter":
+							{
+								"desc":"Considered to be a pirate station",
+								"garages":
+								{
+									"Skull":
+									{
+										"desc":"Pirate supplies",
+										"id":"skull",
+										"end_name":"Garages"
+									}	
+								},
+								"traders":
+								{
+									"Tradestar":
+									{
+										"desc":"Mining Union run trading",
+										"id":"ventrad",
+										"end_name":"Trading"
+									}	
+								}
+								
+							}	
+						}
 					}
 					
 				}

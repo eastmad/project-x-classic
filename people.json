@@ -1,0 +1,20 @@
+{   
+	"Nordstrum":
+	{
+		"sex":"m", 
+		"title":"Prof",
+		"desc":"Alien artifact trader"
+	},
+        "Singh":
+	{
+		"sex":"f", 
+		"title":"Ms",
+		"desc":"Miners Union Rep"
+	},
+        "Gras":
+	{
+		"sex":"f", 
+		"title":"Councillor",
+		"desc":"Mars Tourism Rep"
+	}
+}

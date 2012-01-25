@@ -1,11 +1,27 @@
-class Contact < SimpleBody
-  attr_reader :org, :title, :details, :gender
+class Person
+  attr_reader :gender, :name, :title, :desc
+  @@people = {}
   
-  def initialize(gender, title, name, desc, org, ownerPoint)
-    super(name,desc,ownerPoint.body)
+  def initialize(gender, title, name, desc)
     @gender = gender
-    @org = org
     @title = title
+    @name = name
+    @desc = desc
+    @@people.merge!({name.to_sym => self})
+  end
+  
+  def self.find key
+    @@people[key]
+  end
+end
+
+class Contact < SimpleBody
+  attr_reader :person, :org, :details
+  
+  def initialize(person, org, ownerPoint)
+    super(person.name,person.desc,ownerPoint.body)
+    @person = person
+    @org = org
     @details = {}
   end
   
@@ -14,15 +30,15 @@ class Contact < SimpleBody
   end
   
   def to_s
-    "#{@title} #{@name}"
+    "#{@person.title} #{@person.name}"
   end
   
   def he_or_she
-    (@gender == :m)? "he" : "she"
+    (@person.gender == :m)? "he" : "she"
   end
   
   def him_or_her
-    (@gender == :m)? "him" : "her"
+    (@person.gender == :m)? "him" : "her"
   end
 
   def not_interested_string

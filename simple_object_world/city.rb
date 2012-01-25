@@ -59,8 +59,8 @@ class City < SimpleBody
     "The city port of #{@name} welcomes your visit."
   end
   
-  def contactFactory(gender, title, name, desc, org, trust)
-     contact = Contact.new(gender, title, name, desc, org, @centrePoint)
+  def contactFactory(person, org, trust)
+     contact = Contact.new(person, org, @centrePoint)
 
      add_to_trust_list(trust,contact,org)
      
