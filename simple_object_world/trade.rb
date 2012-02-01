@@ -51,7 +51,10 @@ class Item
     @desc = desc
     @item_type = item_type
     @conditions =  conditions.dup unless conditions.nil?
-    @@item_ref.merge!({id.to_sym => self}) unless id.nil?
+    unless id.nil?
+      raise "Non unique id #{id} - STOP" if @@item_ref.has_key? id.to_sym    
+      @@item_ref.merge!({id.to_sym => self})
+    end
   end
   
   def describe

@@ -3,9 +3,9 @@ class Trader < SimpleBody
   include TrustHolder
   include Trustee
   
-  def initialize(name, index, desc, ownerPoint, id = nil )      
+  def initialize(name, index, desc, ownerPoint, id = nil )   
     super(name, desc, ownerPoint.body, id) 
-    @index_name = index
+    @index_name = index    
     ownerPoint.add_link([:trader], LocationPoint.new(self, :centre)) 
     @trades = []
     @owning_org = self
@@ -18,6 +18,7 @@ class Trader < SimpleBody
  
   def trades
     check_trust_list
+    info "trades number = #{@trades.size}"
     @trades
   end
  
@@ -47,11 +48,10 @@ class Trader < SimpleBody
   
   private
 
-
   def horizon trust, trade, trustee
     if trust <= trustee.trust_score
       @trades << trade
-      info "#{trade.item} added to trades trust = #{trust} type=#{trade.trade_type}"
+      info "#{trade.item} added to trades trust = #{trust} type=#{trade.trade_type} for #{self}"
       push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
       return true
     end
@@ -60,6 +60,7 @@ class Trader < SimpleBody
   end
   
   def add_trade trade, trust, org
+    info "adding #{trade} to trust list of #{self} with trust=#{trust}, and org = #{org}"
     add_to_trust_list trust, trade, org
   end
   

@@ -10,7 +10,7 @@ module TrustHolder
   end
   
   def check_trust_list
-info "consider trust list"    
+ 
     @trust_list = [] if @trust_list.nil?
 
     @trust_list.each do | t |

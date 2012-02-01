@@ -8,7 +8,6 @@ class CelestialObject < SimpleBody
    end
    
   def visit
-info "have we visited #{name}? churnin trust list responds #{respond_to? :check_trust_list}"     
     check_trust_list if (respond_to? :check_trust_list) 
      
     first_time = !@visited
@@ -275,15 +274,18 @@ class SpaceStation < CelestialObject
   def trades_page 
     ret = ""
     traders = @centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
+    info "traders num = #{traders.size}"
     num = 0
     ret << "Consignments to go\n"    
-    traders.each do | trader | 
+    traders.each do | trader |
+       info "consider trader #{trader.to_s}"
       #ret << "#{trader.to_s}\n"
       num += 1
       trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :source}
     end
     ret << "\nConsignments needed\n"
-    traders.each do | trader | 
+    traders.each do | trader |
+      info "consider trader #{trader.to_s}"
       #ret << "#{trader.to_s}\n"
       num += 1
       trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :sink}

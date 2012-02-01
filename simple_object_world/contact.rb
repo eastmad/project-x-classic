@@ -7,7 +7,10 @@ class Person
     @title = title
     @name = name
     @desc = desc
-    @@people.merge!({name.to_sym => self})
+    unless name.nil?
+      raise "Non unique id #{name} - STOP" if @@people.has_key? name.to_sym    
+      @@people.merge!({name.to_sym => self})
+    end
   end
   
   def self.find key

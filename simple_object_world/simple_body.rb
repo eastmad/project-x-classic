@@ -9,7 +9,11 @@ class SimpleBody
     @desc = desc
     @owning_body = owner
     @visited = false
-    @@simple_body_ref.merge!({id.to_sym => self}) unless id.nil?
+    unless id.nil?
+      raise "Non unique id #{id} - STOP" if @@simple_body_ref.has_key? id.to_sym    
+      @@simple_body_ref.merge!({id.to_sym => self})
+    end
+    
   end
   
   def root_body

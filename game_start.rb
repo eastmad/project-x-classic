@@ -57,7 +57,7 @@ class GameStart
    listeningPost.add_updated_desc(1, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
      
-   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
+   nicosia.add_visit_trigger(freemars, 1, :visit_mars) 
    
    ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)
    Dictionary.add_discovered_proper_noun(ship.name, nil) #should be an sgo

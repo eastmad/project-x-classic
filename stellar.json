@@ -76,6 +76,7 @@
 						{												
 							"UnionHall":
 							{
+								"id":"uh",
 								"desc":"Union run trade and service station",
 								"garages":
 								{
@@ -118,15 +119,6 @@
 										"desc":"Pirate supplies",
 										"id":"skull",
 										"end_name":"Garages"
-									}	
-								},
-								"traders":
-								{
-									"Tradestar":
-									{
-										"desc":"Mining Union run trading",
-										"id":"ventrad",
-										"end_name":"Trading"
 									}	
 								}
 								
