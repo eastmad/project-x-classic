@@ -1,5 +1,7 @@
 
 Shoes.app :height => 100 do
-  image "gifs/star_icon.gif"
-  inscription "Sol"
+  fs = font("cour.ttf")
+  info fs
+
+  @text = para "Red with an underline", :font => "Courier, bold, 12"  
 end   

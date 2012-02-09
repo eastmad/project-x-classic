@@ -187,7 +187,7 @@ Shoes.app(:width => 990, :height => 535, :title => "Project X") {
     stack(:width => 615, :height => 250){
       background rgb(20,20,40)
       border rgb(25,25,50) , :strokewidth => 1
-      (0..7).each{|n| @ap[n].line_type = caption strong(""),""}
+      (0..7).each{|n| @ap[n].line_type = caption strong(""),"",:font => "Courier, bold, 12"}
     }
     
     stack(:width => 615, :height => 212){
