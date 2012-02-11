@@ -1,7 +1,18 @@
 #word grouping
-
+require "json"
 require_relative "control_systems/dictionary"
+require_relative "game_start"
+require_relative "simple_object_world/simple_body"
+require_relative "simple_object_world/trustee"
+require_relative "simple_object_world/trust_holder"
+require_relative "simple_object_world/city"
+require_relative "simple_object_world/simple_game_object"
+require_relative "simple_object_world/trade"
+require_relative "simple_object_world/trader"
+require_relative "simple_object_world/location_point"
+require_relative "simple_object_world/location_link"
 
+GameStart.loadGalaxy
 commandlist = []
 nounlist = []
 

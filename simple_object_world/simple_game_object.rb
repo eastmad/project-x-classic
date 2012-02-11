@@ -122,10 +122,10 @@ end
 
 class Planet < CelestialObject
 
-   attr_reader :orbitPoint, :atmospherePoint
+   attr_reader :orbitPoint, :atmospherePoint, :blockers
    
    def initialize(name, desc, ownerPoint)      
-      super(name, desc, ownerPoint.body)
+      super(name, desc, ownerPoint.body, name.to_sym)
       
       @centrePoint = LocationPoint.new(self, :centre)
       @atmospherePoint = LocationPoint.new(self, :atmosphere)
@@ -134,7 +134,8 @@ class Planet < CelestialObject
       
       @orbitPoint.add_link([:star], ownerPoint)  
       @orbitPoint.add_link([:approach], @atmospherePoint)
-      ownerPoint.add_link([:planet], @orbitPoint)      
+      ownerPoint.add_link([:planet], @orbitPoint)
+      @blockers = []
    end
    
    def describe
@@ -206,6 +207,10 @@ class Planet < CelestialObject
       end
       
       sw
+   end
+
+   def add_blocker(block_type, statement, active = true)
+      @blockers << {:block_type => block_type, :active => active, :statement => statement}
    end
 
    def out

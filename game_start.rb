@@ -1,6 +1,5 @@
 class GameStart
 
-
  def self.data2
    loadGalaxy
    ImageWindow.register("Earth",{:orbit => "terre_noir", :atmosphere => "earth_atmosphere"})
@@ -27,6 +26,7 @@ class GameStart
    nicosia = City.find(:Nicosia)
    venutia = City.find(:Venutia)
    dun = City.find(:Dundarach)
+   merc = Planet.find(:Mercury)
    
    trader.add_sink_trade(Item.find :bb)
    trader.add_sink_trade(Item.find :cc)
@@ -45,8 +45,8 @@ class GameStart
    
    trader2.add_source_trade(eye,1)
    
-   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion.\
-    If you want to know more about what's happening to Mars, talk to our contact on Earth.")
+   freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion. \
+If you want to know more about what's happening to Mars, talk to our contact on Earth.")
           
    pers = houston.contactFactory(Person.find(:Nordstrum), freemars, 1)
    pers.add_details(:interest => :alien, :talk => :war)
@@ -54,10 +54,12 @@ class GameStart
    pers.add_details(:talk => :mining_standards)
    dun.contactFactory(Person.find(:Gras), mt, 1)
    
-   listeningPost.add_updated_desc(1, "Earth military control listening post", freemars)
+   listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
      
-   nicosia.add_visit_trigger(freemars, 1, :visit_mars) 
+   nicosia.add_visit_trigger(freemars, 1, :visit_mars)
+   
+   merc.add_blocker(:heat, "insufficient heat shielding - safety interlock")   
    
    ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)
    Dictionary.add_discovered_proper_noun(ship.name, nil) #should be an sgo

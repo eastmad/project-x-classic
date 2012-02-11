@@ -45,10 +45,22 @@ JUMP = "Rift generator"
      @help.suggest(@locationPoint, @status)
   end
  
+  def check_security(planet)
+    info "checking blockers"
+    planet.blockers.each do | blocker |
+      info "consider blocker on #{planet}"
+      if blocker[:active]
+        info "block engaged #{blocker[:statement]}"
+        raise SystemsMessage.new(blocker[:statement], SystemSecurity, :info)
+      end
+    end
+  end
+ 
   def set_heading(planet)
      raise SystemsMessage.new("#{planet} is not a planet",SystemNavigation, :info) unless (planet.kind_of? Planet) 
      #planet must be in system
      raise SystemsMessage.new("Cannot head for a planet not in this system", SystemNavigation, :info) unless (@locationPoint.body.owned_by? planet.owning_body)
+     check_security(planet)    
          
      @headingPoint = planet.orbitPoint
      info "Heading #{@headingPoint}"
