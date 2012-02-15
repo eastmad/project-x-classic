@@ -42,6 +42,7 @@ class GameStart
    
    garage2.set_owning_org(freemars)
    garage2.add_service_module(HammerheadTorpedo,1)
+   garage2.add_service_module(JumpPodModule,2)
    
    trader2.add_source_trade(eye,1)
    

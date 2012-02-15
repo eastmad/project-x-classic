@@ -14,6 +14,14 @@ class ImplModification
       
       mod
   end
-
+  
+  def mod_type_present? type
+    @mods.each do |mod|
+      info "mod.type == #{mod.type}"
+      return true if mod.type == type
+    end
+    
+    false
+  end
 end
 

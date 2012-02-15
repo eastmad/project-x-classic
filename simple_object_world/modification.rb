@@ -9,6 +9,19 @@ class Modification
   def type
     self.class.type
   end
+  
+end
+
+class JumpPodModule < Modification
+  class << self; attr_accessor :name end
+  @name = "Jump Pod"
+  
+  class << self; attr_accessor :type end
+  @type = :pod
+      
+  def initialize
+    @desc = "Gate jump now enabled."
+  end    
 end
 
 class HeatShieldModule < Modification

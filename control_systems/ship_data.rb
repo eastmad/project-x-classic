@@ -49,7 +49,7 @@ JUMP = "Rift generator"
     info "checking blockers"
     planet.blockers.each do | blocker |
       info "consider blocker on #{planet}"
-      if blocker[:active]
+      if blocker[:active] and !@modification.mod_type_present? :shield 
         info "block engaged #{blocker[:statement]}"
         raise SystemsMessage.new(blocker[:statement], SystemSecurity, :info)
       end
