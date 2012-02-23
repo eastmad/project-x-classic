@@ -2,11 +2,11 @@ class ImplHelp
 
   def initialize
    @suggestions = [
-   {:txt => "'accept' or 'give' to move consignments", 
+   {:txt => "'load' or 'unload' to move consignments", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.trades_page.nil?}},
    {:txt => "'cargo' to see what consignments you hold", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.trades_page.nil?}},
-   {:txt => "'load' torpedoes or 'install' components", 
+   {:txt => "'stack' torpedoes or 'install' components", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.services_page.nil?}},
    {:txt => "'undock' to leave a space station", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation}},

@@ -18,10 +18,23 @@ class SystemModification < ShipSystem
     return resp_hash 
   end
   
+  def _modifications(arg = nil)
+    begin
+      para1 = @@ship.all_mod_cons
+      @@rq.enq SystemsMessage.new(para1, "Known modifications", :report)
+      resp_hash = {:success => true}
+    rescue RuntimeError => ex
+      @@rq.enq ex
+      resp_hash = {:str => ex, :success => false}
+    end      
+          
+    return resp_hash
+  end
+  
   def _services(arg = nil)
     begin    
       station = @@ship.locationPoint.body
-      raise SystemsMessage.new("A trades/services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      raise SystemsMessage.new("A trades or services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
       subj = arg || :services      
 
@@ -31,12 +44,11 @@ class SystemModification < ShipSystem
       elsif (subj == :garage)
         para1 = station.services_page  
       elsif (subj == :services)
-        str1 = station.services_page
-        para1 = str1
+        para1 = station.services_page
       end  
  
       if para1.nil?
-        @@rq.enq SystemsMessage.new("There is no service activity", SystemTrade, :info)
+        @@rq.enq SystemsMessage.new("There is no service activity", SystemModification, :response_bad)
       else  
         @@rq.enq SystemsMessage.new(para1, SystemModification, :report)
       end

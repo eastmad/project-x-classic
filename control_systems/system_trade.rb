@@ -29,7 +29,7 @@ class SystemTrade < ShipSystem
   def _trades(arg = nil)
     begin    
       station = @@ship.locationPoint.body
-      raise SystemsMessage.new("A trades/services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      raise SystemsMessage.new("A trades or services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
       subj = arg || :trades      
 
@@ -39,12 +39,11 @@ class SystemTrade < ShipSystem
       elsif (subj == :trader)
         para1 = station.traders_page
       elsif (subj == :trades)
-        str1 = station.trades_page
-        para1 = str1
+        para1 = station.trades_page
       end  
  
       if para1.nil?
-        @@rq.enq SystemsMessage.new("There is no trade activity", SystemTrade, :info)
+        @@rq.enq SystemsMessage.new("There is no trade activity", SystemTrade, :response_bad)
       else  
         @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
       end
@@ -82,7 +81,7 @@ class SystemTrade < ShipSystem
     :trading
   end
    
-  def _accept(args = nil)
+  def _load(args = nil)
     begin
       item = ShipSystem.find_sgo_from_name(@obj)
      
@@ -99,7 +98,7 @@ class SystemTrade < ShipSystem
     resp_hash
   end
   
-  def _give(args = nil)
+  def _unload(args = nil)
     begin    
      item = ShipSystem.find_sgo_from_name(@obj)
 

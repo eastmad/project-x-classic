@@ -208,9 +208,9 @@ class Planet < CelestialObject
       
       sw
    end
-
-   def add_blocker(block_type, statement, active = true)
-      @blockers << {:block_type => block_type, :active => active, :statement => statement}
+  
+   def add_blocker(check_method, to_check, statement, active = true)
+      @blockers << {:check_method => check_method, :to_check => to_check, :active => active, :statement => statement}
    end
 
    def out
@@ -285,15 +285,24 @@ class SpaceStation < CelestialObject
     traders.each do | trader |
        info "consider trader #{trader.to_s}"
       #ret << "#{trader.to_s}\n"
-      num += 1
-      trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :source}
+      trader.trades.each do |trade|
+         if trade.trade_type == :source
+            ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n"
+            num += 1
+         end
+      end   
     end
     ret << "\nConsignments needed\n"
     traders.each do | trader |
       info "consider trader #{trader.to_s}"
       #ret << "#{trader.to_s}\n"
-      num += 1
-      trader.trades.each { |trade| ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n" if trade.trade_type == :sink}
+      
+      trader.trades.each do |trade|
+         if trade.trade_type == :sink
+            ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n"
+            num += 1
+         end   
+      end   
     end
   
     ret = nil if num == 0  
@@ -308,8 +317,10 @@ class SpaceStation < CelestialObject
     ret << "Ship services\n"    
     garages.each do | garage | 
       #ret << "#{trader.to_s}\n"
-      num += 1
-      garage.services.each { |service| ret << "-#{service.name} (#{garage.name} #{garage.index_name})\n"}
+      garage.services.each do |service|
+         ret << "-#{service.name} (#{garage.name} #{garage.index_name})\n"
+         num += 1
+      end
     end
     
     ret = nil if num == 0  
@@ -344,7 +355,7 @@ end
 
 class SmallStructure < CelestialObject
   include TrustHolder
-  attr_reader :damage_rating
+  attr_reader :damage_rating, :blockers
   attr_accessor :status
   
   def initialize(name, desc, ownerPoint, toughness, id)      
@@ -358,6 +369,7 @@ class SmallStructure < CelestialObject
     @status = :normal
     @damage_rating = toughness
     @death_listener = nil
+    @blockers = []
   end
 
   def status_word(status, band)
@@ -389,6 +401,10 @@ class SmallStructure < CelestialObject
     "#{@name} is a satellite of #{@owning_body.name}"
   end
   
+   def add_blocker(check_method, to_check, statement, active = true)
+      @blockers << {:check_method => check_method, :to_check => to_check, :active => active, :statement => statement}
+   end
+     
   def describe_owns
     armour = "No amour"
     armour = "Standard amour" if @damage_rating == 2

@@ -5,7 +5,7 @@ class GameStart
    ImageWindow.register("Earth",{:orbit => "terre_noir", :atmosphere => "earth_atmosphere"})
    ImageWindow.register("Mars",{:orbit => "mars-planet-water-nasa"})
    ImageWindow.register("Venus",{:orbit => "venus"})
-   ImageWindow.register("Mercury",{:orbit => "mercury"})
+   #ImageWindow.register("Mercury",{:orbit => "mercury"})
    ImageWindow.register("Nicosia",{:centre => "ruinedcity22"})
    loadItems
    loadOrgs
@@ -38,10 +38,10 @@ class GameStart
       
    garage1.set_owning_org(vmu)
    garage1.add_service_module(GovTorpedo)
-   garage1.add_service_module(HeatShieldModule,1)
+   garage1.add_service_module(HeatShieldModule,0)
    
    garage2.set_owning_org(freemars)
-   garage2.add_service_module(HammerheadTorpedo,1)
+   garage2.add_service_module(HammerheadTorpedo,0)
    garage2.add_service_module(JumpPodModule,2)
    
    trader2.add_source_trade(eye,1)
@@ -57,10 +57,12 @@ If you want to know more about what's happening to Mars, talk to our contact on 
    
    listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
+   listeningPost.add_blocker(:check_torp_class, GovTorpedo, "Cannot target government property with this munition - safety interlock")
      
    nicosia.add_visit_trigger(freemars, 1, :visit_mars)
    
-   merc.add_blocker(:heat, "insufficient heat shielding - safety interlock")   
+   merc.add_blocker(:check_mod, :shield, "insufficient heat shielding - safety interlock")
+   
    
    ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)
    Dictionary.add_discovered_proper_noun(ship.name, nil) #should be an sgo

@@ -57,6 +57,7 @@ Shoes.app(:width => 990, :height => 535, :title => "Project X") {
   Operation.register_op :stars, :library, 1
   Operation.register_op :trades, :trade, 1
   Operation.register_op :services, :modification, 1
+  Operation.register_op :modifications, :modification, 1
   Operation.register_op :status, :myself, 1
   Operation.register_op :help, :myself, 1
   
@@ -71,8 +72,9 @@ Shoes.app(:width => 990, :height => 535, :title => "Project X") {
   Operation.register_op :plot, :navigation, 1
   Operation.register_op :engage, :power, 1
   Operation.register_op :read, :communication, 1
-  Operation.register_op :accept, :trade, 1
-  Operation.register_op :give, :trade, 1
+  Operation.register_op :stack, :weaponry, 1
+  Operation.register_op :load, :trade, 1
+  Operation.register_op :unload, :trade, 1
   Operation.register_op :contact, :communication, 1
   Operation.register_op :meet, :communication, 1 
   Operation.register_op :suggest, :myself, 1

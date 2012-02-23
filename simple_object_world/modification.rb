@@ -59,7 +59,7 @@ end
 
 class GovTorpedo < Torpedo
     
-  @yield = 3
+  @yield = 2
   @name = "Standard issue torpedo"
   
   def initialize

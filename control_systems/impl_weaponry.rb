@@ -10,6 +10,7 @@ class ImplWeaponry
   def load_torpedoes munition_class
     
     unless @torpedoes.empty?
+      info "remove old missles"
       remove_these = @torpedoes.select do |torp|
         torp.yield < munition_class.yield
       end
@@ -20,11 +21,12 @@ class ImplWeaponry
     end
     
     torp_loaded = nil
+    info "while #{@torpedoes.size} < #{@max_torpedoes}"
     while @torpedoes.size < @max_torpedoes
       torp_loaded = munition_class.new
       @torpedoes << torp_loaded
     end
-    
+    info "torp loaded #{torp_loaded}"
     torp_loaded
   end
 

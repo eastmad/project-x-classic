@@ -12,7 +12,7 @@ class SystemWeaponry < ShipSystem
     end
   end
   
-  def _load(arg = nil)
+  def _stack(arg = nil)
     begin
       @@rq.enq @@ship.load_torpedoes
       {:success => true}

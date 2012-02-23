@@ -44,17 +44,29 @@ JUMP = "Rift generator"
   def suggest
      @help.suggest(@locationPoint, @status)
   end
+  
+  #!@modification.mod_type_present? :shield
  
-  def check_security(planet)
+  def check_security(obj)
     info "checking blockers"
-    planet.blockers.each do | blocker |
-      info "consider blocker on #{planet}"
-      if blocker[:active] and !@modification.mod_type_present? :shield 
+    obj.blockers.each do | blocker |
+      info "consider blocker on #{obj}"
+      if blocker[:active] and method(blocker[:check_method]).call(blocker[:to_check], obj)
         info "block engaged #{blocker[:statement]}"
         raise SystemsMessage.new(blocker[:statement], SystemSecurity, :info)
       end
     end
   end
+ 
+ def check_mod(mod_type, obj)
+    !@modification.mod_type_present? mod_type
+ end
+ 
+ def check_torp_class(class_to_check, obj)
+    torp = @weaponry.torpedoes[0]
+    info "checking class #{class_to_check} for #{torp}: #{torp.kind_of? class_to_check}"
+    torp.kind_of? class_to_check
+ end 
  
   def set_heading(planet)
      raise SystemsMessage.new("#{planet} is not a planet",SystemNavigation, :info) unless (planet.kind_of? Planet) 
@@ -137,6 +149,12 @@ JUMP = "Rift generator"
     else
       raise SystemsMessage.new("Cannot dock with #{spaceStation} from #{@locationPoint}", SystemNavigation, :info)
     end   
+  end
+  
+  
+  def all_mod_cons
+    raise SystemsMessage.new("No modifications to original design added", SystemModification, :response) if @modification.mods.empty?
+    @modification.all_mod_cons
   end
   
   def bay bay = "red"
@@ -298,17 +316,14 @@ JUMP = "Rift generator"
  end
  
   def destroy target
-    begin
 info "target income = #{target}"
-      outcome = @weaponry.destroy target
+    check_security(target)
+    outcome = @weaponry.destroy target
 info "weapons outcome = #{outcome}"
-      mes = "Target destroyed." if outcome > 0
-      mes = "Target disabled." if outcome == 0
-      mes = "Target untouched." if outcome < 0
-      SystemsMessage.new(mes, SystemWeaponry, :info)
-    rescue => ex
-      raise SystemsMessage.new(ex, SystemWeaponry, :info)  
-    end  
+    mes = "Target destroyed." if outcome > 0
+    mes = "Target disabled." if outcome == 0
+    mes = "Target untouched." if outcome < 0
+    SystemsMessage.new(mes, SystemWeaponry, :info) 
   end
      
   def release_docking_clamp()
