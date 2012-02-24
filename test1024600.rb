@@ -39,7 +39,7 @@ require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 990, :height => 535, :title => "Project X") {
+Shoes.app(:width => 962, :height => 535, :title => "Project X") {
   
   background rgb(20, 42, 42)
   stroke white

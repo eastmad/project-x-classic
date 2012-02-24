@@ -38,10 +38,10 @@ class GameStart
       
    garage1.set_owning_org(vmu)
    garage1.add_service_module(GovTorpedo)
-   garage1.add_service_module(HeatShieldModule,0)
+   garage1.add_service_module(HeatShieldModule,1)
    
    garage2.set_owning_org(freemars)
-   garage2.add_service_module(HammerheadTorpedo,0)
+   garage2.add_service_module(HammerheadTorpedo,1)
    garage2.add_service_module(JumpPodModule,2)
    
    trader2.add_source_trade(eye,1)

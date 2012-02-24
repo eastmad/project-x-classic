@@ -51,20 +51,19 @@ JUMP = "Rift generator"
     info "checking blockers"
     obj.blockers.each do | blocker |
       info "consider blocker on #{obj}"
-      if blocker[:active] and method(blocker[:check_method]).call(blocker[:to_check], obj)
+      if blocker[:active] and method(blocker[:check_method]).call(blocker[:to_check])
         info "block engaged #{blocker[:statement]}"
         raise SystemsMessage.new(blocker[:statement], SystemSecurity, :info)
       end
     end
   end
  
- def check_mod(mod_type, obj)
+ def check_mod(mod_type)
     !@modification.mod_type_present? mod_type
  end
  
- def check_torp_class(class_to_check, obj)
+ def check_torp_class(class_to_check)
     torp = @weaponry.torpedoes[0]
-    info "checking class #{class_to_check} for #{torp}: #{torp.kind_of? class_to_check}"
     torp.kind_of? class_to_check
  end 
  
