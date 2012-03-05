@@ -31,9 +31,6 @@ class ImplWeaponry
   end
 
   def destroy target
-    raise "Not a structure this weaponry can target" unless target.kind_of? SmallStructure
-    raise "Structure has insufficient integrity to target" if target.status == :destroyed 
-    raise "No torpedoes loaded" unless @torpedoes.size > 0
     
     #select torpedo
     torpedo = nil
@@ -41,7 +38,7 @@ class ImplWeaponry
       torpedo = torp if (torp.yield - target.damage_rating).abs <= 1
     end
   
-    raise "No torpedo with appropriate yield loaded" if torpedo.nil?
+    return -1 if torpedo.nil?
      
     outcome = torpedo.yield - target.damage_rating
     ind = @torpedoes.index(torpedo)

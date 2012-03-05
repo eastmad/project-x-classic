@@ -315,10 +315,15 @@ JUMP = "Rift generator"
  end
  
   def destroy target
-info "target income = #{target}"
+    raise SystemsMessage.new("Not a structure available weaponry can damage.", SystemWeaponry, :info) unless target.kind_of? SmallStructure
+    raise SystemsMessage.new("No torpedoes loaded",SystemWeaponry, :info) unless @weaponry.torpedoes.size > 0
+    raise SystemsMessage.new("Structure has insufficient integrity to target",SystemWeaponry, :info) if target.status == :destroyed 
+
     check_security(target)
     outcome = @weaponry.destroy target
-info "weapons outcome = #{outcome}"
+    
+    raise SystemsMessage.new("Torpedoes loaded are too small to damage target",SystemWeaponry, :info) if outcome < 0
+    
     mes = "Target destroyed." if outcome > 0
     mes = "Target disabled." if outcome == 0
     mes = "Target untouched." if outcome < 0

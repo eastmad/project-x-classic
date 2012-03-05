@@ -8,6 +8,7 @@ class SystemWeaponry < ShipSystem
       {:success => true}
     rescue => ex
       @@rq.enq ex
+       @@rq.enq SystemsMessage.new("Torpedoes not fired.", SystemWeaponry, :response_bad)
       {:success => false}
     end
   end
