@@ -165,8 +165,15 @@ class Planet < CelestialObject
       SpaceStation.new(name, desc, @orbitPoint, id)
    end
    
-   def structureFactory(name, desc, toughness, id = nil)
-      SmallStructure.new(name, desc, @orbitPoint, toughness, id)
+   def structureFactory(name, desc, toughness, id = nil, subtype = :comms)
+      ret = nil
+      if (subtype == :jumpgate)
+         ret = JumpGate.new(name, desc, @orbitPoint, id)
+      else
+         ret = SmallStructure.new(name, desc, @orbitPoint, toughness, id)
+      end
+      
+      ret
    end
    
    def cityFactory(name, desc)
@@ -378,7 +385,7 @@ class SmallStructure < CelestialObject
     elsif status == :sync
        sw = "orbiting"
     elsif status == :dependent
-       sw = "docked with"
+       sw = "by"
     end
 
     sw
@@ -436,4 +443,10 @@ info "trust list horizons - add desc and visited is no"
    
     false
   end
+end
+
+class JumpGate < SmallStructure
+   def initialize(name, desc, ownerPoint, id)
+      super(name, desc, ownerPoint, 5, id)
+   end   
 end

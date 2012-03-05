@@ -61,7 +61,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
      
    nicosia.add_visit_trigger(freemars, 1, :visit_mars)
    
-   merc.add_blocker(:check_mod, :shield, "insufficient heat shielding - safety interlock")
+   #merc.add_blocker(:check_mod, :shield, "insufficient heat shielding - safety interlock")
    
    
    ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)
@@ -231,7 +231,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
                                        mycity = myplanet.cityFactory(city_name, city_desc)
                                        Dictionary.add_discovered_proper_noun(mycity.name, mycity)
                                     end
-                                 elsif content_type == "satellites"
+                                 elsif content_type == "stations"
                                     sat_or_cit.each do |sat_name, sat |
                                        sid = nil
                                        sat.each do |content_type, business |
@@ -270,13 +270,15 @@ If you want to know more about what's happening to Mars, talk to our contact on 
                                        desc = nil
                                        toughness = nil
                                        sid = nil
+                                       subtype = nil
                                        structure.each do |content_type, content|
                                           desc = content if content_type == "desc"
                                           alt_desc = content if content_type == "alt_desc"
                                           sid = content if content_type == "id"
-                                          toughness = content if content_type == "toughness" 
+                                          toughness = content if content_type == "toughness"
+                                          subtype = content.to_sym if content_type == "subtype"
                                        end
-                                       mystruct = myplanet.structureFactory(struc_name, desc, toughness, sid)
+                                       mystruct = myplanet.structureFactory(struc_name, desc, toughness, sid, subtype)
                                        Dictionary.add_discovered_proper_noun(mystruct.name, mystruct)
                                     end
                                  end

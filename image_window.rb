@@ -17,6 +17,7 @@ class ImageWindow
    :atmosphere => ["gifs/Mars-Atmosphere.jpg"],
    :stationdocked =>["gifs/station-closeup.jpg"],
    :satellite =>["gifs/satellite.jpg"],
+   :jumpgate => ["gifs/earth_jumpgate_tech.jpg"],
    :crates =>["gifs/crates.jpg"],
    :torpedo =>["gifs/torpedo.jpg"],
    }
@@ -28,6 +29,7 @@ class ImageWindow
       :Galaxy => {:centre => :galaxy, :outer => :galaxy},
       :SpaceStation=> {:surface => :stationdocked, :outer => :station, :centre => :stationdocked},
       :SmallStructure => {:centre => :satellite},
+      :JumpGate => {:centre => :jumpgate},
       :City => {:centre => :city}
    }
    

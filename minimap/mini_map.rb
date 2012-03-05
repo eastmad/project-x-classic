@@ -30,6 +30,7 @@ class MiniMap
     
     lps.each {|lp|
       ret << {:name => lp.body.name, :image => gif_map(lp.body), :size => size_map(lp.body),:left => @opt_left}
+      info "#{lp.body.name}, #{gif_map(lp.body)}, #{size_map(lp.body)}}"
     }
     
     ret

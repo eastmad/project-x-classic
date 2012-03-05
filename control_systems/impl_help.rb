@@ -12,6 +12,8 @@ class ImplHelp
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation}},
    {:txt => "To enter a space station, 'dock'", 
     :chk => lambda {@band == :outer and @body.kind_of? SpaceStation}},
+   {:txt => "'destroy' to damage a structure", 
+    :chk => lambda {@body.kind_of? SmallStructure}},
    {:txt => "'describe Earth' to find orbiting bodies", 
     :chk => lambda {@band == :orbit}},
    {:txt => "'planets' to find orbiting planets", 

@@ -12,7 +12,7 @@
 					"Earth":
 					{
 						"desc":"Your home planet",
-						"satellites":
+						"stations":
 						{
 							"OrbitalMall":
 							{
@@ -49,7 +49,7 @@
 					"Mars":
 					{
 						"desc": "Known as the red planet",
-						"satellites":
+						"stations":
 						{
 						},	
 						"cities":		
@@ -72,7 +72,7 @@
 					"Venus":
 					{
 						"desc":"Known for mining",
-						"satellites":
+						"stations":
 						{												
 							"UnionHall":
 							{
@@ -107,7 +107,7 @@
 					"Mercury":
 					{
 						"desc":"Difficult to reach because of solar heat",
-						"satellites":
+						"stations":
 						{												
 							"MarinerCenter":
 							{
@@ -122,6 +122,16 @@
 									}	
 								}
 								
+							}	
+						},
+                  "structures":
+						{
+							"Adastra":
+							{
+								"desc":"Sol system jump gate",
+								"id":"jg",
+								"toughness":5,
+                        "subtype":"jumpgate"
 							}	
 						}
 					}

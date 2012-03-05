@@ -47,6 +47,10 @@ class SimpleBody
     @@simple_body_ref[key]
   end
   
+  def self.clear_ref
+      @@simple_body_ref.clear
+  end
+  
   def to_s
     @name
   end

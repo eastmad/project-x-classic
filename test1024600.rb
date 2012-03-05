@@ -458,6 +458,10 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
     unless (opt_level.nil? or opt_level.size < 2)
       @mm_opt_level_para2.replace opt_level[1][:name],  :stroke => white, :left => @minimap.current_level[:left] + opt_level[1][:left] + @minimap.current_level[:size][:width] + opt_level[1][:size][:width]
       @mm_opt_level_image2.path = opt_level[1][:image]
+      
+      @mm_opt_level_image2.width = opt_level[1][:size][:width] if opt_level[1][:size][:width] > 0
+      @mm_opt_level_image2.height = opt_level[1][:size][:height] if opt_level[1][:size][:height] > 0
+      
       @mm_opt_level_image2.left = @minimap.current_level[:left] + opt_level[1][:left] + @minimap.current_level[:size][:width]
     else
       @mm_opt_level_para2.replace ""

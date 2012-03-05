@@ -12,7 +12,8 @@ include TestHelper
 describe MiniMap do
 
   before(:each) do
-    @sol = Star.new("Sol", "Your home planet's sun")
+    loc = LocationPoint.new(CelestialObject.new("test"), :center)
+    @sol = Star.new("Sol", "Your home planet's sun", loc)
     @earth = @sol.planetFactory("Earth","Your home planet")
     @mars = @sol.planetFactory("Mars", "Known as the red planet")
     
@@ -23,7 +24,12 @@ describe MiniMap do
     @marsport = @mars.cityFactory("Dundarach", "Only space port for Mars, sometimes referred to as Marsport")
     @nicosia = @mars.cityFactory("Nicosia", "Now deserted city, location of the first Mars independence revolt.")
   
-    @mm = MiniMap.new
+    @gate = @mars.structureFactory("Adastra", "Jump gate", 5)
+    @mm = MiniMap.new(5, 10, 15)
+  end
+  
+  after(:each) do
+    SimpleBody.clear_ref
   end
   
   
@@ -83,10 +89,13 @@ describe MiniMap do
       mmhash[:image].should == "gifs/planet_icon.gif"
     end
     
-    it "should show option objects as satellites" do
+    it "should show option objects as structure" do
       mmhasharray = @mm.option_level
       
-      mmhasharray.size.should == 0
+      mmhasharray.size.should == 1
+      
+      mmhasharray[0][:name].should == "Adastra"
+      mmhasharray[0][:image].should == "gifs/smallstructure_icon.gif"
     end
     
   end
