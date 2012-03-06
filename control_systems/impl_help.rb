@@ -5,7 +5,7 @@ class ImplHelp
    {:txt => "'load' or 'unload' to move consignments", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.trades_page.nil?}},
    {:txt => "'cargo' to see what consignments you hold", 
-    :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.trades_page.nil?}},
+    :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation}},
    {:txt => "'stack' torpedoes or 'install' components", 
     :chk => lambda {@status == :dependent and @body.kind_of? SpaceStation and !@body.services_page.nil?}},
    {:txt => "'undock' to leave a space station", 
@@ -27,9 +27,7 @@ class ImplHelp
    {:txt => "'people' to list your local contacts", 
     :chk => lambda {@band == :surface and @body.kind_of? Planet}},
    {:txt => "'plot course' to a planet, then 'engage' drives", 
-    :chk => lambda {@band == :orbit}},
-     {:txt => "'trades' to read station information from the trade channel", 
-    :chk => lambda {@body.kind_of? SpaceStation and (!@body.trades_page.nil? or !@body.services_page.nil?)}}
+    :chk => lambda {@band == :orbit}}
    ]
   end 
 

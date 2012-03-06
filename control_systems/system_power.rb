@@ -108,6 +108,14 @@ class SystemPower < ShipSystem
       
       @@rq.enq @@ship.dock sgo
       @@rq.enq @@ship.lock_docking_clamp()
+      
+      first_time = @@ship.locationPoint.body.visit
+      
+      if first_time
+        para1 = SystemLibrary.desc @@ship.locationPoint.body
+        @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
+      end
+      
       @@rq.enq SystemsMessage.new("'#{sgo.welcome}'", SystemCommunication, :info)
 
       resp_hash = {:success => true, :media => :docking}

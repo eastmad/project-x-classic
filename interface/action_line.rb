@@ -40,6 +40,8 @@ class ActionLine
          @line_type.stroke = rgb(255,175,175)
        when :warn
          @line_type.stroke = rgb(255,150,150)
+       when :flag
+         @line_type.stroke = rgb(200,200,50)  
        when :mail
          @line_type.stroke = rgb(100,200,150)
          @line_type.leading = 2
@@ -47,8 +49,6 @@ class ActionLine
        when :report
          @line_type.stroke = rgb(100,200,150)
          @line_type.leading = 2
-         #@line_type.fill = 
-  
        else
          @line_type.stroke = rgb(255,255,255)
       end

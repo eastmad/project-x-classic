@@ -37,7 +37,7 @@ class ImplTrade
   def source_offered (station, item)
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     traders.each do | trader | 
-      trader.trades.each { |trade| return trade if trade.item == item and trade.trade_type == :source}
+      trader.trades.each { |trade| return trade if trade.item == item and trade.trade_type == :source and trade.status == :available}
     end 
     
     nil
@@ -56,7 +56,7 @@ class ImplTrade
     traders = station.centrePoint.find_linked_location(:trader).collect{|traderPoint| traderPoint.body}
     traders.each do | trader | 
       trader.trades.each do |trade| 
-        return trade if trade.item == item and trade.trade_type == :sink
+        return trade if trade.item == item and trade.trade_type == :sink and trade.status == :unfulfilled
        end
     end 
     nil
@@ -70,7 +70,7 @@ class ImplTrade
   
   def find_trade(type, item)
     @trades.each do | trade |
-      return trade if trade.item == item and trade.trade_type == type
+      return trade if trade.item == item and trade.trade_type == type and trade.status == :available
     end
 
     nil    

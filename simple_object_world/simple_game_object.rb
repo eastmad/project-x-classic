@@ -279,7 +279,12 @@ class SpaceStation < CelestialObject
     ret += "The trading companies include #{traders.join(', ')}" unless traders.empty?
     ret += " " unless traders.empty?
     ret += "Ship services from #{garages.join(', ')}" unless garages.empty?
-    ret = "No trading or ship service companies" if ret.empty?
+    if ret.empty?
+        ret = "No trading or ship service companies"
+    else
+         ret += "\n(Type 'trades' or 'services' to read station channel)"
+    end
+    
     ret
   end
   
@@ -293,26 +298,27 @@ class SpaceStation < CelestialObject
        info "consider trader #{trader.to_s}"
       #ret << "#{trader.to_s}\n"
       trader.trades.each do |trade|
-         if trade.trade_type == :source
+         if trade.trade_type == :source and trade.status == :available
             ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n"
             num += 1
          end
-      end   
+      end
     end
+    ret << "None \n" if num == 0
+    num = 0
     ret << "\nConsignments needed\n"
     traders.each do | trader |
       info "consider trader #{trader.to_s}"
       #ret << "#{trader.to_s}\n"
       
       trader.trades.each do |trade|
-         if trade.trade_type == :sink
+         if trade.trade_type == :sink and trade.status == :unfulfilled
             ret << "-#{trade.item} (#{trader.name} #{trader.index_name})\n"
             num += 1
          end   
-      end   
+      end
     end
-  
-    ret = nil if num == 0  
+    ret << "None \n" if num == 0
     
     ret
   end
@@ -329,8 +335,7 @@ class SpaceStation < CelestialObject
          num += 1
       end
     end
-    
-    ret = nil if num == 0  
+    ret << "None \n" if num == 0  
     
     ret
   end
@@ -356,7 +361,7 @@ class SpaceStation < CelestialObject
   end
   
   def welcome
-    "The space station #{@name} welcomes your visit. Trades/Services channel open."
+    "The space station #{@name} welcomes your visit. Trade channel open."
   end
 end
 

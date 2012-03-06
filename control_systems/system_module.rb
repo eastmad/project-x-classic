@@ -47,11 +47,9 @@ class SystemModification < ShipSystem
         para1 = station.services_page
       end  
  
-      if para1.nil?
-        @@rq.enq SystemsMessage.new("There is no service activity", SystemModification, :response_bad)
-      else  
-        @@rq.enq SystemsMessage.new(para1, SystemModification, :report)
-      end
+        
+      @@rq.enq SystemsMessage.new(para1, SystemModification, :report)
+      
       {:success => true, :media => :service}
     rescue RuntimeError
       @@rq.enq ex

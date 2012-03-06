@@ -234,7 +234,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
     @rq.enq SystemsMessage.new("Welcome aboard the #{@ship.name}.", SystemMyself, :response)
     @rq.enq SystemsMessage.new("#{@ship.name} is #{@ship.describeLocation}", SystemNavigation, :info)
     
-    #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :response)
+    #@rq.enq SystemsMessage.new("You have mail from 'ghost'", SystemCommunication, :flag)
 
     resps = []
     pos = 0
@@ -355,7 +355,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
           
           if @ship.has_new_mail?
             new_mail = @ship.read_mail(:position => :new, :consume => false)
-            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response) if @rq.peek.flavour != :report
+            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :flag) if @rq.peek.flavour != :report
           end            
            
         rescue => ex
