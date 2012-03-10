@@ -14,6 +14,8 @@ class ImplHelp
     :chk => lambda {@band == :outer and @body.kind_of? SpaceStation}},
    {:txt => "'destroy' to damage a structure", 
     :chk => lambda {@body.kind_of? SmallStructure}},
+   {:txt => "'jump' to use gate", 
+    :chk => lambda {@body.kind_of? JumpGate}},
    {:txt => "'describe Earth' to find orbiting bodies", 
     :chk => lambda {@band == :orbit}},
    {:txt => "'planets' to find orbiting planets", 

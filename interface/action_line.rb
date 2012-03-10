@@ -1,34 +1,50 @@
 class ActionLine
 
-   attr_accessor :line_type, :flavour, :origin
+   attr_accessor :line_type, :flavour, :origin, :recent_flag
    
    def set_line message
      @flavour = message.flavour
      set_stroke message.flavour 
      @origin = message.origin
-     @line_type.contents[1].replace(message.make_string)
+     @recent_flag = message.recent_flag
+
+     @line_type.contents[2].replace(message.make_string)
      spaces = ""
      txt =""
      if (message.flavour == :mail)
-       @line_type.contents[0].underline = "single"
+       @line_type.contents[1].underline = "single"
        txt = "mail from #{@origin}\n" unless @origin.nil?
        (1..80).each {|d| spaces += ' '}
        spaces = spaces[0,(spaces.size - txt.size)]
      elsif (message.flavour == :report)
-       @line_type.contents[0].underline = "single"
+       @line_type.contents[1].underline = "single"
        txt = "#{@origin}\n" unless @origin.nil?
        (1..80).each {|d| spaces += ' '}
        spaces = spaces[0,(spaces.size - txt.size)]
      else
-      @line_type.contents[0].underline = "none"
+      @line_type.contents[1].underline = "none"
       txt = @origin.cursor_str unless @origin.nil?
+      if @recent_flag
+         @line_type.contents[0].replace("*")
+      else
+         @line_type.contents[0].replace("")
+      end   
+      
      end
      
-     @line_type.contents[0].replace("#{spaces}#{txt}")
+     @line_type.contents[1].replace("#{spaces}#{txt}")
    end  
    
+   def not_recent
+      @recent_flag = false
+   end
+   
+   def recent
+      @recent_flag = true
+   end
+   
    def make_string
-     @line_type.contents[1]
+     @line_type.contents[2]
    end
    
    def set_stroke flav

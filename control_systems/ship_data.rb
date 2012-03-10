@@ -182,6 +182,13 @@ JUMP = "Rift generator"
     SystemsMessage.new("Consignment of #{item} added to cargo hold", SystemTrade, :info)  
   end
   
+  def jump sys
+    raise SystemsMessage.new("No Jump pod present", SystemModification, :info) unless @modification.mod_type_present? :pod
+    
+    SystemsMessage.new("Jumping to #{sys} system.", SystemPower, :info)
+  end
+  
+  
   def install mod_type
     raise SystemsMessage.new("You can only install modules at a space station", SystemModification, :info) unless (@status == :dependent and @locationPoint.body.kind_of? SpaceStation)
     #raise SystemsMessage.new("Cannot find any services offering torpedoes", SystemTrade, :info) if (item.nil? or !item.kind_of? Item)

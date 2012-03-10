@@ -81,6 +81,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
   Operation.register_op :destroy, :weaponry, 1
   Operation.register_op :load, :weaponry, 1
   Operation.register_op :install, :modification, 1
+  Operation.register_op :jump , :power, 1
  
    
   @rq = ResponseQueue.new
@@ -189,29 +190,41 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
     stack(:width => 615, :height => 250){
       background rgb(20,20,40)
       border rgb(25,25,50) , :strokewidth => 1
-      (0..7).each{|n| @ap[n].line_type = caption strong(""),"",:font => "Courier, bold, 12"}
+      (0..7).each{|n| @ap[n].line_type = caption "",strong(""),"",:font => "Courier, bold, 12"}
     }
     
     stack(:width => 615, :height => 212){
       background rgb(30,30,50)
       border rgb(25,25,50) , :strokewidth => 1
-      @ma.line_type = caption strong(""),""
+      @ma.line_type = caption "",strong(""),""
     }
     
+    every(5){
+      @ap.each {|al| al.not_recent}
+    }
+     
     
-    every (1) {
+    every(1) {
+      #remove recent
+      
+      unless @rq.peek.nil?
+      
+      
       unless @rq.peek.nil?     
         message = @rq.deq
-
+  
         unless (message.flavour == :mail || message.flavour == :report)
           (7.downto 1).each do |n|
              @ap[n].line_type.show
              @ap[n].set_line @ap[n - 1]
           end
           @ap[0].set_line message
+         
         else
           @ma.set_line message
         end 
+      end
+      
       end
     }
 
@@ -402,7 +415,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
           
           if @ship.has_new_mail?
             new_mail = @ship.read_mail(:position => :new, :consume => false)
-            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :response) if @rq.peek.flavour != :report
+            @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :flag) if @rq.peek.flavour != :report
           end            
            
         rescue => ex

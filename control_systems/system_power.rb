@@ -1,6 +1,24 @@
 class SystemPower < ShipSystem
   Operation.register_sys(:power)
   
+  def _jump(args=nil)
+    begin
+      raise SystemsMessage.new("Not picking up a jump gate signal", SystemPower, :info) unless @@ship.locationPoint.body.kind_of? JumpGate
+              
+      @@rq.enq @@ship.jump "New"
+        
+      @@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
+        
+      resp_hash = {:success => true, :media => :travel}
+    rescue RuntimeError => ex 
+      resp_hash = {:str => ex, :success => false}
+      @@rq.enq ex
+      @@rq.enq SystemsMessage.new("Jump cancelled", SystemPower, :response_bad)
+    end      
+              
+    return resp_hash     
+  end
+  
   def _launch(args=nil)   
     begin
       raise SystemsMessage.new("#{@@ship.name} is beyond launch stage", SystemMyself, :info) unless @@ship.status == :dependent

@@ -207,7 +207,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
       mytrader = nil
       desc = nil
       id = nil
-      File.open("stellar.json") do |file|
+      File.open(File.join("game_data","stellar.json")) do |file|
          galaxies = JSON::load(file)
          galaxies.each do |galaxy_name, galaxy|
             galaxy.each do |content_type, stars |
@@ -294,7 +294,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
    end
  
    def self.loadOrgs
-      File.open("organisation.json") do |file|
+      File.open(File.join("game_data","organisation.json")) do |file|
           orgs = JSON::load(file)
           orgs.each do |org_name, org|
             desc = nil
@@ -312,7 +312,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
    end
    
    def self.loadPeople
-      File.open("people.json") do |file|
+      File.open(File.join("game_data","people.json")) do |file|
           people = JSON::load(file)
           people.each do |person_name, person|
             desc = nil
@@ -331,7 +331,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
  
    def self.loadItems   
       myitem = nil
-      File.open("item.json") do |file|
+      File.open(File.join("game_data","item.json")) do |file|
           items = JSON::load(file)
           items.each do |item_name, item|
             desc = nil

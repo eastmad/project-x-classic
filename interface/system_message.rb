@@ -1,10 +1,11 @@
 class SystemsMessage < RuntimeError
-   attr_reader :text, :origin, :flavour 
+   attr_reader :text, :origin, :flavour, :recent_flag 
 
    def initialize txt, orig = nil, flav = :info
       @text = txt
       @origin = orig
       @flavour = flav
+      @recent_flag = true
    end
    
    def make_string
