@@ -195,6 +195,27 @@ If you want to know more about what's happening to Mars, talk to our contact on 
       }
     end
   end
+ end
+ 
+ def self.congratulations
+  poop =  window(:title => "The end of Project-X", :width => 500, :height => 300)  do
+    background black
+    stack do
+      
+      flow {
+        caption strong("You have reached the next system, brother.\nWhatever you are looking for, you may well find it."), :stroke => white, :align => "center"
+      }
+
+      flow {
+        para "\n\n- Hope you enjoyed the quick beta\n"
+        para "- Maybe I'm improving things even now\n", :stroke => azure
+        para "- David Eastman\n", :stroke => azure
+      }
+      keypress { | k| 
+          poop.close
+      }
+    end
+  end
  end 
  
    def self.loadGalaxy 

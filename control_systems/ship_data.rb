@@ -96,20 +96,21 @@ JUMP = "Rift generator"
     SystemsMessage.new("#{DRIVE} engaged", SystemPower, :info)
   end
   
-  def approach(local_body)
-    inside = @locationPoint.body == local_body
-    info "in approach #{local_body}"    
+  def approach(target_body)
+ 
+    inside = @locationPoint.body == target_body.owning_body
+    info "in approach #{target_body}"    
  
     lps = (@locationPoint.find_linked_location :satellite) + (@locationPoint.find_linked_location :approach)
-    raise SystemsMessage.new("#{local_body} not in range of thrusters", SystemNavigation, :info) if (lps.empty? and !inside)
-    raise SystemsMessage.new("Cannot approach #{local_body} safely with thrusters", SystemNavigation, :info) if (lps.empty? and inside)
+    raise SystemsMessage.new("#{target_body} not in range of thrusters", SystemNavigation, :info) if (lps.empty? and !inside)
+    raise SystemsMessage.new("Cannot approach #{target_body} safely with thrusters", SystemNavigation, :info) if (lps.empty? and inside)
     
-    lp = lps.find {| lp | info "lps = #{lp.body}";lp.body == local_body}
+    found_lp = lps.find {| lp | info "lps = #{lp.body}";lp.body == target_body || lp.body == target_body.owning_body}
     
-    info "exit approach #{lp}"
+    info "exit approach #{found_lp}"
     
-    unless lp.nil? 
-     @locationPoint = lp
+    unless found_lp.nil? 
+     @locationPoint = found_lp
      @status = :rest
      SystemsMessage.new("#{THRUSTERS} fired", SystemPower, :info)
     else

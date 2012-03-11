@@ -7,7 +7,9 @@ class SystemPower < ShipSystem
               
       @@rq.enq @@ship.jump "New"
         
-      @@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
+      GameStart.congratulations
+      
+      #@@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
         
       resp_hash = {:success => true, :media => :travel}
     rescue RuntimeError => ex 
@@ -50,16 +52,17 @@ class SystemPower < ShipSystem
     
     begin
       
-      @obj = nil if args == @obj
+      sgo = nil     
       
-      sgo = nil
-      unless args.nil?
+      if @obj.nil?
+        sgo = @@ship.locationPoint.body if @obj.nil?
+      else  
         sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
         
-        raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo
-        raise SystemsMessage.new("You can only land on a planet", SystemPower, :info) unless (sgo.kind_of? Planet or sgo.kind_of? City)        
+        raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo               
       end
-      sgo = nil unless (sgo.kind_of? City or sgo.kind_of? Planet)
+      
+      raise SystemsMessage.new("You can only land on a planet", SystemPower, :info) unless (sgo.kind_of? Planet or sgo.kind_of? City)
       
       lps = (@@ship.locationPoint.find_linked_location :land)
       if lps.empty?
