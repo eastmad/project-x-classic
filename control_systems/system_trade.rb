@@ -26,6 +26,17 @@ class SystemTrade < ShipSystem
     _bay nil
   end
   
+  def _torpedoes(arg = nil)
+   info "noun exception"
+    begin
+      @@rq.enq @@ship.load_torpedoes
+      {:success => true}
+    rescue => ex
+      @@rq.enq ex
+      {:success => false}
+    end
+  end
+  
   def _trades(arg = nil)
     begin    
       station = @@ship.locationPoint.body
@@ -80,6 +91,9 @@ class SystemTrade < ShipSystem
    
   def _load(args = nil)
     begin
+      #exception noun
+      return args if args.kind_of? Hash
+      
       item = ShipSystem.find_sgo_from_name(@obj)
      
       @@rq.enq @@ship.accept(item)

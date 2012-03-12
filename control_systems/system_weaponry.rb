@@ -13,16 +13,6 @@ class SystemWeaponry < ShipSystem
     end
   end
   
-  def _stack(arg = nil)
-    begin
-      @@rq.enq @@ship.load_torpedoes
-      {:success => true}
-    rescue => ex
-      @@rq.enq ex
-      {:success => false}
-    end
-  end  
-  
   def _fire(arg = nil)     
     #info "Call fire"
       

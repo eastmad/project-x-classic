@@ -41,6 +41,7 @@ class Dictionary
             {:word => :course, :grammar => :noun, :sys => :navigation},
             {:word => :stack, :grammar => :verb, :sys => :weaponry},
             {:word => :torpedo, :grammar => :noun, :sys => :weaponry},
+            {:word => :torpedoes, :grammar => :noun, :sys => :trade},
             {:word => :shield, :grammar => :noun, :sys => :modification},
             {:word => :jump, :grammar => :verb, :sys => :power},
             {:word => :pod, :grammar => :noun, :sys => :modification},
