@@ -37,21 +37,12 @@ class SystemTrade < ShipSystem
     end
   end
   
-  def _trades(arg = nil)
+  def _trading(arg = nil)
     begin    
       station = @@ship.locationPoint.body
-      raise SystemsMessage.new("A trades or services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      raise SystemsMessage.new("A trading or services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
-      subj = arg || :trades      
-
-      if (sgo = ShipSystem.find_sgo_from_name(arg))
-        para1 = sgo.describe
-        para1 << "\n#{sgo.desc}"
-      elsif (subj == :trader)
-        para1 = station.traders_page
-      elsif (subj == :trades)
-        para1 = station.trades_page
-      end  
+      para1 = station.trades_page  
  
       @@rq.enq SystemsMessage.new(para1, SystemTrade, :report)
       
@@ -74,7 +65,7 @@ class SystemTrade < ShipSystem
   end   
    
   def _trade(args = nil)
-    :trades
+    :trading
   end  
    
   def _industries(args = nil)
@@ -83,10 +74,6 @@ class SystemTrade < ShipSystem
   
   def _intergalactic(args = nil)
     :intergalactic
-  end
-  
-  def _trading(args = nil)
-    :trading
   end
    
   def _load(args = nil)

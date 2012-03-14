@@ -282,7 +282,7 @@ class SpaceStation < CelestialObject
     if ret.empty?
         ret = "No trading or ship service companies"
     else
-         ret += "\n(Type 'trades' or 'services' to read station channel)"
+         ret += "\n(Type 'trading' or 'services' to read station channel)"
     end
     
     ret

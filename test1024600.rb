@@ -55,7 +55,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
   Operation.register_op :people, :communication, 1
   Operation.register_op :planets, :library, 1
   Operation.register_op :stars, :library, 1
-  Operation.register_op :trades, :trade, 1
+  Operation.register_op :trading, :trade, 1
   Operation.register_op :services, :modification, 1
   Operation.register_op :modifications, :modification, 1
   Operation.register_op :status, :myself, 1

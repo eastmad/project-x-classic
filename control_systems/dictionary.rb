@@ -11,7 +11,7 @@ class Dictionary
             {:word => :stars, :grammar => :short, :sys => :library},
             {:word => :companies, :grammar => :short, :sys => :trade},
             {:word => :bay, :grammar => :verb, :sys => :trade},
-            {:word => :trades, :grammar => :short, :sys => :trade},
+            {:word => :trading, :grammar => :short, :sys => :trade},
             {:word => :services, :grammar => :short, :sys => :modification},
             
             {:word => :approach, :grammar => :verb, :sys => :power},

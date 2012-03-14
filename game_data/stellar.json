@@ -109,7 +109,7 @@
 						"desc":"Difficult to reach because of solar heat",
 						"stations":
 						{												
-							"MarinerCenter":
+							"HermesCenter":
 							{
 								"desc":"Considered to be a pirate station",
 								"garages":
@@ -133,6 +133,10 @@
 								"toughness":5,
                         "subtype":"jumpgate"
 							}	
+						},
+						"cities":		
+						{
+							"Caloris": "Small outpost. mainly for monitoring the gate"
 						}
 					}
 					

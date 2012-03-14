@@ -7,6 +7,7 @@ class GameStart
    ImageWindow.register("Venus",{:orbit => "venus"})
    #ImageWindow.register("Mercury",{:orbit => "mercury"})
    ImageWindow.register("Nicosia",{:centre => "ruinedcity22"})
+   ImageWindow.register("Caloris",{:centre => "desertoutpost"})
    loadItems
    loadOrgs
    loadPeople
@@ -61,7 +62,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
      
    nicosia.add_visit_trigger(freemars, 1, :visit_mars)
    
-   merc.add_blocker(:check_mod, :shield, "insufficient heat shielding - safety interlock")
+  # merc.add_blocker(:check_mod, :shield, "insufficient heat shielding - safety interlock")
    
    
    ship = ShipRegistry.register_ship("ProjectX",SpaceStation.find(:sputnik).surfacePoint)

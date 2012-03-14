@@ -13,6 +13,7 @@ class ImageWindow
    :city => ["gifs/cityport.jpg"],
    :planet => ["gifs/planet.jpg"],
    :ruinedcity => ["gifs/ruinedcity22.jpg"],
+   :desertoutpost => ["gifs/desertoutpost.jpg"],
    :earth_atmosphere => ["gifs/atmosphere.jpg"],
    :atmosphere => ["gifs/Mars-Atmosphere.jpg"],
    :stationdocked =>["gifs/station-closeup.jpg"],

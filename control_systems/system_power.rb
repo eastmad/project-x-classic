@@ -82,7 +82,7 @@ class SystemPower < ShipSystem
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
       end  
         
-      @@rq.enq SystemsMessage.new("Landed at #{@@ship.locationPoint.body.name}", SystemPower, :info)  
+      @@rq.enq SystemsMessage.new("Landed at #{@@ship.locationPoint.body.name}", SystemPower, :response)  
       
       resp_hash = {:success => true, :media => :land}
     rescue RuntimeError => ex 
@@ -186,9 +186,8 @@ class SystemPower < ShipSystem
       if first_time
         para1 = SystemLibrary.desc @@ship.locationPoint.body
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
-      else
-        SystemNavigation.status
-      end 
+      end
+      @@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
       
       resp_hash = {:success => true, :media => :drive}
     rescue RuntimeError => ex          

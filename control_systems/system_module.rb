@@ -34,7 +34,7 @@ class SystemModification < ShipSystem
   def _services(arg = nil)
     begin    
       station = @@ship.locationPoint.body
-      raise SystemsMessage.new("A trades or services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
+      raise SystemsMessage.new("A trading or services channel is only broadcast from space stations.", SystemTrade, :response_bad) unless station.kind_of? SpaceStation      
       
       subj = arg || :services      
 
