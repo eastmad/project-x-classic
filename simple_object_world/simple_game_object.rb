@@ -400,7 +400,7 @@ class SmallStructure < CelestialObject
     @status = st
     unless (st == :normal or @death_listener.nil?)
       @death_listener.trust(1)
-      push_message("thanks for blowing shit up", @death_listener)
+      push_mail("thanks for blowing shit up", @death_listener)
     end  
   end
 

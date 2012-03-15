@@ -52,7 +52,7 @@ class SystemCommunication < ShipSystem
       @@rq.enq @@ship.meet(sgo)
       talk = sgo.details[:talk]
 
-      {:success => true, :talk => talk}
+      {:success => true, :talk => talk, :name => sgo.name   }
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex

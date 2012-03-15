@@ -49,7 +49,7 @@ class SystemTrade < ShipSystem
       resp_hash = {:success => true, :media => :trade}
     rescue RuntimeError
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("No information available", SystemNavigation, :response_bad)
+      @@rq.enq SystemsMessage.new("No trading information available", SystemTrade, :response_bad)
       resp_hash = {:success => false}
     end
     

@@ -2,6 +2,7 @@ class SimpleBody
 
   attr_reader :name, :desc, :owning_body, :boundary_point, :id
   @@outgoing_mail = []
+  @@outgoing_comms = []
   @@simple_body_ref = {}
   
   def initialize name, desc = "Unknown origin", owner = nil, id = nil
@@ -35,12 +36,20 @@ class SimpleBody
     body
   end
   
-  def push_message txt, from
+  def push_mail txt, from
     @@outgoing_mail << Mail.new(txt, from) 
   end
  
+   def push_message txt
+    @@outgoing_comms << txt 
+   end
+ 
   def self.get_mail
     @@outgoing_mail
+  end
+  
+  def self.get_comms
+    @@outgoing_comms
   end
   
   def self.find key

@@ -25,7 +25,9 @@ class ImplContact
   end
   
   def interested?(contact, cargo)
+  info "6.0 #{contact}"   
     interest = contact.details[:interest]
+  info "6.1 #{interest}"  
     return true if interest.nil?
       
     cargo.each do | consignment |

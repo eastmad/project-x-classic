@@ -44,6 +44,11 @@ class Contact < SimpleBody
     (@person.gender == :m)? "him" : "her"
   end
 
+
+   def his_or_her
+       (@person.gender == :m)? "his" : "her"
+   end
+
   def not_interested_string
     "#{self} doesn't want to meet you. You may not have anything #{self.he_or_she} wants."
   end
@@ -68,7 +73,10 @@ class Contact < SimpleBody
   private
   
   def interseted_in_string
-    "#{self.he_or_she.capitalize} is interested in #{Item.detail(@details[:interest])}." if  @details.has_key? :interest
+    ret = ""
+    ret = "#{self.he_or_she.capitalize} is interested in #{Item.detail(@details[:interest])}." if  @details.has_key? :interest
+    
+    ret
   end
   
 end

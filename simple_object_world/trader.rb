@@ -52,7 +52,7 @@ class Trader < SimpleBody
     if trust <= trustee.trust_score
       @trades << trade
       info "#{trade.item} added to trades trust = #{trust} type=#{trade.trade_type} for #{self}"
-      push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
+      push_mail(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
       return true
     end
     
@@ -131,7 +131,7 @@ class Garage < SimpleBody
     if trust <= trustee.trust_score
       @services << mod_class
       info "#{mod_class.name} added to service trust = #{trust} type=#{mod_class.type}"
-      #push_message(thanks(trade), to_s) if trust > 0 and trade.trade_type == :source 
+      push_message("#{self} has made #{mod_class.name} available to you.") if trust > 0 
       return true
     end
     

@@ -246,16 +246,16 @@ JUMP = "Rift generator"
 
     #check @meet.meet_me[name] for an entry
     mes = person.not_interested_string
-
     if @icontact.contacted? person
       mes = person.already_agreed_meet_string
-    else    
+    else
+    
       if @icontact.interested?(person, @trade.cargo)
         mes = person.agreed_meet_string
         @icontact.contact_made(person)
       end
     end
-  
+
     SystemsMessage.new(mes, SystemCommunication, :response)
   end
  

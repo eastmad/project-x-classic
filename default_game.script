@@ -1,28 +1,23 @@
 launch
 read
-approach OrbitalMall
-dock
-status
-trades
-accept wafer cones
+dock ProjectX with OrbitalMall
+load wafer cones
 launch
-cargo
-bay red
 plot course to Mars
 engage
-approach Mars
-describe Owl23
 land ProjectX at Nicosia
 people
 planets
 launch
 plot course to Venus
 engage
-approach UnionHall
-dock
-give wafer cones
-read
-launch
+people
+dock ProjectX with UnionHall
+services
+unload wafer cones
+services
+undock
+people
 plot course to Earth
 engage
 approach OrbitalMall

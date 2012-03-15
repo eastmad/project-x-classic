@@ -39,7 +39,7 @@ require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
-Shoes.app(:width => 962, :height => 535, :title => "Project X") {
+Shoes.app(:width => 945, :height => 545, :title => "Project X") {
   
   background rgb(20, 42, 42)
   stroke white
@@ -87,13 +87,14 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
   @ma = ActionLine.new
+  @talk_sceen_name = nil
   
   GameStart.welcome
   
   @backstack = stack(:hidden => true){
     flow(:width => 976) {
       image "gifs/contact.jpg"
-      caption " Newton Todd", :stroke => white
+      @talk_screen_name = caption " ", :stroke => white
       para "        F1 - exit   F2 - finish", :stroke => darkgray
     }  
     
@@ -199,7 +200,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
       @ma.line_type = caption "",strong(""),""
     }
     
-    every(5){
+    every(6){
       @ap.each {|al| al.not_recent}
     }
      
@@ -280,7 +281,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
           resps = Dictionary.filter_with_substring(resps, word_building)
         end
         if resps.size > 0
-          @dr.req_str = resps.first[:word].to_s 
+          @dr.req_str = resps.first[:word].to_s
           @dr.req_grammar = resps.first[:grammar]
         end  
         pos = 0
@@ -345,7 +346,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
               SoundPlay.play_sound(5)
             end
             
-            talk_screen resp_hash[:talk] unless resp_hash[:talk].nil?
+            talk_screen resp_hash[:talk],resp_hash[:name]  unless resp_hash[:talk].nil?
           else
             SystemNavigation.status
           end
@@ -369,7 +370,12 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
           if @ship.has_new_mail?
             new_mail = @ship.read_mail(:position => :new, :consume => false)
             @rq.enq SystemsMessage.new("You have mail from '#{new_mail.from}'", SystemCommunication, :flag) if @rq.peek.flavour != :report
-          end            
+          end
+          
+          #read comms
+          unless SimpleBody.get_comms.empty?
+            @rq.enq SystemsMessage.new(SimpleBody.get_comms.shift, SystemCommunication, :flag)
+          end 
            
         rescue => ex
            @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
@@ -395,7 +401,7 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
               SoundPlay.play_sound(5)
             end
             
-            talk_screen resp_hash[:talk] unless resp_hash[:talk].nil?
+            talk_screen resp_hash[:talk],resp_hash[:name] unless resp_hash[:talk].nil?
          
           #if (!@ship.headingPoint.nil?)
           #  @heading_para.replace @ship.headingPoint, :stroke => white, :left => 50
@@ -483,9 +489,11 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
     
   end
   
-  def talk_screen txt_key
+  def talk_screen txt_key, name
     @mainstack1.hide
     @mainstack2.hide
+    
+    @talk_screen_name.replace(name)
     @backstack.show  
           
     str = LongText.txt txt_key
@@ -494,7 +502,12 @@ Shoes.app(:width => 962, :height => 535, :title => "Project X") {
     @count_rate = 1
     count = 0
     txt_timer = animate(10){ |frame|
-      @t.replace(str[0,count]) if count < str.length
+      if count < str.length
+         @t.replace(str[0,count])
+      else
+         @t.replace(str)
+      end
+      
       count += @count_rate
       if @end_text_talk
         @mainstack1.show

@@ -89,7 +89,8 @@ class City < SimpleBody
   def horizon trust, contact, org
     if trust <= org.trust_score  
       @contacts << contact
-      Dictionary.add_discovered_proper_noun(contact.name, contact, :comms)
+      Dictionary.add_discovered_proper_noun(contact.name, contact,:communication)
+      push_message("New contact #{contact} has registered #{contact.his_or_her} details.")
        info "#{contact.name} added to contacts"
       @new_contact = true if trust > 0
       return true
@@ -101,7 +102,7 @@ class City < SimpleBody
   def first_visit_trigger
      @visit_triggers.each do | trig |
         trig[:org].trust(trig[:amount])
-        push_message(trig[:org].get_message(trig[:mail]), trig[:org]) unless trig[:mail].nil?
+        push_mail(trig[:org].get_message(trig[:mail]), trig[:org]) unless trig[:mail].nil?
      end
   end
 end
