@@ -13,4 +13,8 @@ class SystemsMessage < RuntimeError
       str = " #{@text}"
       str
    end
+   
+   def to_s
+      text
+   end
 end

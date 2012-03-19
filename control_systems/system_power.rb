@@ -55,25 +55,16 @@ class SystemPower < ShipSystem
       sgo = nil     
       
       if @obj.nil?
-        sgo = @@ship.locationPoint.body if @obj.nil?
+        sgo = @@ship.locationPoint.body
       else  
-        sgo = ShipSystem.find_sgo_from_name(@obj) unless @obj.nil?
-        
-        raise SystemsMessage.new("#{@@ship.name} is above #{@@ship.locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @@ship.locationPoint.body != sgo               
+        sgo = ShipSystem.find_sgo_from_name(@obj)
       end
-      
-      raise SystemsMessage.new("You can only land on a planet", SystemPower, :info) unless (sgo.kind_of? Planet or sgo.kind_of? City)
-      
-      lps = (@@ship.locationPoint.find_linked_location :land)
-      if lps.empty?
-         info "can't land - call approach to #{sgo}" 
-         @@rq.enq @@ship.approach sgo
-      end
-      
-      city_point = @@ship.locationPoint.body.available_city(sgo)
-      raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_point.nil?
-      
-      @@rq.enq @@ship.land city_point         
+           
+      if @@ship.land_need_approach?(sgo)
+        @@rq.enq @@ship.approach sgo
+      end  
+         
+      @@rq.enq @@ship.land sgo         
  
       first_time = @@ship.locationPoint.body.visit
       

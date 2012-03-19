@@ -16,6 +16,10 @@ class Person
   def self.find key
     @@people[key]
   end
+  
+  def self.clear_ref
+    @@people.clear
+  end
 end
 
 class Contact < SimpleBody

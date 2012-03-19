@@ -3,9 +3,13 @@ require_relative "../spec_helper.rb"
 describe SmallStructure do
   before(:each) do
     @earth = mock "earth", :body => @body, :add_link => true
-    @sm = SmallStructure.new("test", "test", @earth, 2)
+    @sm = SmallStructure.new("test", "test", @earth, 2, :test)
     @trustee = mock "Trustee", :kind_of? => true
     @nontrustee = mock "Trustee", :kind_of? => false
+  end
+  
+  after(:each) do
+    SimpleBody.clear_ref
   end
   
   it "can add a trustee death_listener" do

@@ -91,7 +91,7 @@ class City < SimpleBody
       @contacts << contact
       Dictionary.add_discovered_proper_noun(contact.name, contact,:communication)
       push_message("New contact #{contact} has registered #{contact.his_or_her} details.")
-       info "#{contact.name} added to contacts"
+      info "#{contact.name} added to contacts"
       @new_contact = true if trust > 0
       return true
     end

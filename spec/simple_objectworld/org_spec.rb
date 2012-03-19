@@ -12,7 +12,7 @@ describe Contact do
     @mars = mock "mars", :body => @body, :add_link => true
     
     @city = City.new("Houston", "Earth", @earth, @earth)
-    @freeMars = Organisation.new("Free Mars", "Dedicated to Mars freedom", :proscribed)
+    @freeMars = Organisation.new("Free Mars", "Dedicated to Mars freedom", :proscribed, :fm)
     @freeMars.add_message(:poo, "Wo is me")
   end
   

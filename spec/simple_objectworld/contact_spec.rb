@@ -12,11 +12,18 @@ describe Contact do
     @mars = mock "mars", :body => @body, :add_link => true
     
     @city = City.new("Houston", "Earth", @earth, @earth)
-    @freeMars = Organisation.new("Free Mars", "Dedicated to Mars freedom", :proscribed)
-    @contact = @city.contactFactory(:m, "Jesper", "Nordstrum", "Collector of alien artefacts", @freeMars, 1)
+    @freeMars = Organisation.new("Free Mars", "Dedicated to Mars freedom", :proscribed, :fm)
+    @person = Person.new(:m, "Prof", "Nordstrum", "Collector of alien artefacts")
+    @contact = @city.contactFactory(@person, @freeMars, 1)
     @contact.add_details(:interest => :alien, :talk => :war)
-    @contact2 = @city.contactFactory(:f, "Per", "Persen", "Tax inspector", @freeMars, 2)
+    @person2 = Person.new(:f, "Madam", "Persen", "Tax Inspector")
+    @contact2 = @city.contactFactory(@person2, @freeMars, 2)
         
+  end
+  
+  after(:each) do
+    SimpleBody.clear_ref
+    Person.clear_ref
   end
   
   it "contact have personal pronoun set" do
@@ -43,16 +50,16 @@ describe Contact do
     @contact.org.trust 1
     @city.contacts.size.should == 1
     @city.contacts.last.should == @contact
-    @city.describe_contacts.should include "Jesper Nordstrum"
-    @city.describe_contacts.should_not include "Per Persen"
+    @city.describe_contacts.should include "Prof Nordstrum"
+    @city.describe_contacts.should_not include "Madam Persen"
   end
   
   it "two contact added if trust goes up by two" do
     @contact.org.trust 2
     @city.contacts.size.should == 2
     @city.contacts.last.should == @contact2
-    @city.describe_contacts.should include "Jesper Nordstrum"
-    @city.describe_contacts.should include "Per Persen"
+    @city.describe_contacts.should include "Prof Nordstrum"
+    @city.describe_contacts.should include "Madam Persen"
   end
   
   context "Visit Mars" do
@@ -66,7 +73,7 @@ describe Contact do
       @visit_city.visit
       @city.contacts.last.should == @contact
       @city.contacts.size.should == 1
-      @city.describe_contacts.should include "Jesper Nordstrum"
+      @city.describe_contacts.should include "Prof Nordstrum"
     end
     
     it "subsequent visits don't add more" do

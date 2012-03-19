@@ -30,7 +30,7 @@ describe Torpedo do
     end
     
     it "should get yield" do
-      @govtorp.yield.should == 3
+      @govtorp.yield.should == 2
     end
     
     it "should get prinatble name" do
@@ -62,7 +62,7 @@ describe Torpedo do
     end
 
     it "should get yield" do
-      @torp_inst.yield.should == 3
+      @torp_inst.yield.should == 2
     end
     
     it "should get prinatble name" do
@@ -90,19 +90,14 @@ describe ImplWeaponry do
  
     it "destroy should fail if target is of correct type" do
       target = mock "Turkey", :kind_of? => false, :status => :normal
-      expect { @impl.destroy target }.to raise_error(RuntimeError, "Not a structure this weaponry can target")    
+      @impl.destroy(target).should == -1 
     end
 
-    it "destroy should fail if incorrect weaponry installed" do
+    it "destroy should fail no weaponry loaded" do
       target = mock "SmallStructure", :kind_of? => true, :status => :normal
-      expect { @impl.destroy target }.to raise_error(RuntimeError, "No torpedoes loaded")    
+      @impl.destroy(target).should == -1    
     end
-    
-    it "destroy should fail if target is already destroyed" do
-      target = mock "SmallStructure", :kind_of? => true, :status => :destroyed
-      expect { @impl.destroy target }.to raise_error(RuntimeError, "Structure has insufficient integrity to target")    
-    end
-        
+       
   end
   
   context "Insufficient damage" do

@@ -286,9 +286,26 @@ JUMP = "Rift generator"
     
     SystemsMessage.new(mes, SystemCommunication, :info)
   end
+
+
+  def land_need_approach?(sgo)
+    raise SystemsMessage.new("#{@name} is already stationary", SystemPower, :info) if (@status == :dependent)
+    raise SystemsMessage.new("You can only land at a city space port", SystemPower, :info) unless (sgo.kind_of? Planet or sgo.kind_of? City)
+    raise SystemsMessage.new("#{@name} is above #{@locationPoint.body} not #{sgo}", SystemPower, :info) if sgo.kind_of? Planet and @locationPoint.body != sgo
+    
+    lps = (@locationPoint.find_linked_location :land)
+    if lps.empty?
+         info "can't land - call approach to #{sgo}" 
+         return true
+    end
+    
+    false
+  end
              
- def land(city_point)
-   
+ def land(sgo)
+    city_point = @locationPoint.body.available_city(sgo)
+    raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_point.nil?
+  
    #location must be city     
    #city_points = @locationPoint.find_linked_location :city
    #raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
