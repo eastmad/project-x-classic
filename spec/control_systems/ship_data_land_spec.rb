@@ -23,6 +23,12 @@ describe ShipData do
         @body.stub!(:available_city).and_return(nil)
         expect {@ship.land(@body)}.to raise_error(SystemsMessage, "No space ports found") 
       end
+      
+      it "should return SystemMessage if available" do
+        @body.stub!(:available_city).and_return(@locPoint)
+        
+        @ship.land(@body).to_s.should == "Landed at TestOwnerBody" 
+      end
     end
     
     context "call land_need_approach?" do

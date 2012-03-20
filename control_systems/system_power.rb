@@ -52,7 +52,8 @@ class SystemPower < ShipSystem
     
     begin
       
-      sgo = nil     
+      sgo = nil
+      resp_hash = {}
       
       if @obj.nil?
         sgo = @@ship.locationPoint.body
@@ -62,6 +63,7 @@ class SystemPower < ShipSystem
            
       if @@ship.land_need_approach?(sgo)
         @@rq.enq @@ship.approach sgo
+        resp_hash[:media] = :atmosphere
       end  
          
       @@rq.enq @@ship.land sgo         
@@ -72,14 +74,13 @@ class SystemPower < ShipSystem
         para1 = SystemLibrary.desc @@ship.locationPoint.body
         @@rq.enq SystemsMessage.new(para1, SystemLibrary, :report)
       end  
-        
-      @@rq.enq SystemsMessage.new("Landed at #{@@ship.locationPoint.body.name}", SystemPower, :response)  
-      
+       
       resp_hash = {:success => true, :media => :land}
     rescue RuntimeError => ex 
-      resp_hash = {:str => ex, :success => false}
+      resp_hash[:str] = ex
+      resp_hash[:success] = false
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("To land on a planet, first approach it from orbit.", SystemPower, :response_bad)
+      @@rq.enq SystemsMessage.new("Could not land.", SystemPower, :response_bad)
     end      
                 
     return resp_hash     

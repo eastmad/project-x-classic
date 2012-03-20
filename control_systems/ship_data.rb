@@ -109,13 +109,12 @@ JUMP = "Rift generator"
     
     info "exit approach #{found_lp}"
     
-    unless found_lp.nil? 
-     @locationPoint = found_lp
-     @status = :rest
-     SystemsMessage.new("#{THRUSTERS} fired", SystemPower, :info)
-    else
-     SystemsMessage.new("#{local_body} not in range", SystemNavigation, :info)
-    end 
+    raise SystemsMessage.new("#{target_body} not in range of thrusters", SystemNavigation, :info) if found_lp.nil?
+    
+    @locationPoint = found_lp
+    @status = :rest
+    
+    SystemsMessage.new("#{THRUSTERS} fired", SystemPower, :info)
   end
   
   def orbit(planet)      
@@ -305,38 +304,11 @@ JUMP = "Rift generator"
  def land(sgo)
     city_point = @locationPoint.body.available_city(sgo)
     raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_point.nil?
-  
-   #location must be city     
-   #city_points = @locationPoint.find_linked_location :city
-   #raise SystemsMessage.new("No space ports found", SystemNavigation, :info) if city_points.empty? 
- 
-   #if a city specified check it is available to land at
-   #take first for now
-   #target_point = city_points.first
-   #city_points.each do | lp |
-   #   target_point = lp if lp.body == city
-   #end
    
-   if (@status == :rest)
-     @status = :dependent
-     @locationPoint = city_point
-     
-     #first_time = @locationPoint.body.visit
-     #
-     #if first_time
-     #  city = @locationPoint.body
-     #  para1 = "#{city}\n\n"
-     #  para1 << city.describe
-     #  para1 << "\n- " << city.desc
-     #  para1 << "\n- " << city.describe_owns 
- 
-      # return SystemsMessage.new(para1, SystemLibrary, :report)
-     #else 
-     #  return SystemsMessage.new("Landed at #{city_point.body.name}", SystemPower, :info)
-     #end
-   else
-     raise SystemsMessage.new("Cannot land on #{city_point.body.name} from #{@locationPoint}", SystemNavigation, :info)
-   end   
+    @status = :dependent
+    @locationPoint = city_point
+    
+    SystemsMessage.new("Landed at #{city_point.body.name}", SystemPower, :info)  
  end
  
   def destroy target

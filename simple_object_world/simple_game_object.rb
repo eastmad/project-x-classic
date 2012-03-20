@@ -146,16 +146,21 @@ class Planet < CelestialObject
        @orbitPoint.find_linked_location(:satellite)
    end
    
-   def available_city(city = nil)   
+   def available_city(body = nil)   
       city_points = @atmospherePoint.find_linked_location :city
       return nil if city_points.empty? 
- 
+ info "cps = #{city_points}"
       #if a city specified check it is available to land at
-      #take first for now
-      target_point = city_points.first
-      city_points.each do | cp |
-         target_point = cp if cp.body == city
-      end
+      #take first if no city specified
+      
+      target_point = nil
+      if body.kind_of? Planet
+         target_point = city_points.first
+      elsif body.kind_of? City
+         city_points.each do | cp |
+            target_point = cp if cp.body == body
+         end
+      end      
    
       return target_point
    end
