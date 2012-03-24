@@ -115,7 +115,7 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
     @imstack = stack {
       image @im_win.first_image()      
     } 
-    animate (4) do | frame |                     
+    animate(4) do | frame |                     
       @imstack.clear {image @im_win.animate_image(frame)}                     
     end
 
@@ -296,13 +296,20 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
       end
 
       if (@key == :delete)
-        @gr.undo_grammar
-        needs_reset = @dr.remove_req @arr            
-        #@dr.replace_req @arr
-        @gr.reset_grammar if needs_reset
+        info "req str to delete >#{@dr.req_str}<" 
+        if @dr.req_str.length > 1
+         info "clear_req >#{@dr.req_str}<"  
+         @dr.clear_req @arr
+        else
+         info "remove_req >#{@dr.req_str}<"  
+         @gr.undo_grammar
+         needs_reset = @dr.remove_req @arr            
+         #@dr.replace_req @arr
+         @gr.reset_grammar if needs_reset
         
-        @key_input_state = InputState.new if @dr.req_str.empty?
-        key_hints @key_input_state.state
+         @key_input_state = InputState.new if @dr.req_str.empty?
+         key_hints @key_input_state.state
+        end 
       end
       
 

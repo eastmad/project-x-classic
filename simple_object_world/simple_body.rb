@@ -17,6 +17,13 @@ class SimpleBody
     
   end
   
+  def owned_by? body
+    return false if @owning_body.nil?
+    return true if @owning_body == body 
+    
+    return @owning_body.owned_by? body 
+  end
+  
   def root_body
     body = self
     until body.owning_body.nil?

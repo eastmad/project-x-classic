@@ -14,14 +14,7 @@ class City < SimpleBody
     @centrePoint = LocationPoint.new(self, :centre)
     @centrePoint.add_link([:up, :launch], exitPoint)
     ownerPoint.add_link([:city, :land], @centrePoint)
-  end      
-
-  def owned_by? body
-    return false if @owning_body.nil?
-    return true if @owning_body == body 
-    
-    return @owning_body.owned_by? body 
-  end
+  end     
   
   def contacts
      check_trust_list

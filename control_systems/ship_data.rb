@@ -236,22 +236,21 @@ JUMP = "Rift generator"
     SystemsMessage.new("Consignment of #{item} taken from cargo hold", SystemTrade, :info)  
   end
   
-  def contact(person)
-    city =  @locationPoint.body
+  def contact(con)
+    local_body =  @locationPoint.body
 
-    raise SystemsMessage.new("You can only make contact in a city.", SystemCommunication, :info) unless city.kind_of? City
-    raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless person.kind_of? Contact    
-    raise SystemsMessage.new("Cannot find #{person} in #{city}.", SystemCommunication, :info) unless city.contacts.include? person
+    raise SystemsMessage.new("You can only contact a person.", SystemCommunication, :info) unless con.kind_of? Contact    
+    raise SystemsMessage.new("We are not close enough to #{con.owning_body}", SystemCommunication, :info) unless (con.owned_by?(local_body) || con.owning_body == local_body || con.owning_body.owning_body == local_body.owning_body) 
 
     #check @meet.meet_me[name] for an entry
-    mes = person.not_interested_string
-    if @icontact.contacted? person
-      mes = person.already_agreed_meet_string
+    mes = con.not_interested_string
+    if @icontact.contacted? con
+      mes = con.already_agreed_meet_string
     else
     
-      if @icontact.interested?(person, @trade.cargo)
-        mes = person.agreed_meet_string
-        @icontact.contact_made(person)
+      if @icontact.interested?(con, @trade.cargo)
+        mes = con.agreed_meet_string
+        @icontact.contact_made(con)
       end
     end
 

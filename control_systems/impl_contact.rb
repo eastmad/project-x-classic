@@ -24,10 +24,8 @@ class ImplContact
     @met_contacts.include?(contact)		
   end
   
-  def interested?(contact, cargo)
-  info "6.0 #{contact}"   
+  def interested?(contact, cargo) 
     interest = contact.details[:interest]
-  info "6.1 #{interest}"  
     return true if interest.nil?
       
     cargo.each do | consignment |

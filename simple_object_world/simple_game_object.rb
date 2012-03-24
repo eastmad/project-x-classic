@@ -16,13 +16,6 @@ info "first_time? = #{first_time}"
     
     first_time
   end
-
-  def owned_by? body
-    return false if @owning_body.nil?
-    return true if @owning_body == body 
-      
-    return @owning_body.owned_by? body 
-  end
      
   def to_s
     @name

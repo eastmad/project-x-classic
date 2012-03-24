@@ -30,7 +30,15 @@ class DisplayResponse
       
       @current_word -= 1
       @req_grammar = @complete_words[@current_word][:grammar]
-      @req_str = @complete_words[@current_word][:word].to_s            
+      #@req_str = @complete_words[@current_word][:word].to_s
+      @req_str = ""
+      return false
+   end
+   
+   def clear_req paras
+      paras[@current_word].replace "_"
+      
+      @req_str = ""
       return false
    end
    

@@ -49,11 +49,11 @@ class GameStart
    freemars.add_message(:visit_mars,"New Nicosia is still desolate from when Earth forces levelled it after the rebellion. \
 If you want to know more about what's happening to Mars, talk to our contact on Earth.")
           
-   pers = houston.contactFactory(Person.find(:Nordstrum), freemars, 1)
+   pers = houston.contactFactory(Person.find(:Nordstrum), freemars, 0)
    pers.add_details(:interest => :alien, :talk => :war)
-   pers = venutia.contactFactory(Person.find(:Singh), vmu, 1)
+   pers = venutia.contactFactory(Person.find(:Singh), vmu, 0)
    pers.add_details(:talk => :mining_standards)
-   dun.contactFactory(Person.find(:Gras), mt, 1)
+   dun.contactFactory(Person.find(:Gras), mt, 0)
    
    listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
