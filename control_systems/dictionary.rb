@@ -26,6 +26,7 @@ class Dictionary
             {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :undock, :grammar => :verb, :sys => :power, :following => :self},
             {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
+            {:word => :set, :grammar => :verb, :sys => :navigation, :following => :course},
             {:word => :send, :grammar => :verb, :sys => :communication},
             {:word => :read, :grammar => :verb, :sys => :communication},
             {:word => :contact, :grammar => :verb, :sys => :communication},

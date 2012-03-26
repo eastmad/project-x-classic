@@ -15,7 +15,12 @@ class SystemNavigation < ShipSystem
   end
    
   def _course(arg = nil)        
-  end    
+  end
+  
+  #synonym
+  def _set(args = nil)
+    _plot(args)
+  end
   
   def _plot(args = nil)     
     begin        

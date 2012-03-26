@@ -78,7 +78,7 @@ class SystemTrade < ShipSystem
    
   def _load(args = nil)
     begin
-      #exception noun
+      #noun exception
       return args if args.kind_of? Hash
       
       item = ShipSystem.find_sgo_from_name(@obj)
