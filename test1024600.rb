@@ -305,9 +305,11 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
          @gr.undo_grammar
          needs_reset = @dr.remove_req @arr            
          #@dr.replace_req @arr
+         info "reset? >#{needs_reset}<"
          @gr.reset_grammar if needs_reset
         
-         @key_input_state = InputState.new if @dr.req_str.empty?
+         info "set state"
+         @key_input_state = InputState.new if needs_reset
          key_hints @key_input_state.state
         end 
       end

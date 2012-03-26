@@ -21,6 +21,7 @@ class DisplayResponse
    end   
    
    def remove_req paras
+      info "current word = #{@current_word}"
       paras[@current_word].replace ""
       
       if @current_word == 0
@@ -32,6 +33,8 @@ class DisplayResponse
       @req_grammar = @complete_words[@current_word][:grammar]
       #@req_str = @complete_words[@current_word][:word].to_s
       @req_str = ""
+      @complete_words[@current_word][:word] = @req_str
+      info "leaving remove_req"
       return false
    end
    
