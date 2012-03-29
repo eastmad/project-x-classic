@@ -16,5 +16,11 @@
 		"sex":"f", 
 		"title":"Councillor",
 		"desc":"Mars Tourism Rep"
+	},
+	"Travis":
+	{
+		"sex":"m", 
+		"title":"Engineer",
+		"desc":"Gate engineer"
 	}
 }

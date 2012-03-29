@@ -7,6 +7,7 @@ class Dictionary
             {:word => :modifications, :grammar => :short, :sys => :modification},
             {:word => :cargo, :grammar => :short, :sys => :trade},
             {:word => :people, :grammar => :short, :sys => :communication},
+            {:word => :weaponry, :grammar => :short, :sys => :weaponry},
             {:word => :planets, :grammar => :short, :sys => :library},
             {:word => :stars, :grammar => :short, :sys => :library},
             {:word => :companies, :grammar => :short, :sys => :trade},

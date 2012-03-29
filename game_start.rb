@@ -20,12 +20,13 @@ class GameStart
    garage2 = Garage.find(:skull)
    freemars = Organisation.find :fm
    vmu = Organisation.find :vmu
-   mt = Organisation.find :mt
+   sg = Organisation.find :sg
    houston = City.find(:Houston)
    listeningPost = SmallStructure.find(:lp)
    nicosia = City.find(:Nicosia)
    venutia = City.find(:Venutia)
    dun = City.find(:Dundarach)
+   cal = City.find(:Caloris)
    merc = Planet.find(:Mercury)
    
    trader.add_sink_trade(Item.find :bb)
@@ -53,13 +54,18 @@ If you want to know more about what's happening to Mars, talk to our contact on 
    pers.add_details(:interest => :alien, :talk => :war)
    pers = venutia.contactFactory(Person.find(:Singh), vmu, 1)
    pers.add_details(:talk => :mining_standards)
-   dun.contactFactory(Person.find(:Gras), mt, 1)
+   pers = dun.contactFactory(Person.find(:Gras), sg, 1)
+   pers.add_details(:talk => :tourism)
+   pers = cal.contactFactory(Person.find(:Travis), sg, 1)
+   pers.add_details(:talk => :gate)
    
    listeningPost.add_updated_desc(2, "Earth military control listening post", freemars)
    listeningPost.add_death_listener(freemars)
    listeningPost.add_blocker(:check_torp_class, GovTorpedo, "Cannot target government property with this munition - safety interlock")
      
    nicosia.add_visit_trigger(freemars, 1, :visit_mars)
+   cal.add_visit_trigger(sg, 1, nil)
+   dun.add_visit_trigger(sg, 1, nil)
    
    merc.add_blocker(:check_mod, :shield, "insufficient heat shielding - safety interlock")
    

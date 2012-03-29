@@ -19,7 +19,8 @@ class SystemCommunication < ShipSystem
       @@rq.enq SystemsMessage.new("No known local contacts", SystemCommunication, :info)
     else
       para1 << "\n\nType 'contact person' to arrange a meeting"
-      @@rq.enq SystemsMessage.new("Contacts\n\n#{para1}", SystemCommunication, :report)
+      para1 << "\nType 'meet person' to arrange a meeting"
+      @@rq.enq SystemsMessage.new("Local contacts for #{sgo}\n\n#{para1}", SystemCommunication, :report)
     end
     {:success => true}
   end
@@ -56,7 +57,7 @@ class SystemCommunication < ShipSystem
     rescue => ex
       info "oops #{ex}"
       @@rq.enq ex
-      @@rq.enq SystemsMessage.new("Type 'people' for known contacts.", SystemCommunication, :info)
+      @@rq.enq SystemsMessage.new("Type 'people' for known local contacts.", SystemCommunication, :info)
       {:success => false}
     end  
 

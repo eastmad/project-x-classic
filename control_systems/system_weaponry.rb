@@ -40,7 +40,15 @@ class SystemWeaponry < ShipSystem
   
   def _vessel(arg = nil)        
    @obj = "vessel"
-  end     
+  end
+  
+  def _weaponry(args = nil)
+    
+    para1 = SystemWeaponry.status
+    @@rq.enq SystemsMessage.new("Weaponry\n\n#{para1}", SystemWeaponry, :report)
+    
+    {:success => true}
+  end
   
   def _nearest(arg = nil)     
    @adj = "nearest"
@@ -51,7 +59,7 @@ class SystemWeaponry < ShipSystem
   end 
    
   def self.to_s
-      "Weaponry system"
+      "Weapon systems"
   end
   
   def self.cursor_str
@@ -60,10 +68,13 @@ class SystemWeaponry < ShipSystem
   
   def self.status
     num = @@ship.weaponry.torpedoes.size
-    torp_loaded = "#{num}"
-    torp_loaded = "No" if num == 0 
+    if num > 0
+      torp_loaded = "#{num}x #{@@ship.weaponry.torpedoes[0].name}"
+    else  
+      torp_loaded = "No"
+    end  
     para1 = <<-END.gsub(/^ {4}/, '')      
-      -#{torp_loaded} torpedoes loaded.
+      > #{torp_loaded} loaded.
     END
   end
 

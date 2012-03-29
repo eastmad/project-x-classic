@@ -96,6 +96,7 @@ class City < SimpleBody
      @visit_triggers.each do | trig |
         trig[:org].trust(trig[:amount])
         push_mail(trig[:org].get_message(trig[:mail]), trig[:org]) unless trig[:mail].nil?
+        check_trust_list
      end
   end
 end
