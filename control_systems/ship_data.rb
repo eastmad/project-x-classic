@@ -272,6 +272,7 @@ JUMP = "Rift generator"
           person.org.trust(1)
           @icontact.contact_met person
           mes = "You met #{person}"
+          return SystemsMessage.new(mes, SystemCommunication, :info)
         else
           mes = person.already_met_string
         end
@@ -282,7 +283,7 @@ JUMP = "Rift generator"
       mes = "Contact #{person} first. It's only polite."
     end
     
-    SystemsMessage.new(mes, SystemCommunication, :info)
+    raise SystemsMessage.new(mes, SystemCommunication, :info)
   end
 
 

@@ -65,6 +65,9 @@ class DisplayResponse
       paras.each do | para |
          para.replace "" if (!para.nil?)                     
       end
+      
+      paras[0].replace "_"
+      paras[0].stroke = rgb(255,255,255)
    end   
    
    #def replace_req parag1, parag2, parag3

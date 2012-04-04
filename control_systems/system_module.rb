@@ -10,6 +10,8 @@ class SystemModification < ShipSystem
       @@rq.enq @@ship.install(mod)
       resp_hash = {:success => true}
       
+      @@rq.enq SystemsMessage.new("Installation successful", SystemModification, :response)
+      
     rescue RuntimeError => ex
       @@rq.enq ex
       resp_hash = {:str => ex, :success => false}
