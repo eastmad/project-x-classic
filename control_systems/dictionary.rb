@@ -1,6 +1,12 @@
 class Dictionary
     
     @@Words = [
+        
+            {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
+            {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
+            {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
+            {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
+        
             {:word => :status, :grammar => :short, :sys => :myself},
             {:word => :help, :grammar => :short, :sys => :myself},
             {:word => :manifest, :grammar => :short, :sys => :trade},
@@ -17,16 +23,16 @@ class Dictionary
             
             {:word => :approach, :grammar => :verb, :sys => :power},
             {:word => :launch, :grammar => :verb, :sys => :power},
-            {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
+            
             {:word => :destroy, :grammar => :verb, :sys => :weaponry},
             {:word => :install, :grammar => :verb, :sys => :modification},                        
-            {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
+            
             {:word => :orbit, :grammar => :verb, :sys => :navigation},
             {:word => :accept, :grammar => :verb, :sys => :trade},
             {:word => :give, :grammar => :verb, :sys => :trade},
-            {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
+            
             {:word => :undock, :grammar => :verb, :sys => :power, :following => :self},
-            {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
+            
             {:word => :set, :grammar => :verb, :sys => :navigation, :following => :course},
             {:word => :send, :grammar => :verb, :sys => :communication},
             {:word => :read, :grammar => :verb, :sys => :communication},
