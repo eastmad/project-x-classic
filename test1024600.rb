@@ -173,8 +173,8 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
       background rgb(20, 42, 42)
       flow {
         caption "> ", :stroke => white
-        @arr[0] = caption "_", :stroke => white
-        (1..6).each{|n| @arr[n] = caption " ", :stroke => white}
+        @arr[0] = caption strong(""),"_", :stroke => white
+        (1..6).each{|n| @arr[n] = caption strong("")," ", :stroke => white}
       }
       flow {
         @last_command = para "Waiting for command", :stroke => gray
@@ -204,14 +204,11 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
     
     every(6){
       @ap.each {|al| al.not_recent}
+      #@dr.replace_req @arr
     }
      
-    
     every(1) {
       #remove recent
-      
-      unless @rq.peek.nil?
-      
       
       unless @rq.peek.nil?     
         message = @rq.deq
@@ -226,8 +223,6 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
         else
           @ma.set_line message
         end 
-      end
-      
       end
     }
 
@@ -277,9 +272,11 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
         if @dr.req_str.empty?
           @dr.req_str = k
           word_building = k
+          @dr.typed = k
           resps = Dictionary.all_matching_words(@dr.req_str, @gr.next_filter, @gr.context)
         else
           word_building += k
+          @dr.typed = word_building
           resps = Dictionary.filter_with_substring(resps, word_building)
         end
         if resps.size > 0
@@ -325,19 +322,20 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
         else
           SoundPlay.play_sound(0)
           @dr.req_str = res[:word]
+          info "req_str = #{@dr.req_str}"
           @dr.req_grammar = res[:grammar]
           @gr.set_grammar(res[:grammar])
           @gr.context ||= res[:sys]
 
           unless following.nil?
-            @dr.add_req               
+            @dr.add_req
             @dr.replace_req @arr
             @dr.req_str = following[:word]
             @dr.req_grammar = following[:grammar]
             @gr.set_grammar(following[:grammar])
           end
-        end                           
-        @dr.add_req                     
+        end
+        @dr.add_req
       end
       
       @dr.replace_req @arr

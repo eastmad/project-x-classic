@@ -17,7 +17,7 @@ class ImplHelp
    {:txt => "'destroy' to damage a structure", 
     :chk => lambda {@body.kind_of? SmallStructure}},
    {:txt => "'plot course' to a planet, then 'engage' drives", 
-    :chk => lambda {@band == :orbit}}
+    :chk => lambda {@band == :orbit}},
    {:txt => "'jump' to use gate", 
     :chk => lambda {@body.kind_of? JumpGate}},
    {:txt => "'describe' to consult library", 
