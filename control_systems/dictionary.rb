@@ -4,8 +4,8 @@ class Dictionary
         
             {:word => :plot, :grammar => :verb, :sys => :navigation, :following => :course},
             {:word => :engage, :grammar => :verb, :sys => :power, :following => :drive},
-            {:word => :dock, :grammar => :verb, :sys => :power, :following => :self},
-            {:word => :land, :grammar => :verb, :sys => :power, :following => :self},
+            {:word => :dock, :grammar => :verb, :sys => :power, :following => :"self-with"},
+            {:word => :land, :grammar => :verb, :sys => :power, :following => :"self-at"},
         
             {:word => :status, :grammar => :short, :sys => :myself},
             {:word => :help, :grammar => :short, :sys => :myself},
@@ -46,7 +46,7 @@ class Dictionary
             {:word => :release, :grammar => :verb, :sys => :security},
             {:word => :gate, :grammar => :noun, :sys => :navigation},
             {:word => :probe, :grammar => :noun, :sys => :navigation},
-            {:word => :course, :grammar => :noun, :sys => :navigation},
+            {:word => :course, :grammar => :noun, :sys => :navigation, :following => :to},
             {:word => :stack, :grammar => :verb, :sys => :weaponry},
             {:word => :torpedo, :grammar => :noun, :sys => :weaponry},
             {:word => :torpedoes, :grammar => :noun, :sys => :trade},
@@ -92,13 +92,21 @@ class Dictionary
 
    def self.all_words; @@Words; end   
       
-   def self.matching_word(str)              
+   def self.matching_word(orig)              
      res = nil
+     info "orig == #{orig}"
+     str = orig
+     str = @@shipname if (orig.start_with?("self"))
       
      @@Words.each do |k|
        if (k[:word].to_s == str)
          res = k           
        end          
+     end
+      
+     if (orig.start_with?("self"))
+         res[:following] = nil
+         res[:following] = orig[5..-1].to_sym if orig[4] == '-'
      end
       
      return res   
@@ -144,7 +152,7 @@ class Dictionary
        if (k[:word].to_s.match("^#{str}") and filter.include?(k[:grammar]) and 
            (context.nil? or k[:sys].nil? or k[:sys] == context)) 
          res = k
-         k[:following] = @@shipname if k[:following] == :self
+         #k[:following] = @@shipname if k[:following] == :self
        end          
      end
           

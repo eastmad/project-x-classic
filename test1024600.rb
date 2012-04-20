@@ -327,12 +327,15 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
           @gr.set_grammar(res[:grammar])
           @gr.context ||= res[:sys]
 
-          unless following.nil?
+          until following.nil?
             @dr.add_req
             @dr.replace_req @arr
             @dr.req_str = following[:word]
             @dr.req_grammar = following[:grammar]
             @gr.set_grammar(following[:grammar])
+            follow_word = following[:following]
+            following = nil
+            following = Dictionary.matching_word(follow_word.to_s) unless follow_word.nil?
           end
         end
         @dr.add_req
