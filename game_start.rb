@@ -185,7 +185,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
     stack do
       
       flow {
-        caption strong("You are in control of the small vessel, Project-x.\n"), :stroke => white, :align => "center"
+        caption strong("Post Easter, Geoff fix special.\n"), :stroke => white, :align => "center"
       }
 
       flow {

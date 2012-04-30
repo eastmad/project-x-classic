@@ -113,7 +113,7 @@ class SystemPower < ShipSystem
       end
       
       raise SystemsMessage.new("You dock with space stations, and land in cities.", SystemNavigation, :info) if (sgo.kind_of? City)
-      raise SystemsMessage.new("Cannot dock with #{sgo}", SystemNavigation, :info) unless (spaceStation.kind_of? SpaceStation) 
+      raise SystemsMessage.new("Cannot dock with #{sgo}", SystemNavigation, :info) unless (sgo.kind_of? SpaceStation) 
       
       lps = (locationPoint.find_linked_location :dock)
       if lps.empty?
