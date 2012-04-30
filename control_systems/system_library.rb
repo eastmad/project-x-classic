@@ -57,6 +57,7 @@ info "local star = #{sgo}"
 
   def self.desc sgo
     raise SystemsMessage.new("That isn't a known galactic object", SystemLibrary, :info) if sgo.nil?
+    raise SystemsMessage.new("I only know about large objects", SystemLibrary, :info) unless sgo.respond_to? :describe
     para1  = "  #{sgo}\n\n"
     para1 << "  #{sgo.describe}"
     para1 << "\n  - " << sgo.desc

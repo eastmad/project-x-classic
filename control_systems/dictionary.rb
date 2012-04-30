@@ -15,6 +15,7 @@ class Dictionary
             {:word => :people, :grammar => :short, :sys => :communication},
             {:word => :weaponry, :grammar => :short, :sys => :weaponry},
             {:word => :planets, :grammar => :short, :sys => :library},
+            
             {:word => :stars, :grammar => :short, :sys => :library},
             {:word => :companies, :grammar => :short, :sys => :trade},
             {:word => :bay, :grammar => :verb, :sys => :trade},
@@ -29,7 +30,6 @@ class Dictionary
             
             {:word => :orbit, :grammar => :verb, :sys => :navigation},
             {:word => :accept, :grammar => :verb, :sys => :trade},
-            {:word => :give, :grammar => :verb, :sys => :trade},
             
             {:word => :undock, :grammar => :verb, :sys => :power, :following => :self},
             
@@ -46,7 +46,7 @@ class Dictionary
             {:word => :release, :grammar => :verb, :sys => :security},
             {:word => :gate, :grammar => :noun, :sys => :navigation},
             {:word => :probe, :grammar => :noun, :sys => :navigation},
-            {:word => :course, :grammar => :noun, :sys => :navigation, :following => :to},
+            {:word => :course, :grammar => :noun, :sys => :navigation, :following => :for},
             {:word => :stack, :grammar => :verb, :sys => :weaponry},
             {:word => :torpedo, :grammar => :noun, :sys => :weaponry},
             {:word => :torpedoes, :grammar => :noun, :sys => :trade},
@@ -57,6 +57,7 @@ class Dictionary
             {:word => :vessel, :grammar => :noun, :sys => :weaponry},
             {:word => :drive, :grammar => :noun, :sys => :power},
             {:word => :consignment, :grammar => :noun, :sys => :trade},
+            {:word => :go, :grammar => :verb, :sys => :power},
             
             {:word => :for, :grammar => :preposition},
             {:word => :at, :grammar => :preposition},
@@ -93,8 +94,9 @@ class Dictionary
    def self.all_words; @@Words; end   
       
    def self.matching_word(orig)              
+     return nil if orig.nil?
+    
      res = nil
-     info "orig == #{orig}"
      str = orig
      str = @@shipname if (orig.start_with?("self"))
       
@@ -155,7 +157,7 @@ class Dictionary
          #k[:following] = @@shipname if k[:following] == :self
        end          
      end
-          
+     info "str = #{str}, res[follow] = >#{res[:following]}<"     
      following = matching_word(res[:following].to_s) if (res and res[:following])      
      return res, following   
    end

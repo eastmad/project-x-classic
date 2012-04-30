@@ -138,7 +138,6 @@ JUMP = "Rift generator"
   
   def dock(spaceStation)
     raise SystemsMessage.new("#{@name} is already docked", SystemNavigation, :info) if (@status == :dependent)
-    raise SystemsMessage.new("Cannot dock with #{spaceStation}", SystemNavigation, :info) unless (spaceStation.kind_of? SpaceStation) 
     #location must be planet or spaceStation
     #Either orbiting planet or atspaceStation
     if (spaceStation == @locationPoint.body and (@status == :rest or @status == :sync))

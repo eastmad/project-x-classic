@@ -110,15 +110,17 @@ class SystemPower < ShipSystem
       locationPoint = @@ship.locationPoint
       if sgo.nil?
         sgo = locationPoint.body
-      end  
+      end
+      
+      raise SystemsMessage.new("You dock with space stations, and land in cities.", SystemNavigation, :info) if (sgo.kind_of? City)
+      raise SystemsMessage.new("Cannot dock with #{sgo}", SystemNavigation, :info) unless (spaceStation.kind_of? SpaceStation) 
       
       lps = (locationPoint.find_linked_location :dock)
       if lps.empty?
       	info "can't dock - call approach" 
       	@@rq.enq @@ship.approach sgo
       end
-      
-      
+          
       @@rq.enq @@ship.dock sgo
       @@rq.enq @@ship.lock_docking_clamp()
       
@@ -144,6 +146,7 @@ class SystemPower < ShipSystem
   def _undock(args = nil)     
       #info "Call undock"
       begin
+        raise SystemsMessage.new("#{@@ship.name} is not held in dock", SystemMyself, :info) unless @@ship.status == :dependent
       
         @@rq.enq @@ship.release_docking_clamp()
         
@@ -166,6 +169,11 @@ class SystemPower < ShipSystem
       end      
          
       return resp_hash  
+  end
+  
+  #synonym
+  def _go(args = nil)
+    _engage(args)
   end
   
   def _engage (arg = nil)
