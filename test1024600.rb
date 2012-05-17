@@ -1,3 +1,9 @@
+
+def info str
+   p str
+end
+
+require 'purple_shoes'
 require "json"
 require "local_config"
 require "display_response"
@@ -39,10 +45,40 @@ require "minimap/mini_map"
 require "long_text"
 require "game_start"
 
+module Stuff
+   def welcome
+    poop =  window(:title => "Welcome to Project-X", :width => 500, :height => 300)  do
+      background black
+      stack do
+        
+        flow {
+          caption strong("Post Easter, Geoff fix special.\n"), :stroke => white, :align => "center"
+        }
+  
+        flow {
+          para "\n- Type commands to control Project-x\n"
+          para "- Try 'status' to find out more commands\n", :stroke => azure
+          para "- Type space to complete any command\n", :stroke => azure
+          para "- Change the first command with up/down arrow, or just type\n", :stroke => azure
+          para "- Use capitals for proper nouns, like \"Earth\"\n", :stroke => azure
+          para "- Your vessel is in an old space station\n", :stroke => azure
+          para "- The first command to try is probably 'undock'\n", :stroke => aquamarine
+  
+        }
+        keypress { | k| 
+            poop.close
+        }
+      end
+    end   
+  end
+ 
+end
+
 Shoes.app(:width => 945, :height => 545, :title => "Project X") {
   
   background rgb(20, 42, 42)
   stroke white
+  extend Stuff
 
   @ship = GameStart.data2
   @minimap = MiniMap.new(10,30,50)
@@ -87,13 +123,34 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
   Operation.register_op :install, :modification, 1
   Operation.register_op :jump , :power, 1
  
+   ActionLine.set_hash({:response => rgb(150,150,255), :warn => rgb(255,150,150), :response_bad => rgb(255,175,175), :flag => rgb(200,200,50), :report => rgb(100,200,150), :info => rgb(255,255,255)},
+                        {:mail => 2, :report => 2})
+     #case flav   
+      # when :response
+      #   @line_type.stroke = 
+      # when :response_bad
+      #   @line_type.stroke = rgb(255,175,175)
+      # when :warn
+      #   @line_type.stroke = 
+      # when :flag
+      #   @line_type.stroke =   
+      # when :mail
+      #   @line_type.stroke = rgb(100,200,150)
+      #   @line_type.leading = 2
+      #   #@line_type.fill =
+      # when :report
+      #   @line_type.stroke = rgb(100,200,150)
+      #   @line_type.leading = 2
+      # else
+      #   @line_type.stroke = rgb(255,255,255)
+      #end 
    
   @rq = ResponseQueue.new
   @ap = [ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new, ActionLine.new]
   @ma = ActionLine.new
   @talk_sceen_name = nil
   
-  GameStart.welcome
+  welcome()
   
   @backstack = stack(:hidden => true){
     flow(:width => 976) {
@@ -159,8 +216,8 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
       #}
       #@heading_icon.hide
     }
-
-    @iconstack.move(0,parent.height - 200)
+        
+    #@iconstack.move(0,self.height - 200)
   }
 
   @mainstack2 = stack(:width => 615)  {  
@@ -358,6 +415,10 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
               MediaManager.show_media(@im_win,resp_hash[:media],media_lp) unless resp_hash[:media].nil?
             else 
               SoundPlay.play_sound(5)
+            end
+            
+            if resp_hash[:finished]
+               congratulations
             end
             
             talk_screen resp_hash[:talk],resp_hash[:name]  unless resp_hash[:talk].nil?
@@ -577,6 +638,26 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
     key_hints :start 
   end   
   
+ def congratulations
+   poop =  window(:title => "The end of Project-X", :width => 500, :height => 300)  do
+      background black
+      stack do
+        
+        flow {
+          caption strong("You have reached the next system, brother.\nWhatever you are looking for, you may well find it."), :stroke => white, :align => "center"
+        }
+  
+        flow {
+          para "\n\n- Hope you enjoyed the quick beta\n"
+          para "- Maybe I'm improving things even now\n", :stroke => azure
+          para "- David Eastman\n", :stroke => azure
+        }
+        keypress { | k| 
+            poop.close
+        }
+      end
+   end
+ end
 }
 
 

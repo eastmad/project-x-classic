@@ -6,12 +6,10 @@ class SystemPower < ShipSystem
       raise SystemsMessage.new("Not picking up a jump gate signal", SystemPower, :info) unless @@ship.locationPoint.body.kind_of? JumpGate
               
       @@rq.enq @@ship.jump "New"
-        
-      GameStart.congratulations
       
       #@@rq.enq SystemsMessage.new(SystemNavigation.status, SystemNavigation, :response)
         
-      resp_hash = {:success => true, :media => :travel}
+      resp_hash = {:success => true, :media => :travel, :finished => true}
     rescue RuntimeError => ex 
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex

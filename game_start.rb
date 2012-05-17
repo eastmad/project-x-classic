@@ -179,52 +179,7 @@ If you want to know more about what's happening to Mars, talk to our contact on 
   ship
  end
  
- def self.welcome
-  poop =  window(:title => "Welcome to Project-X", :width => 500, :height => 300)  do
-    background black
-    stack do
-      
-      flow {
-        caption strong("Post Easter, Geoff fix special.\n"), :stroke => white, :align => "center"
-      }
-
-      flow {
-        para "\n- Type commands to control Project-x\n"
-        para "- Try 'status' to find out more commands\n", :stroke => azure
-        para "- Type space to complete any command\n", :stroke => azure
-        para "- Change the first command with up/down arrow, or just type\n", :stroke => azure
-        para "- Use capitals for proper nouns, like \"Earth\"\n", :stroke => azure
-        para "- Your vessel is in an old space station\n", :stroke => azure
-        para "- The first command to try is probably 'undock'\n", :stroke => aquamarine
-
-      }
-      keypress { | k| 
-          poop.close
-      }
-    end
-  end
- end
- 
- def self.congratulations
-  poop =  window(:title => "The end of Project-X", :width => 500, :height => 300)  do
-    background black
-    stack do
-      
-      flow {
-        caption strong("You have reached the next system, brother.\nWhatever you are looking for, you may well find it."), :stroke => white, :align => "center"
-      }
-
-      flow {
-        para "\n\n- Hope you enjoyed the quick beta\n"
-        para "- Maybe I'm improving things even now\n", :stroke => azure
-        para "- David Eastman\n", :stroke => azure
-      }
-      keypress { | k| 
-          poop.close
-      }
-    end
-  end
- end 
+  
  
    def self.loadGalaxy 
       mygalaxy = nil

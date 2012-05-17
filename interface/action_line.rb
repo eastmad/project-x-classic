@@ -2,6 +2,11 @@ class ActionLine
 
    attr_accessor :line_type, :flavour, :origin, :recent_flag
    
+   def self.set_hash pen_hash, leading_hash
+      @@pen_hash = pen_hash
+      @@leading_hash = leading_hash
+   end
+   
    def set_line message
      @flavour = message.flavour
      set_stroke message.flavour 
@@ -12,7 +17,7 @@ class ActionLine
      spaces = ""
      txt =""
      if (message.flavour == :mail)
-       @line_type.contents[1].underline = "single"
+       #@line_type.contents[1].underline = "single"
        txt = "mail from #{@origin}\n" unless @origin.nil?
        (1..80).each {|d| spaces += ' '}
        spaces = spaces[0,(spaces.size - txt.size)]
@@ -22,7 +27,7 @@ class ActionLine
        (1..80).each {|d| spaces += ' '}
        spaces = spaces[0,(spaces.size - txt.size)]
      else
-      @line_type.contents[1].underline = "none"
+      #@line_type.contents[1].underline = "none"
       txt = @origin.cursor_str unless @origin.nil?
       if @recent_flag
          @line_type.contents[0].replace("*")
@@ -49,25 +54,27 @@ class ActionLine
    
    def set_stroke flav
    
-      case flav   
-       when :response
-         @line_type.stroke = rgb(150,150,255)
-       when :response_bad
-         @line_type.stroke = rgb(255,175,175)
-       when :warn
-         @line_type.stroke = rgb(255,150,150)
-       when :flag
-         @line_type.stroke = rgb(200,200,50)  
-       when :mail
-         @line_type.stroke = rgb(100,200,150)
-         @line_type.leading = 2
-         #@line_type.fill =
-       when :report
-         @line_type.stroke = rgb(100,200,150)
-         @line_type.leading = 2
-       else
-         @line_type.stroke = rgb(255,255,255)
-      end
+      @line_type.stroke = @@pen_hash[flav]
+      @line_type.leading = @@leading_hash[flav] if @@leading_hash[flav]
+      #case flav   
+      # when :response
+      #   @line_type.stroke = rgb(150,150,255)
+      # when :response_bad
+      #   @line_type.stroke = rgb(255,175,175)
+      # when :warn
+      #   @line_type.stroke = rgb(255,150,150)
+      # when :flag
+      #   @line_type.stroke = rgb(200,200,50)  
+      # when :mail
+      #   @line_type.stroke = rgb(100,200,150)
+      #   @line_type.leading = 2
+      #   #@line_type.fill =
+      # when :report
+      #   @line_type.stroke = rgb(100,200,150)
+      #   @line_type.leading = 2
+      # else
+      #   @line_type.stroke = rgb(255,255,255)
+      #end
    
    end
    
