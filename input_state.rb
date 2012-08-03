@@ -60,7 +60,7 @@ class InputState
       @sm = @sm.space_key
       @change = true
       @key = :space
-    elsif key_code == "\n"
+    elsif key_code == :return
       return false if @sm.return_key.nil?
       @sm = @sm.return_key
       @change = true

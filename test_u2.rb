@@ -1,8 +1,8 @@
-
+require 'purple_shoes'
 
 Shoes.app(:title => "The Owner", :width => 1024, :height => 600) do
   
-  poop =  window("Welcome to Project-X", :width => 512, :height => 250)  do
+  poop =  window(:title => "Welcome to Project-X", :width => 512, :height => 250)  do
     @myline = Myline.new
     @p = nil
     background black

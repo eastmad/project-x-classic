@@ -315,7 +315,6 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
         end 
       end
       
-
       if (@key == :space)
         res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
         if (res == nil)

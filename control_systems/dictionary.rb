@@ -157,7 +157,7 @@ class Dictionary
          #k[:following] = @@shipname if k[:following] == :self
        end          
      end
-     info "str = #{str}, res[follow] = >#{res[:following]}<"     
+     p "str = #{str}, res[follow] = >#{res[:following]}<"     
      following = matching_word(res[:following].to_s) if (res and res[:following])      
      return res, following   
    end

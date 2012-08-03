@@ -25,7 +25,7 @@ class ShipSystem
  
  
  def self.evaluate(script)       
-    debug "Call evaluate for command '#{script}'"
+    info "Call evaluate for command '#{script}'"
              
     words = script.split
     processed_script = ""
@@ -106,9 +106,9 @@ class ShipSystem
    
    if !dic_entry.nil?      
      ret = dic_entry[:sgo]
-     debug "Found entry #{ret} for proper name #{name}"
+     info "Found entry #{ret} for proper name #{name}"
    else
-     warn "Cannot find entry for proper name #{name}"
+     info "Cannot find entry for proper name #{name}"
    end
    
    ret
