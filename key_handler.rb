@@ -25,26 +25,27 @@ class KeyHandler
   def set_civ(civ)
     @civ = civ
   end
+  
 
   def process k
     p "ret = #{k}"
     return unless @key_input_state.accept k
     @key = @key_input_state.key
     @state = @key_input_state.state
-    #key_hints @state
+    @civ.key_hints = @state
         
     if (@key == :down)
       @pos += 1
       @pos = 0 if @pos >= @resps.size
       @dr.req_str = @resps[@pos][:word].to_s if @resps.size > @pos
       @dr.req_grammar = @resps[@pos][:grammar]
-      @word_building = ""
+      #@word_building = ""
     elsif (@key == :up)
       @pos -= 1
       @pos = @resps.size - 1 if @pos < 0
       @dr.req_str = @resps[@pos][:word].to_s if @resps.size > 0
-      @dr.req_grammar = resps[@pos][:grammar]
-      @word_building = ""
+      @dr.req_grammar = @resps[@pos][:grammar]
+      #@word_building = ""
     elsif (@key == :alpha)
       if @dr.req_str.empty?
         @dr.req_str = k
@@ -54,6 +55,7 @@ class KeyHandler
       else
         @word_building += k
         @dr.typed = @word_building
+        p "typed #{@dr.typed}"
         @resps = Dictionary.filter_with_substring(@resps, @word_building)
       end
       if @resps.size > 0
@@ -86,7 +88,7 @@ class KeyHandler
       
        p "set state"
        @key_input_state = InputState.new if needs_reset
-       key_hints @key_input_state.state
+       @civ.key_hints = @key_input_state.state
       end 
     end
     
@@ -104,7 +106,7 @@ class KeyHandler
         @gr.context ||= res[:sys]
 
         until following.nil?
-          @dr.add_req
+          @dr.add_req @civ
           @dr.replace_req @civ
           @dr.req_str = following[:word]
           @dr.req_grammar = following[:grammar]
@@ -114,7 +116,7 @@ class KeyHandler
           following = Dictionary.matching_word(follow_word.to_s) unless follow_word.nil?
         end
       end
-      @dr.add_req
+      @dr.add_req @civ
     end
     
     @dr.replace_req @civ

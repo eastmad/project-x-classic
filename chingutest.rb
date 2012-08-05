@@ -22,10 +22,19 @@ module ColourMap
     :short => 0xffffddaa, :proper_noun => 0xffaaffaa,
     :item => 0xffaaaaff, :none => 0xffdd8888, :verb => 0xffffff00}
   
+  SHADOWMAP = {:short => 0xff887755, :proper_noun => 0xff558855,
+    :item => 0xff555588, :none => 0xff774444, :verb => 0xff888800}
+  
   COLOURS = {}
+  
+  module_function
   
   def get_map col
     MAP[col]
+  end
+  
+  def get_shadow_map col
+    SHADOWMAP[col]
   end
   
   def get_colour col
@@ -33,9 +42,6 @@ module ColourMap
     
     COLOURS[col] = Gosu::Color.new(MAP[col])
   end
-  
-  module_function :get_colour
-  module_function :get_map
 end
 
 class Game < Chingu::Window
@@ -131,42 +137,57 @@ end
 
 class CommandInputView < Chingu::GameObject
   
-  attr_accessor :suggestion, :complete_words, :active_word_part
+  attr_accessor :suggestion, :complete_words, :active_word_part, :key_hints
   
   def initialize(x0,y0,x1,y1)
     super({})
     @rect = Rect.new(x0, y0, x1 - x0, y1 - y0)
     @font = Gosu::Font.new($window, "Gosu::default_font_file", 24)
-    @suggestion = [:darkergreen, ""]
-    @complete_words = [[:white,">"], [:yellow,""]]
-    @active_word_part = [:green,""]
+    @suggestion = [:verb, ""]
+    @complete_words = []
+    @active_word_part = [:verb,""]
+    @key_space = Gosu::Image.new($window, "gifs/space-key.jpg", false)
+    @key_alpha = Gosu::Image.new($window, "gifs/a-key.jpg", false)
+    @key_arrow = Gosu::Image.new($window, "gifs/arrow-key.jpg", false)
+    @key_return = Gosu::Image.new($window, "gifs/return-key.jpg", false)    
   end
-  
+
   def draw
     $window.fill_rect(@rect, ColourMap.get_colour(:commandviewblue), 0)
-    carat = [:white,"_"]
-    carat_pos = 0
+    
+    prompt = [:white,"> "]
+    cursor = [:white,"_"]
+    cursor_pos = 0
     entire_string = ""
     
     p "@suggestion = #{@suggestion}"
     p "@active_word_part = #{@active_word_part}"
     p "@complete_words = #{@complete_words}"
+    p "state  = #{@key_hints}"
+    
+    @font.draw(prompt[1], @rect.x, @rect.y, 1, 1.0, 1.0, ColourMap.get_map(prompt[0]))
+    entire_string += prompt[1]
+    cursor_pos = @font.text_width(entire_string)
     
     @complete_words.each do |txt_arr|
       entire_string += "#{txt_arr[1]} "
-      @font.draw(txt_arr[1], @rect.x + carat_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_map(txt_arr[0]))
-      carat_pos = @font.text_width(entire_string)
+      @font.draw(txt_arr[1], @rect.x + cursor_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_map(txt_arr[0]))
+      cursor_pos = @font.text_width(entire_string)
     end
     
     entire_string += @active_word_part[1]
-    @font.draw(@active_word_part[1], @rect.x + carat_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_map(@active_word_part[0]))
-    carat_pos = @font.text_width(entire_string)
+    @font.draw(@active_word_part[1], @rect.x + cursor_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_map(@active_word_part[0]))
+    cursor_pos = @font.text_width(entire_string)
 
     suggest_complete = @suggestion[1][@active_word_part[1].length..-1]
     entire_string += suggest_complete
-    @font.draw("#{suggest_complete}#{carat[1]}", @rect.x + carat_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_map(@suggestion[0]))
-    carat_pos = @font.text_width(entire_string)
+    @font.draw("#{suggest_complete}#{cursor[1]}", @rect.x + cursor_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_shadow_map(@suggestion[0]))
+    cursor_pos = @font.text_width(entire_string)
     
+    @key_space.draw(@rect.x + 20, @rect.y + 50, 1) if @key_hints == :word
+    @key_arrow.draw(@rect.x + 20 + @key_space.width + 5, @rect.y + 50, 1) if @key_hints == :word
+    @key_return.draw(@rect.x + 20 + @key_space.width + @key_arrow.width + 10, @rect.y + 50, 1) if @key_hints == :next
+    @key_alpha.draw(@rect.x + 20 + @key_space.width + @key_arrow.width + @key_return.width + 15, @rect.y + 50, 1) unless @key_hints == :word
   end  
 end
 

@@ -15,11 +15,13 @@ class DisplayResponse
       @typed = ""
    end
    
-   def add_req
+   def add_req civ
       @complete_words[@current_word] = {:word => @req_str, :grammar => @req_grammar}
       @req_str = ""
       @req_grammar = :none
       @current_word += 1
+      
+      civ.complete_words << [@req_grammer, @req_str]
    end   
    
    def remove_req civ
@@ -44,7 +46,7 @@ class DisplayResponse
    end
    
    def clear_req civ
-      civ.active_word_part = [:white, "_"]
+      civ.active_word_part = [:white, ""]
       #paras[@current_word].contents[1].replace "_"
       #paras[@current_word].contents[0].replace "_"
       
@@ -69,11 +71,11 @@ class DisplayResponse
       @req_grammar = :none
       @current_word = 0
       
-      civ.comple_words.each do | word |
+      civ.complete_words.each do | word |
         word = [:white, ""]
       end
       
-      civ.active_word_part = [:white, "_"]
+      civ.active_word_part = [:white, ""]
    end   
    
    #def replace_req parag1, parag2, parag3
@@ -87,8 +89,9 @@ class DisplayResponse
          i += 1         
       end
       fi = @req_str[0...@typed.size]
+      #fi = @typed
       fi = "" if fi.nil?
-      sec = "#{@req_str}_"
+      sec = @req_str
       sec = "" if sec.nil?
    
       civ.suggestion = [@req_grammar, sec]
