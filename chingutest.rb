@@ -5,6 +5,8 @@ require_relative "control_systems/dictionary"
 require_relative "display_response"
 require_relative "control_systems/grammar_tree"
 require_relative "interface/system_message"
+require_relative "interface/response_line"
+require_relative "interface/response_queue"
 require_relative "key_handler"
 include Gosu
 include Chingu
@@ -15,15 +17,15 @@ include Chingu
 
 
 module ColourMap
-  MAP = {:white => 0xffffffff, :red => 0xffff0000,
+  MAP = {:white => 0xffffffff, :grey => 0xffaaaaaa, :red => 0xffff0000,
     :black => 0xff000000, :blue => 0xff0000ff,
     :yellow => 0xffffff00, :green => 0xff00ff00, :darkergreen => 0xff00dd00,
-    :detailviewblue => 0xff2222aa, :commandviewblue => 0xff142a2a,
+    :detailviewblue => 0xff2222aa, :commandviewblue => 0xff142a2a, :commandresponseblue => 0xff151526,
     :short => 0xffffddaa, :proper_noun => 0xffaaffaa,
-    :item => 0xffaaaaff, :none => 0xffdd8888, :verb => 0xffffff00}
+    :item => 0xffaaaaff, :none => 0xffdd8888, :verb => 0xffffff00, :adjective => 0xffffff00}
   
-  SHADOWMAP = {:short => 0xff887755, :proper_noun => 0xff558855,
-    :item => 0xff555588, :none => 0xff774444, :verb => 0xff888800}
+  SHADOWMAP = {:white => 0xffffffff, :short => 0xff887755, :proper_noun => 0xff558855,
+    :item => 0xff555588, :none => 0xff774444, :verb => 0xff888800, :adjective => 0xffffff00}
   
   COLOURS = {}
   
@@ -47,14 +49,15 @@ end
 class Game < Chingu::Window
 
   def initialize
-    super     # This is always needed if you override Window#initialize
+    super(945,545,false)     # This is always needed if you override Window#initialize
+    self.caption = "Project X"
     #
     # Player will automatically be updated and drawn since it's a Chingu::GameObject
     # You'll need your own Chingu::Window#update and Chingu::Window#draw after a while, but just put #super there and Chingu can do its thing.
     #
     
-    verticals = {:v0 => 0, :v1 => width/2, :vmax => width - 1}
-    horizontals = {:h0 => 0, :h1 => height/3, :h2 => (2*height)/3, :h3 => height/2, :hmax => height}
+    verticals = {:v0 => 0, :v1 => width/3, :vmax => width - 1}
+    horizontals = {:h0 => 0, :h1 => height/7, :h2 => (2*height)/3, :h3 => height/2, :hmax => height}
     MiniMapView.create(verticals[:v0],horizontals[:h1],verticals[:v1],horizontals[:hmax])
     @pv = PictureView.create(verticals[:v0],horizontals[:h0],verticals[:v1],horizontals[:h3])
     @civ = CommandInputView.create(verticals[:v1],horizontals[:h0],verticals[:vmax],horizontals[:h1])
@@ -62,6 +65,10 @@ class Game < Chingu::Window
     @dv =DetailView.create(verticals[:v1],horizontals[:h2],verticals[:vmax],horizontals[:hmax]);
     @pv.set_image()
     @kh = KeyHandler.new
+    rq = ResponseQueue.new
+    @kh.set_civ(@civ)
+    @kh.set_rq(rq)
+    @crv.set_rq(rq)
   end
   
   def button_down(id)
@@ -93,11 +100,13 @@ class Game < Chingu::Window
           ret = :down
       end
     end
-  
-    @kh.set_civ(@civ)
-    @kh.process ret
     
-    #@civ.active_word_part = [:yellow,ret] unless ret.nil?
+    begin
+      @kh.process ret
+    rescue => ex
+      p "we blew key with #{ex}"
+    end  
+    
   end
   
   def draw
@@ -137,15 +146,17 @@ end
 
 class CommandInputView < Chingu::GameObject
   
-  attr_accessor :suggestion, :complete_words, :active_word_part, :key_hints
+  attr_accessor :suggestion, :complete_words, :active_word_part, :key_hints, :last_command
   
   def initialize(x0,y0,x1,y1)
     super({})
     @rect = Rect.new(x0, y0, x1 - x0, y1 - y0)
     @font = Gosu::Font.new($window, "Gosu::default_font_file", 24)
+    @smallfont = Gosu::Font.new($window, "Gosu::default_font_file", 18)
     @suggestion = [:verb, ""]
     @complete_words = []
     @active_word_part = [:verb,""]
+    @last_command = [:grey, "Waiting for command"]
     @key_space = Gosu::Image.new($window, "gifs/space-key.jpg", false)
     @key_alpha = Gosu::Image.new($window, "gifs/a-key.jpg", false)
     @key_arrow = Gosu::Image.new($window, "gifs/arrow-key.jpg", false)
@@ -184,23 +195,55 @@ class CommandInputView < Chingu::GameObject
     @font.draw("#{suggest_complete}#{cursor[1]}", @rect.x + cursor_pos, @rect.y, 1, 1.0, 1.0, ColourMap.get_shadow_map(@suggestion[0]))
     cursor_pos = @font.text_width(entire_string)
     
-    @key_space.draw(@rect.x + 20, @rect.y + 50, 1) if @key_hints == :word
-    @key_arrow.draw(@rect.x + 20 + @key_space.width + 5, @rect.y + 50, 1) if @key_hints == :word
-    @key_return.draw(@rect.x + 20 + @key_space.width + @key_arrow.width + 10, @rect.y + 50, 1) if @key_hints == :next
-    @key_alpha.draw(@rect.x + 20 + @key_space.width + @key_arrow.width + @key_return.width + 15, @rect.y + 50, 1) unless @key_hints == :word
+    @key_space.draw(@rect.right - 40 - @key_alpha.width - @key_return.width - @key_arrow.width- @key_space.width, @rect.y + 50, 1) if @key_hints == :word
+    @key_arrow.draw(@rect.right - 30 - @key_alpha.width - @key_return.width - @key_arrow.width, @rect.y + 50, 1) if @key_hints == :word
+    @key_return.draw(@rect.right - 20 - @key_alpha.width - @key_return.width, @rect.y + 50, 1) unless @key_hints == :next
+    @key_alpha.draw(@rect.right - 10 - @key_alpha.width, @rect.y + 50, 1) unless @key_hints == :word
+    
+    @smallfont.draw(@last_command[1], @rect.x, @rect.y + 50, 1, 1.0, 1.0, ColourMap.get_map(@last_command[0]))
   end  
 end
 
 class CommandResponseView < Chingu::GameObject
+  attr_accessor :rl
+  traits :timer
   
   def initialize(x0,y0,x1,y1)
     super({})
     @rect = Rect.new(x0, y0, x1 - x0, y1 - y0)
+    @font = Gosu::Font.new($window, "Gosu::default_font_file", 24)
+    @rl = [ResponseLine.new, ResponseLine.new, ResponseLine.new, ResponseLine.new, ResponseLine.new, ResponseLine.new, ResponseLine.new]
+    every(1000) {
+      unless @rq.peek.nil?     
+        message = @rq.deq
+  
+        unless (message.flavour == :mail || message.flavour == :report)
+          #@rl.each do |n|
+          #   n.set_line @ap[n - 1]
+          #end
+          @rl[0].set_line message
+         
+        else
+          #@ma.set_line message
+        end 
+      end
+    }
+  end
+  
+  def set_rq rq
+    @rq = rq
   end
 
   def draw
-    $window.fill_rect(@rect, ColourMap.get_colour(:green))
-  end  
+    $window.fill_rect(@rect, ColourMap.get_colour(:commandresponseblue))
+    l = 0
+    @rl.each do |n|
+      @font.draw(n.text, @rect.x, @rect.y + l, 1, 1.0, 1.0, ColourMap.get_map(:white))
+      l += 20
+    end
+  end
+  
+ 
 end
 
 class DetailView < Chingu::GameObject

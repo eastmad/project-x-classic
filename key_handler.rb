@@ -1,3 +1,10 @@
+class SystemMyself
+  def self.cursor_str
+    "myself:"
+  end
+end
+   
+
 class KeyHandler
   
   def initialize
@@ -8,6 +15,7 @@ class KeyHandler
     @dr = DisplayResponse.new 
     @gr = GrammarTree.new
     @civ = nil
+    @rq = nil
     
     Dictionary.add_discovered_proper_noun("Earth",nil)
   end
@@ -26,6 +34,16 @@ class KeyHandler
     @civ = civ
   end
   
+  def set_rq(rq)
+    @rq = rq
+  end
+  
+  def reset     
+    @dr.clear @civ            
+    @state = :empty
+    @gr.reset_grammar()
+    @civ.key_hints = :start 
+  end 
 
   def process k
     p "ret = #{k}"
@@ -37,14 +55,18 @@ class KeyHandler
     if (@key == :down)
       @pos += 1
       @pos = 0 if @pos >= @resps.size
-      @dr.req_str = @resps[@pos][:word].to_s if @resps.size > @pos
-      @dr.req_grammar = @resps[@pos][:grammar]
+      if @resps.size > @pos
+        @dr.req_str = @resps[@pos][:word].to_s 
+        @dr.req_grammar = @resps[@pos][:grammar]
+      end  
       #@word_building = ""
     elsif (@key == :up)
       @pos -= 1
       @pos = @resps.size - 1 if @pos < 0
-      @dr.req_str = @resps[@pos][:word].to_s if @resps.size > 0
-      @dr.req_grammar = @resps[@pos][:grammar]
+      if @resps.size > 0
+        @dr.req_str = @resps[@pos][:word].to_s 
+        @dr.req_grammar = @resps[@pos][:grammar]
+      end
       #@word_building = ""
     elsif (@key == :alpha)
       if @dr.req_str.empty?
@@ -96,6 +118,7 @@ class KeyHandler
       res, following = Dictionary.complete_me(@dr.req_str, @gr.next_filter, @gr.context)
       if (res == nil)
         @rq.enq SystemsMessage.new("#{@dr.req_str} is not in #{@gr.context} dictionary", SystemMyself, :warn)
+        reset
         raise
       else
         #SoundPlay.play_sound(0)
@@ -171,7 +194,7 @@ class KeyHandler
          @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
       end
 
-      @last_command.text = @dr.fullCommand  if @dr.fullCommand.size > 1
+      @civ.last_command[1] = @dr.fullCommand  if @dr.fullCommand.size > 1
       reset
     end
     
@@ -218,7 +241,7 @@ class KeyHandler
          @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
       end
 
-      @last_command.text = @dr.fullCommand  if @dr.fullCommand.size > 1
+      @civ.last_command[1] = @dr.fullCommand  if @dr.fullCommand.size > 1
       @dr.script_command = nil
       reset
     end

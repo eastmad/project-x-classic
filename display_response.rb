@@ -46,7 +46,8 @@ class DisplayResponse
    end
    
    def clear_req civ
-      civ.active_word_part = [:white, ""]
+      civ.active_word_part[1] = ""
+      
       #paras[@current_word].contents[1].replace "_"
       #paras[@current_word].contents[0].replace "_"
       
@@ -71,11 +72,10 @@ class DisplayResponse
       @req_grammar = :none
       @current_word = 0
       
-      civ.complete_words.each do | word |
-        word = [:white, ""]
-      end
+      civ.complete_words.clear
       
       civ.active_word_part = [:white, ""]
+      civ.suggestion = [:white, ""]
    end   
    
    #def replace_req parag1, parag2, parag3
