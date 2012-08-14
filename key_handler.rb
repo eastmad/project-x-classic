@@ -1,10 +1,3 @@
-class SystemMyself
-  def self.cursor_str
-    "myself:"
-  end
-end
-   
-
 class KeyHandler
   
   def initialize
@@ -16,8 +9,6 @@ class KeyHandler
     @gr = GrammarTree.new
     @civ = nil
     @rq = nil
-    
-    Dictionary.add_discovered_proper_noun("Earth",nil)
   end
 
   def debug   ret
@@ -36,6 +27,10 @@ class KeyHandler
   
   def set_rq(rq)
     @rq = rq
+  end
+  
+  def set_ship(ship)
+    @ship = ship
   end
   
   def reset     
@@ -156,7 +151,7 @@ class KeyHandler
             media_lp = resp_hash[:sgo].centrePoint unless resp_hash[:sgo].nil?
             MediaManager.show_media(@im_win,resp_hash[:media],media_lp) unless resp_hash[:media].nil?
           else 
-            SoundPlay.play_sound(5)
+            #SoundPlay.play_sound(5)
           end
           
           talk_screen resp_hash[:talk],resp_hash[:name]  unless resp_hash[:talk].nil?
@@ -174,7 +169,6 @@ class KeyHandler
         #either the current body is a planet, or the owning body.
         #local_body = @ship.locationPoint.body
         #local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name
-        draw_mini_map
         
         #read mail
         mail = SimpleBody.get_mail.shift
@@ -191,6 +185,7 @@ class KeyHandler
         end 
          
       rescue => ex
+         p "SystemMessage: #{ex}"
          @rq.enq SystemsMessage.new("#{ex}", SystemMyself, :warn)            
       end
 
@@ -211,7 +206,7 @@ class KeyHandler
             media_lp = resp_hash[:sgo].centrePoint unless resp_hash[:sgo].nil?
             MediaManager.show_media(@im_win,resp_hash[:media],media_lp) unless resp_hash[:media].nil?
           else 
-            SoundPlay.play_sound(5)
+            #SoundPlay.play_sound(5)
           end
           
           talk_screen resp_hash[:talk],resp_hash[:name] unless resp_hash[:talk].nil?
@@ -226,7 +221,6 @@ class KeyHandler
         #either the current body is a planet, or the owning body.
         #local_body = @ship.locationPoint.body
         #local_planet = (local_body.kind_of? Planet)? local_body.name : local_body.owning_body.name
-        draw_mini_map
         
         #read mail
         mail = SimpleBody.get_mail.shift

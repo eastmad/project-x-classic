@@ -9,7 +9,7 @@ class ShipSystem
  def self.command_parser command_str, rq
  
    command_verb = command_str.split.first
-   #info "command_verb = #{command_verb}"
+   p "command_verb = #{command_verb}"
    req_op = Operation.find_op(command_verb.to_sym)
    raise "No operation corresponds to command '#{command_verb}'" if req_op.nil? 
    
@@ -25,7 +25,7 @@ class ShipSystem
  
  
  def self.evaluate(script)       
-    info "Call evaluate for command '#{script}'"
+    p "Call evaluate for command '#{script}'"
              
     words = script.split
     processed_script = ""
@@ -34,7 +34,7 @@ class ShipSystem
       processed_script += "_#{word} "
     end 
     
-    #info "processed '#{processed_script}'"
+    #p "processed '#{processed_script}'"
     
     self.new.instance_eval(processed_script)     
     
@@ -106,9 +106,9 @@ class ShipSystem
    
    if !dic_entry.nil?      
      ret = dic_entry[:sgo]
-     info "Found entry #{ret} for proper name #{name}"
+     p "Found entry #{ret} for proper name #{name}"
    else
-     info "Cannot find entry for proper name #{name}"
+     p "Cannot find entry for proper name #{name}"
    end
    
    ret
@@ -125,17 +125,17 @@ class ShipSystem
  
  def get_system_from_symbol sym
    sys_string = "System#{sym.to_s.capitalize}"
-   info "Sys string #{sys_string}"
+   p "Sys string #{sys_string}"
    sys = Kernel.const_get(sys_string)
    sys
  end
  
   def method_missing (methId, *args)      
     word = methId.id2name
-    info "(methId, *args) Call method missing:#{word} and #{args.length} "
+    p "(methId, *args) Call method missing:#{word} and #{args.length} "
  
     ret = word.slice!(0)
-    info "is #{word} proper noun?"
+    p "is #{word} proper noun?"
     if ShipSystem.is_proper_noun?(word)
       ret = ShipSystem.make_proper_noun(word)
       if (@obj.nil?)

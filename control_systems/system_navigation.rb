@@ -41,8 +41,8 @@ class SystemNavigation < ShipSystem
   end
   
   def _orbit(args = nil)     
-    #info "Call orbit"
-    begin      
+    begin
+      p "start orbit"
       sgo = ShipSystem.find_sgo_from_name(args)
       if sgo.nil?
         lp = @@ship.locationPoint.find_linked_location :orbit
@@ -50,7 +50,8 @@ class SystemNavigation < ShipSystem
       end  
       @@rq.enq @@ship.orbit sgo
       resp_hash = {:success => true, :media => :orbit}
-    rescue RuntimeError => ex 
+    rescue RuntimeError => ex
+      p "orbit error"
       resp_hash = {:str => ex, :success => false}
       @@rq.enq ex
       @@rq.enq SystemsMessage.new("Establish orbit before approaching a body.", SystemNavigation, :response_bad)

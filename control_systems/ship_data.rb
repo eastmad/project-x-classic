@@ -48,11 +48,11 @@ JUMP = "Rift generator"
   #!@modification.mod_type_present? :shield
  
   def check_security(obj)
-    info "checking blockers"
+    p "checking blockers"
     obj.blockers.each do | blocker |
-      info "consider blocker on #{obj}"
+      p "consider blocker on #{obj}"
       if blocker[:active] and method(blocker[:check_method]).call(blocker[:to_check])
-        info "block engaged #{blocker[:statement]}"
+        p "block engaged #{blocker[:statement]}"
         raise SystemsMessage.new(blocker[:statement], SystemSecurity, :info)
       end
     end
@@ -74,7 +74,7 @@ JUMP = "Rift generator"
      check_security(planet)    
          
      @headingPoint = planet.orbitPoint
-     info "Heading #{@headingPoint}"
+     p "Heading #{@headingPoint}"
      SystemsMessage.new("New heading is #{@headingPoint}", SystemNavigation, :info)
   end
   
@@ -86,8 +86,8 @@ JUMP = "Rift generator"
     end    
       
     #location must be planet in system
-    info "heading body #{@headingPoint.body}"
-    info "location owner body #{@locationPoint.body.root_body}"
+    p "heading body #{@headingPoint.body}"
+    p "location owner body #{@locationPoint.body.root_body}"
     raise SystemsMessage.new("Cannot head for a planet not in this system", SystemNavigation, :info) unless (@headingPoint.body.owned_by? @locationPoint.body.local_star)
           
     @locationPoint = @headingPoint
@@ -99,15 +99,15 @@ JUMP = "Rift generator"
   def approach(target_body)
  
     inside = @locationPoint.body == target_body.owning_body
-    info "in approach #{target_body}"    
+    p "in approach #{target_body}"    
  
     lps = (@locationPoint.find_linked_location :satellite) + (@locationPoint.find_linked_location :approach)
     raise SystemsMessage.new("#{target_body} not in range of thrusters", SystemNavigation, :info) if (lps.empty? and !inside)
     raise SystemsMessage.new("Cannot approach #{target_body} safely with thrusters", SystemNavigation, :info) if (lps.empty? and inside)
     
-    found_lp = lps.find {| lp | info "lps = #{lp.body}";lp.body == target_body || lp.body == target_body.owning_body}
+    found_lp = lps.find {| lp | p "lps = #{lp.body}";lp.body == target_body || lp.body == target_body.owning_body}
     
-    info "exit approach #{found_lp}"
+    p "exit approach #{found_lp}"
     
     raise SystemsMessage.new("#{target_body} not in range of thrusters", SystemNavigation, :info) if found_lp.nil?
     
@@ -127,7 +127,7 @@ JUMP = "Rift generator"
  
     orbit_point = @locationPoint.find_linked_location :orbit
     found_orbit_point = orbit_point.first.body == planet unless orbit_point.empty?
-    info "found_orbit_point = #{found_orbit_point}"
+    p "found_orbit_point = #{found_orbit_point}"
     raise SystemsMessage.new("Cannot orbit #{planet} from #{@locationPoint}", SystemNavigation, :info) unless ((planet == @locationPoint.body or found_orbit_point) and @status != :sync)
         
     @status = :sync
@@ -156,7 +156,7 @@ JUMP = "Rift generator"
   end
   
   def bay bay = "red"
-    info "bay = #{bay}"
+    p "bay = #{bay}"
     raise SystemsMessage.new("Cargo bays empty", SystemTrade, :response) if @trade.cargo.empty?
     if (ImplTrade::Bay_colour_map.keys.include? bay)
       resp = @trade.bay(bay)
@@ -293,7 +293,7 @@ JUMP = "Rift generator"
     
     lps = (@locationPoint.find_linked_location :land)
     if lps.empty?
-         info "can't land - call approach to #{sgo}" 
+         p "can't land - call approach to #{sgo}" 
          return true
     end
     

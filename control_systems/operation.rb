@@ -4,14 +4,14 @@ class Operation
    @@systems = nil
    private_class_method :new
    
-   def self.register_op(command_verb, sys, op_id) 
+   def self.register_op(command_verb, sys) 
       @@opers = Array.new unless @@opers
       
-      ophash = {:command_verb => command_verb, :ship_system => sys, :op_id => op_id}
+      ophash = {:command_verb => command_verb, :ship_system => sys}
       @@opers << ophash
    end
 
-  def self.register_sys(sys) 
+   def self.register_sys(sys) 
       @@systems = Array.new unless @@systems
       @@systems << sys
       Dictionary.add_system_nouns(sys)

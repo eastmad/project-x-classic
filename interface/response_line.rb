@@ -1,12 +1,14 @@
 class ResponseLine
 
-   attr_accessor :text, :flavour, :origin, :recent_flag
+   attr_accessor :cursor, :text, :flavour, :origin, :recent_flag
    
    def set_line message
      @flavour = message.flavour
      @origin = message.origin
      @recent_flag = message.recent_flag
 
+
+     @text = message.make_string
      spaces = ""
      txt =""
      if (message.flavour == :mail)
@@ -21,7 +23,7 @@ class ResponseLine
       txt = @origin.cursor_str unless @origin.nil?      
      end
      
-     @text = "#{spaces}#{txt}"
+     @cursor = "#{spaces}#{txt}"
    end  
    
    def not_recent
