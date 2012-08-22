@@ -34,4 +34,7 @@ class ResponseLine
       @recent_flag = true
    end
      
+   def make_string
+     @text
+   end  
 end

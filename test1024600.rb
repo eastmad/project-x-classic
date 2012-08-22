@@ -1,6 +1,6 @@
 require "json"
 require "local_config"
-require "display_response"
+require "old_display_response"
 require "image_window"
 require "media_manager"
 require "sound_play"
@@ -49,43 +49,43 @@ Shoes.app(:width => 945, :height => 545, :title => "Project X") {
   @minimap.set_location_point(@ship.locationPoint)
   @key_input_state = InputState.new
 
-  Operation.register_op :manifest, :trade, 1
-  Operation.register_op :bay, :trade, 1
-  Operation.register_op :cargo, :trade, 1
-  Operation.register_op :people, :communication, 1
-  Operation.register_op :weaponry, :weaponry, 1
-  Operation.register_op :planets, :library, 1
-  Operation.register_op :stars, :library, 1
-  Operation.register_op :trading, :trade, 1
-  Operation.register_op :services, :modification, 1
-  Operation.register_op :modifications, :modification, 1
-  Operation.register_op :status, :myself, 1
-  Operation.register_op :help, :myself, 1
+  Operation.register_op :manifest, :trade
+  Operation.register_op :bay, :trade
+  Operation.register_op :cargo, :trade
+  Operation.register_op :people, :communication
+  Operation.register_op :weaponry, :weaponry
+  Operation.register_op :planets, :library
+  Operation.register_op :stars, :library
+  Operation.register_op :trading, :trade
+  Operation.register_op :services, :modification
+  Operation.register_op :modifications, :modification
+  Operation.register_op :status, :myself
+  Operation.register_op :help, :myself
   
-  Operation.register_op :launch, :power, 1
-  Operation.register_op :land, :power, 1
-  Operation.register_op :undock, :power, 1
-  Operation.register_op :approach, :power, 1
-  Operation.register_op :release, :security, 1
-  Operation.register_op :dock, :power, 1
-  Operation.register_op :describe, :library, 1
-  Operation.register_op :orbit, :navigation, 1
-  Operation.register_op :plot, :navigation, 1
-  Operation.register_op :set, :navigation, 1
-  Operation.register_op :go, :power, 1
+  Operation.register_op :launch, :power
+  Operation.register_op :land, :power
+  Operation.register_op :undock, :power
+  Operation.register_op :approach, :power
+  Operation.register_op :release, :security
+  Operation.register_op :dock, :power
+  Operation.register_op :describe, :library
+  Operation.register_op :orbit, :navigation
+  Operation.register_op :plot, :navigation
+  Operation.register_op :set, :navigation
+  Operation.register_op :go, :power
   
-  Operation.register_op :engage, :power, 1
-  Operation.register_op :read, :communication, 1
-  Operation.register_op :stack, :weaponry, 1
-  Operation.register_op :load, :trade, 1
-  Operation.register_op :unload, :trade, 1
-  Operation.register_op :contact, :communication, 1
-  Operation.register_op :meet, :communication, 1 
-  Operation.register_op :suggest, :myself, 1
-  Operation.register_op :destroy, :weaponry, 1
-  Operation.register_op :load, :weaponry, 1
-  Operation.register_op :install, :modification, 1
-  Operation.register_op :jump , :power, 1
+  Operation.register_op :engage, :power
+  Operation.register_op :read, :communication
+  Operation.register_op :stack, :weaponry
+  Operation.register_op :load, :trade
+  Operation.register_op :unload, :trade
+  Operation.register_op :contact, :communication
+  Operation.register_op :meet, :communication 
+  Operation.register_op :suggest, :myself
+  Operation.register_op :destroy, :weaponry
+  Operation.register_op :load, :weaponry
+  Operation.register_op :install, :modification
+  Operation.register_op :jump , :power
  
    
   @rq = ResponseQueue.new

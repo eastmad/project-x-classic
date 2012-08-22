@@ -83,7 +83,7 @@ class Game < Chingu::Window
     
     verticals = {:v0 => 0, :v1 => width/3, :vmax => width - 1}
     horizontals = {:h0 => 0, :h1 => height/7, :h2 => (2*height)/3, :h3 => height/2, :hmax => height}
-    @mmv = MiniMapView.create(verticals[:v0],horizontals[:h1],verticals[:v1],horizontals[:hmax])
+    @mmv = MiniMapView.create(verticals[:v0],horizontals[:h3],verticals[:v1],horizontals[:hmax])
     @pv = PictureView.create(verticals[:v0],horizontals[:h0],verticals[:v1],horizontals[:h3])
     @civ = CommandInputView.create(verticals[:v1],horizontals[:h0],verticals[:vmax],horizontals[:h1])
     @crv = CommandResponseView.create(verticals[:v1],horizontals[:h1],verticals[:vmax],horizontals[:h2])
@@ -163,6 +163,17 @@ class MiniMapView < Chingu::GameObject
     super({})
     @rect = Rect.new(x0, y0, x1, y1)
     @minimap = MiniMap.new(10,30,50)
+    
+    @moving_image = Gosu::Image.new($window, "gifs/loc1_icon.gif", false)
+    @landed_image = Gosu::Image.new($window, "gifs/loc_icon.gif", false)
+    @blank_image = Gosu::Image.new($window, "gifs/blank_icon.gif", false)
+    @city_image = Gosu::Image.new($window, "gifs/city_icon.gif", false)
+    @star_image = Gosu::Image.new($window, "gifs/star_icon.gif", false)
+    @planet_image = Gosu::Image.new($window, "gifs/planet_icon.gif", false)
+    @smallstructure_image = Gosu::Image.new($window, "gifs/smallstructure_icon.gif", false)
+    @spacestation_image = Gosu::Image.new($window, "gifs/spacestation_icon.gif", false)
+    @jumpgate_image = Gosu::Image.new($window, "gifs/jumpgate_icon.gif", false)
+    @font = Gosu::Font.new($window, "Gosu::default_font_file", 14)
   end
   
   def set_ship ship
@@ -171,7 +182,51 @@ class MiniMapView < Chingu::GameObject
   
   def draw
     @minimap.set_location_point @ship.locationPoint
-    $window.fill_rect(@rect, ColourMap.get_colour(:red), 0)
+    $window.fill_rect(@rect, ColourMap.get_colour(:black), 0)
+    
+    @font.draw(@minimap.top_level[:name], @rect.x + @minimap.top_level[:left] + @minimap.top_level[:size][:width], @rect.y, 1, 1.0, 1.0, ColourMap.get_map(:white))
+    @planet_image.draw(@rect.x + @minimap.top_level[:left], @rect.y, ColourMap.get_map(:white))
+    
+    @font.draw(@minimap.current_level[:name], @rect.x + @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width] + @minimap.current_level[:left], @rect.y + 50, 1, 1.0, 1.0, ColourMap.get_map(:white))
+    @spacestation_image.draw(@rect.x + @minimap.current_level[:left] + @minimap.top_level[:size][:width], @rect.y + 50, 0)
+    
+    if @ship.status == :dependent
+      @landed_image.draw(@rect.x + @minimap.current_level[:left]  + @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width] + @font.text_width(@minimap.current_level[:name]), @rect.y + 50, 0)
+    else  
+      @moving_image.draw(@rect.x + @minimap.current_level[:left]  + @minimap.top_level[:size][:width] + @minimap.current_level[:size][:width] + @font.text_width(@minimap.current_level[:name]), @rect.y + 50, 0)
+    end  
+    #
+    #opt_level = @minimap.option_level
+    #
+    #unless opt_level.nil?
+    #  info "path = #{opt_level[0][:image]}"
+    #  @mm_opt_level_para.replace opt_level[0][:name], :stroke => white, :left => @minimap.current_level[:left] + opt_level[0][:left] + @minimap.current_level[:size][:width] + opt_level[0][:size][:width]
+    #  @mm_opt_level_image.path = opt_level[0][:image]
+    #  
+    #  @mm_opt_level_image.width = opt_level[0][:size][:width] if opt_level[0][:size][:width] > 0
+    #  @mm_opt_level_image.height = opt_level[0][:size][:height] if opt_level[0][:size][:height] > 0
+    #
+    #  @mm_opt_level_image.left = @minimap.current_level[:left] + opt_level[0][:left] + @minimap.current_level[:size][:width]
+    #else
+    #  @mm_opt_level_para.replace ""
+    #  @mm_opt_level_image.path = "gifs/blank_icon.gif"
+    #  @mm_opt_level_image.width = 16
+    #  @mm_opt_level_image.height = 16
+    #  info "set width = 16"
+    #end
+    #
+    #unless (opt_level.nil? or opt_level.size < 2)
+    #  @mm_opt_level_para2.replace opt_level[1][:name],  :stroke => white, :left => @minimap.current_level[:left] + opt_level[1][:left] + @minimap.current_level[:size][:width] + opt_level[1][:size][:width]
+    #  @mm_opt_level_image2.path = opt_level[1][:image]
+    #  
+    #  @mm_opt_level_image2.width = opt_level[1][:size][:width] if opt_level[1][:size][:width] > 0
+    #  @mm_opt_level_image2.height = opt_level[1][:size][:height] if opt_level[1][:size][:height] > 0
+    #  
+    #  @mm_opt_level_image2.left = @minimap.current_level[:left] + opt_level[1][:left] + @minimap.current_level[:size][:width]
+    #else
+    #  @mm_opt_level_para2.replace ""
+    #  @mm_opt_level_image2.path = "gifs/blank_icon.gif"
+    #end
   end  
 end
 
@@ -266,9 +321,10 @@ class CommandResponseView < Chingu::GameObject
         message = @rq.deq
   
         unless (message.flavour == :mail || message.flavour == :report)
-          #@rl.each do |n|
-          #   n.set_line @ap[n - 1]
-          #end
+          sz = @rl.size - 1
+          (sz.downto 1).each do |n|
+             @rl[n].set_line @rl[n - 1]
+          end
           @rl[0].set_line message
          
         else
@@ -285,11 +341,12 @@ class CommandResponseView < Chingu::GameObject
   def draw
     $window.fill_rect(@rect, ColourMap.get_colour(:commandresponseblue))
     l = 0
+    line_height = 20
     @rl.each do |n|
       @font.draw(n.cursor, @rect.x, @rect.y + l, 1, 1.0, 1.0, ColourMap.get_map(:white))
       cursor_pos = @font.text_width(n.cursor)
       @font.draw(n.text, @rect.x + cursor_pos + 2, @rect.y + l, 1, 1.0, 1.0, ColourMap.get_map(:white))
-      l += 20
+      l += line_height
     end
   end
   
